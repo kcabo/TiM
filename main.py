@@ -23,6 +23,7 @@ class UserStatus(db.Model):
 @app.route("/create")
 def create_db():
     db.create_all()
+    return "ok"
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -35,9 +36,10 @@ def callback():
         if event_type == "follow":
             reply_token = event['replyToken']
             lineid = event['source']['userId']
-            reg = UserStatus(lineid = lineid, name = "Reo", status = "add", currentblock = "190521")
-            db.session.add(reg)
-            db.session.commit()
+            linepost.GetProfile(lineid)
+            # reg = UserStatus(lineid = lineid, name = "Reo", status = "add", currentblock = "190521")
+            # db.session.add(reg)
+            # db.session.commit()
             linepost.SendReplyMsg(reply_token,["おｋ"])
 
     return "ok"
