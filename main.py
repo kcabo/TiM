@@ -1,0 +1,47 @@
+from flask import Flask, request, abort
+from flask_sqlalchemy import SQLAlchemy
+
+import os
+import json
+import linepost
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+
+class UserStatus(db.Model):
+    __tablename__ = "userstatus"
+    keyid = db.Column(db.Integer, primary_key=True)
+    # userid = db.Column(db.Integer)
+    lineid = db.Column(db.String(100))
+    name = db.Column(db.String(100))
+    status = db.Column(db.String(40))
+    currentblock = db.Column(db.String(40))
+
+@app.route("/create")
+def create_db():
+    db.create_all()
+
+@app.route("/callback", methods=['POST'])
+def callback():
+
+    body = request.get_data(as_text=True)
+    body_json = json.loads(body)
+
+    for event in body_json['events']:
+        event_type = event['type']
+        if event_type == "follow":
+            reply_token = event['replyToken']
+            lineid = event['source']['userId']
+            reg = UserStatus(lineid = lineid, name = "Reo", status = "add", currentblock = "190521")
+            db.session.add(reg)
+            db.session.commit()
+            linepost.SendReplyMsg(reply_token,["おｋ"])
+
+    return "ok"
+
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
