@@ -27,7 +27,8 @@ def SendReplyMsg(reply_token, text):
 
 def GetProfile(lineid):
     url = 'https://api.line.me/v2/bot/profile/{lineid}'.format(lineid=lineid)
-    response = requests.post(url, headers=headers)
-    print(response.json())
+    response = requests.get(url, headers=headers)
+    js = response.json()
+    print(js['displayName'])
 
     return "ok"
