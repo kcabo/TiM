@@ -48,7 +48,7 @@ def create_db():
 @app.route("/")
 def test():
     # q = UserStatus.query.filter_by(keyid = 1).first()
-    # if q == None:
+    # if q is None:
     #     print("nnnon")
     # else:
     #     print(q.lineid)
@@ -76,7 +76,7 @@ def callback():
         lineid = event['source']['userId']
 
         user = UserStatus.query.filter_by(lineid = lineid).first()
-        if user == None:
+        if user is None:
             lineapi.SendTextMsg(reply_token,["登録されていないユーザーです。"])
             continue
         elif user.authorized != True:
@@ -142,6 +142,7 @@ def callback():
 
                     block_date = blockhandler.BlockDate() #19052
                     blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all()
+                    print(blocks)
                     con = blockhandler.BlocksFlex(blocks,block_date)
                     lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
 

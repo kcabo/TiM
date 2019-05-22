@@ -15,7 +15,7 @@ def BlockDate():
 
 
 def BlocksFlex(blocks, block_date):
-    if blocks == None:
+    if blocks is None:
         object = block_date * 10 + 1
     else:
         object = blocks[-1].blockid + 1
@@ -52,7 +52,7 @@ def BlocksFlex(blocks, block_date):
       }
     }]
 
-    if blocks != None:
+    if blocks is not None:
         for b in blocks:
             bubble_sample = {
               "type": "bubble",
