@@ -31,7 +31,7 @@ def BlocksFlex(blocks, block_date):
         "url": "https://drive.google.com/uc?export=view&id=1TJf3oWXtG4BF9VpqAxTb9qzAoMkO2u_K",
         "action": {
               "type": "postback",
-              "data": action_new
+              "data": str(object)#action_new
             }
       },
       "footer": {
