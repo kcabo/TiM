@@ -108,6 +108,9 @@ def callback():
                     rows = msg_text.split("\n")
                     swimmer = rows[0]
                     currentblock = user.currentblock
+                    if currentblock == "":
+                        lineapi.SendTextMsg(reply_token,["一覧からブロックを選択してから入力してください。"])
+                        continue
 
                     for i, row in enumerate(rows):
                         if i != 0: #０個目は名前が書いてあるから飛ばす
@@ -132,11 +135,16 @@ def callback():
 
                 #ブロック一覧を表示する
                 elif msg_text == "一覧":
+                    user.currentblock = ""
+                    user.status = "add"
+                    db.session.add(user)
+                    db.session.commit()
                     block_int = blockhandler.BlockDate()
                     block_min = block_int * 10
                     block_max = block_int * 10 + 9
-                    # blocks = Block.query.filter_by(blockid=>block_min, blockid=<block_max).all()
-                    blocks = ""
+
+                    blocks = Block.query.filter_by(blockid=>block_min, blockid=<block_max).all()
+                    print(blocks[0].blockid)
                     con = blockhandler.BlocksFlex(blocks)
                     lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
 
