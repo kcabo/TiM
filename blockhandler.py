@@ -51,7 +51,7 @@ def BlocksFlex(blocks, block_date):
         ]
       }
     }]
-
+    print(bubbles)
     if len(blocks) > 0:
         for b in blocks:
             bubble_sample = {
@@ -133,7 +133,7 @@ def BlocksFlex(blocks, block_date):
             bubbles.append(bubble_sample)
 
     contents = {"type": "carousel", "contents": bubbles}
-
+    print(bubbles,"2")
     return contents
 
 
