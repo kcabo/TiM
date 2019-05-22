@@ -58,7 +58,11 @@ def callback():
 
     for event in body_json['events']:
         event_type = event['type']
-        reply_token = event['replyToken']
+        try:
+            reply_token = event['replyToken']
+        except:
+            print("リプライトークンの取得に失敗しました。") #おそらくブロックされたとき
+            continue
         lineid = event['source']['userId']
 
         if event_type == "follow": #友だち追加ならユーザーテーブルに追加
@@ -113,7 +117,9 @@ def callback():
 
                 #ブロック一覧を表示する
                 elif msg_text == "一覧":
-                    lineapi.SendFlexMsg(reply_token)
+                    c = lookblock.FlexMsg()
+
+                    lineapi.SendFlexMsg(reply_token,c)
 
 
 
