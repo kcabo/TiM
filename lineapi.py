@@ -21,11 +21,11 @@ def SendTextMsg(reply_token, text):
     requests.post(url, headers=headers, data=json.dumps(data))
     return "ok"
 
-def SendFlexMsg(reply_token,contents_dict):
+def SendFlexMsg(reply_token,contents_dict,altText="メッセージだよ！！"):
     url = 'https://api.line.me/v2/bot/message/reply'
     msgs = [{
       "type": "flex",
-      "altText": "This is a Flex Message",
+      "altText": altText,
       "contents": contents_dict
     }]
     # for t in text: #引数2のメッセージをひとつずつリストに格納する
