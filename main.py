@@ -143,7 +143,7 @@ def callback():
                     block_min = block_int * 10 -1 #1905209
                     block_max = block_int * 10 + 10 #1905220
 
-                    blocks = Block.query.filter_by(blockid > block_min, blockid < block_max).all()
+                    blocks = Block.query.filter_by(Block.blockid > block_min).all()
                     print(blocks[0].blockid)
                     con = blockhandler.BlocksFlex(blocks)
                     lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
