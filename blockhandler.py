@@ -14,7 +14,13 @@ def BlockDate():
 
 
 
-def BlocksFlex(blocks):
+def BlocksFlex(blocks, block_date):
+    if blocks == None:
+        object = block_date * 10 + 1
+    else:
+        object = blocks[-1].blockid + 1
+
+    action_new = {"method":"new","object":str(object)}
     bubbles = [{
       "type": "bubble",
       "hero": {
@@ -25,7 +31,7 @@ def BlocksFlex(blocks):
         "url": "https://drive.google.com/uc?export=view&id=1TJf3oWXtG4BF9VpqAxTb9qzAoMkO2u_K",
         "action": {
               "type": "postback",
-              "data": "新規作成だぜ"
+              "data": action_new
             }
       },
       "footer": {
@@ -46,85 +52,85 @@ def BlocksFlex(blocks):
       }
     }]
 
-    
-
-    bubble_sample = {
-      "type": "bubble",
-      "hero": {
-        "type": "image",
-        "size": "full",
-        "aspectRatio": "20:7",
-        "aspectMode": "cover",
-        "url": "https://drive.google.com/uc?export=view&id=11O6iLjfxVbag2sAP3k93C9AkS_qygU0Y"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "spacing": "sm",
-        "contents": [
-          {
-            "type": "text",
-            "text": "BlockID:1904281",
-            "wrap": True,
-            "weight": "regular",
-            "size": "md"
-          },
-          {
-            "type": "text",
-            "text": "Swim",
-            "wrap": True,
-            "weight": "bold",
-            "size": "md",
-            "margin": "md"
-          },
-          {
-            "type": "text",
-            "text": "50*4*1 high average",
-            "wrap": True,
-            "weight": "bold",
-            "size": "sm",
-            "margin": "none"
-          },
-          {
-            "type": "text",
-            "text": "1:00",
-            "wrap": True,
-            "weight": "bold",
-            "size": "sm",
-            "margin": "none"
-          }
-        ]
-      },
-      "footer": {
-        "type": "box",
-        "layout": "vertical",
-        "spacing": "sm",
-        "contents": [
-          {
-            "type": "button",
-            "style": "primary",
-            "color": "#2e6095",
-            "action": {
-              "type": "postback",
-              "label": "編集",
-              "data": "受け取れこの文字列を"
+    if blocks != None:
+        for b in blocks:
+            bubble_sample = {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "size": "full",
+                "aspectRatio": "20:7",
+                "aspectMode": "cover",
+                "url": "https://drive.google.com/uc?export=view&id=11O6iLjfxVbag2sAP3k93C9AkS_qygU0Y"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "sm",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "BlockID:{}".format(b.blockid),
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "md"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Swim",
+                    "wrap": True,
+                    "weight": "bold",
+                    "size": "md",
+                    "margin": "md"
+                  },
+                  {
+                    "type": "text",
+                    "text": "50*4*1 high average",
+                    "wrap": True,
+                    "weight": "bold",
+                    "size": "sm",
+                    "margin": "none"
+                  },
+                  {
+                    "type": "text",
+                    "text": "1:00",
+                    "wrap": True,
+                    "weight": "bold",
+                    "size": "sm",
+                    "margin": "none"
+                  }
+                ]
+              },
+              "footer": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "sm",
+                "contents": [
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "action": {
+                      "type": "postback",
+                      "label": "編集",
+                      "data": "受け取れこの文字列を"
+                    }
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#1d366d",
+                    "action": {
+                      "type": "postback",
+                      "label": "確認",
+                      "data": "こっちは下のだ"
+                    }
+                  }
+                ]
+              }
             }
-          },
-          {
-            "type": "button",
-            "style": "primary",
-            "color": "#1d366d",
-            "action": {
-              "type": "postback",
-              "label": "確認",
-              "data": "こっちは下のだ"
-            }
-          }
-        ]
-      }
-    }
 
-    bubbles.append(bubble_sample)
+            bubbles.append(bubble_sample)
 
     contents = {"type": "carousel", "contents": bubbles}
 
