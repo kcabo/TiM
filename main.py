@@ -3,7 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 
 import os
 import json
-import linepost
+import lineapi
+import valueconv
+import lookblock
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -27,7 +29,7 @@ class TimeData(db.Model):
     blockid = db.Column(db.Integer)
     row = db.Column(db.Integer)
     swimmer = db.Column(db.String(40))
-    time_value = db.Column(db.String(40))
+    time_string = db.Column(db.String(40))
     style = db.Column(db.String(40))
 
 @app.route("/create")
@@ -60,32 +62,33 @@ def callback():
         lineid = event['source']['userId']
 
         if event_type == "follow": #友だち追加ならユーザーテーブルに追加
-            name = linepost.GetProfile(lineid)
-            reg = UserStatus(lineid = lineid, name = name, status = "add", currentblock = "190521")
+            name = lineapi.GetProfile(lineid)
+            reg = UserStatus(lineid = lineid, name = name, authorized = True, status = "add", currentblock = "190521")
 
             try:    #lineidにunique制約あるので二重登録しようとするとエラー発生
                 db.session.add(reg)
                 db.session.commit()
-                linepost.SendReplyMsg(reply_token,["おｋ"])
+                lineapi.SendTextMsg(reply_token,["おｋ"])
             except:
-                linepost.SendReplyMsg(reply_token,["登録に失敗しました。","既に登録されている可能性がございます。"])
+                lineapi.SendTextMsg(reply_token,["登録に失敗しました。","既に登録されている可能性がございます。"])
 
         elif event_type == "message": #普通にメッセージきたとき
             msg_type = event['message']['type']
             if msg_type == "text":
                 msg_text = event['message']['text']
+
+                #timedataテーブルに新しい記録を追加する
                 if msg_text.find("\n") > 0: #改行が含まれるときは登録と判断
                     rows = msg_text.split("\n")
                     swimmer = rows[0]
                     user = UserStatus.query.filter_by(lineid = lineid).first()
                     if user == None:
-                        linepost.SendReplyMsg(reply_token,["登録されていないユーザーです。"])
+                        lineapi.SendTextMsg(reply_token,["登録されていないユーザーです。"])
                         continue
                     elif user.authorized != True:
-                        linepost.SendReplyMsg(reply_token,["許可されていないユーザーです。"])
+                        lineapi.SendTextMsg(reply_token,["許可されていないユーザーです。"])
                         continue
                     currentblock = user.currentblock
-                    import valueconv
 
                     for i, row in enumerate(rows):
                         if i != 0: #０個目は名前が書いてあるから飛ばす
@@ -96,17 +99,22 @@ def callback():
                             r = valueconv.RowSeparator(row)
                             td.style = r.style
                             if r.data.isdecimal(): #データ部分が数字のみならタイムを変換
-                                time_value = valueconv.get_time_value(r.data) #これはfloat型 文字列を秒数にしてる
-                                td.time_value = str(time_value)
+                                time_string = valueconv.fix_time_string(r.data) #ただの整数列を0:00.00の形式にする
+                                td.time_string = time_string
                             else:
-                                td.time_value = r.data
+                                td.time_string = r.data
                             db.session.add(td)
 
                     try:
                         db.session.commit()
-                        linepost.SendReplyMsg(reply_token,["おｋ"])
+                        lineapi.SendTextMsg(reply_token,["おｋ"])
                     except:
-                        linepost.SendReplyMsg(reply_token,["登録に失敗しました。"])
+                        lineapi.SendTextMsg(reply_token,["登録に失敗しました。"])
+
+                #ブロック一覧を表示する
+                elif msg_text == "一覧":
+                    lineapi.SendFlexMsg(reply_token)
+
 
 
     return "ok"
