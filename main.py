@@ -20,7 +20,7 @@ class UserStatus(db.Model):
     name = db.Column(db.String(100))
     authorized = db.Column(db.Boolean)
     status = db.Column(db.String(40))
-    currentblock = db.Column(db.String(40))
+    currentblock = db.Column(db.Integer)
 
 class TimeData(db.Model):
     __tablename__ = "timedata"
@@ -85,7 +85,7 @@ def callback():
 
         if event_type == "follow": #友だち追加ならユーザーテーブルに追加
             name = lineapi.GetProfile(lineid)
-            reg = UserStatus(lineid = lineid, name = name, authorized = True, status = "add", currentblock = "190521")
+            reg = UserStatus(lineid = lineid, name = name, authorized = True, status = "add", currentblock = 190521)
 
             try:    #lineidにunique制約あるので二重登録しようとするとエラー発生
                 db.session.add(reg)
@@ -97,6 +97,23 @@ def callback():
         elif event_type == "postback": #ボタン押したときとかのポストバックイベント
             p_data = event['postback']['data']
             print(p_data)
+            if "new" in p_data:
+                block_date = blockhandler.BlockDate()
+                blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all()
+                if len(blocks) == 0:
+                    object = block_date * 10 + 1
+                else:
+                    object = blocks[-1].blockid + 1
+                user.currentblock = object
+                user.status = "new"
+                db.session.add(user)
+
+                mb = MenuBlock()
+                mb.blockid = object
+                mb.date = block_date
+                db.session.add(mb)
+
+                db.session.commit()
 
         elif event_type == "message": #普通にメッセージきたとき
             msg_type = event['message']['type']
