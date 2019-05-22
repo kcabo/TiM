@@ -15,7 +15,7 @@ class UserStatus(db.Model):
     __tablename__ = "userstatus"
     keyid = db.Column(db.Integer, primary_key=True)
     # userid = db.Column(db.Integer)
-    lineid = db.Column(db.String(100))
+    lineid = db.Column(db.String(100), unique = True)
     name = db.Column(db.String(100))
     status = db.Column(db.String(40))
     currentblock = db.Column(db.String(40))
@@ -36,10 +36,10 @@ def callback():
         if event_type == "follow":
             reply_token = event['replyToken']
             lineid = event['source']['userId']
-            linepost.GetProfile(lineid)
-            # reg = UserStatus(lineid = lineid, name = "Reo", status = "add", currentblock = "190521")
-            # db.session.add(reg)
-            # db.session.commit()
+            name = linepost.GetProfile(lineid)
+            reg = UserStatus(lineid = lineid, name = name, status = "add", currentblock = "190521")
+            db.session.add(reg)
+            db.session.commit()
             linepost.SendReplyMsg(reply_token,["おｋ"])
 
     return "ok"
