@@ -46,6 +46,8 @@ def BlocksFlex(blocks):
       }
     }]
 
+    
+
     bubble_sample = {
       "type": "bubble",
       "hero": {
