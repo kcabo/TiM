@@ -20,7 +20,6 @@ def BlocksFlex(blocks, block_date):
     else:
         object = blocks[-1].blockid + 1
 
-    action_new = {"method": "new", "object": str(object)}
     bubbles = [{
       "type": "bubble",
       "hero": {
@@ -31,7 +30,7 @@ def BlocksFlex(blocks, block_date):
         "url": "https://drive.google.com/uc?export=view&id=1TJf3oWXtG4BF9VpqAxTb9qzAoMkO2u_K",
         "action": {
               "type": "postback",
-              "data": action_new
+              "data": "new_{}".format(str(object))
             }
       },
       "footer": {
@@ -51,7 +50,7 @@ def BlocksFlex(blocks, block_date):
         ]
       }
     }]
-    print(bubbles)
+
     if len(blocks) > 0:
         for b in blocks:
             bubble_sample = {
@@ -133,7 +132,7 @@ def BlocksFlex(blocks, block_date):
             bubbles.append(bubble_sample)
 
     contents = {"type": "carousel", "contents": bubbles}
-    print(bubbles,"2")
+    
     return contents
 
 
