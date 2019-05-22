@@ -38,9 +38,14 @@ def callback():
             lineid = event['source']['userId']
             name = linepost.GetProfile(lineid)
             reg = UserStatus(lineid = lineid, name = name, status = "add", currentblock = "190521")
-            db.session.add(reg)
-            db.session.commit()
-            linepost.SendReplyMsg(reply_token,["おｋ"])
+
+            try:
+                db.session.add(reg)
+                db.session.commit()
+                linepost.SendReplyMsg(reply_token,["おｋ"])
+            except:
+                linepost.SendReplyMsg(reply_token,["登録に失敗しました。","既に登録されている可能性がございます。"])
+
 
     return "ok"
 
