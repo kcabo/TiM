@@ -26,7 +26,7 @@ class TimeData(db.Model):
     blockid = db.Column(db.Integer)
     row = db.Column(db.Integer)
     swimmer = db.Column(db.String(40))
-    time_value = db.Column(db.Integer)
+    time_value = db.Column(db.String(40))
     style = db.Column(db.String(40))
 
 @app.route("/create")
@@ -75,8 +75,7 @@ def callback():
                             td.style = r.style
                             if r.data.isdecimal(): #データ部分が数字のみならタイムを変換
                                 time_value = valueconv.get_time_value(r.data) #これはfloat型 文字列を秒数にしてる
-                                time_value_100 = int(time_value * 100) #これはint型 DBの型に合わせてる
-                                td.time_value = time_value_100
+                                td.time_value = str(time_value)
                             else:
                                 td.time_value = r.data
                             db.session.add(td)
