@@ -28,11 +28,6 @@ def SendFlexMsg(reply_token,contents_dict,altText="メッセージだよ！！")
       "altText": altText,
       "contents": contents_dict
     }]
-    # for t in text: #引数2のメッセージをひとつずつリストに格納する
-    #     msgs.append({
-    #       'type' : 'text',
-    #       'text' : t
-    #     })
     data = {'replyToken': reply_token, 'messages': msgs}
     requests.post(url, headers=headers, data=json.dumps(data))
     return "ok"

@@ -12,7 +12,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-
 class UserStatus(db.Model):
     __tablename__ = "userstatus"
     keyid = db.Column(db.Integer, primary_key=True)
@@ -66,13 +65,23 @@ def callback():
     body_json = json.loads(body)
 
     for event in body_json['events']:
-        event_type = event['type']
+
         try:
             reply_token = event['replyToken']
         except:
             print("リプライトークンの取得に失敗しました。") #おそらくブロックされたとき
             continue
+
+        event_type = event['type']
         lineid = event['source']['userId']
+
+        user = UserStatus.query.filter_by(lineid = lineid).first()
+        if user == None:
+            lineapi.SendTextMsg(reply_token,["登録されていないユーザーです。"])
+            continue
+        elif user.authorized != True:
+            lineapi.SendTextMsg(reply_token,["許可されていないユーザーです。"])
+            continue
 
         if event_type == "follow": #友だち追加ならユーザーテーブルに追加
             name = lineapi.GetProfile(lineid)
@@ -98,13 +107,6 @@ def callback():
                 if msg_text.find("\n") > 0: #改行が含まれるときは登録と判断
                     rows = msg_text.split("\n")
                     swimmer = rows[0]
-                    user = UserStatus.query.filter_by(lineid = lineid).first()
-                    if user == None:
-                        lineapi.SendTextMsg(reply_token,["登録されていないユーザーです。"])
-                        continue
-                    elif user.authorized != True:
-                        lineapi.SendTextMsg(reply_token,["許可されていないユーザーです。"])
-                        continue
                     currentblock = user.currentblock
 
                     for i, row in enumerate(rows):
