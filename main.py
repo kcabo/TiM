@@ -72,10 +72,13 @@ def callback():
                             td.row = i
                             td.swimmer = swimmer
                             r = valueconv.RowSeparator(row)
-                            time_value = valueconv.get_time_value(r.data) #これはfloat型 文字列を秒数にしてる
-                            time_value_100 = int(time_value * 100) #これはint型 DBの型に合わせてる
-                            td.time_value = time_value_100
                             td.style = r.style
+                            if r.data.isdecimal(): #データ部分が数字のみならタイムを変換
+                                time_value = valueconv.get_time_value(r.data) #これはfloat型 文字列を秒数にしてる
+                                time_value_100 = int(time_value * 100) #これはint型 DBの型に合わせてる
+                                td.time_value = time_value_100
+                            else:
+                                td.time_value = r.data
                             db.session.add(td)
 
                     try:
