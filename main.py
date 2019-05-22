@@ -139,9 +139,9 @@ def callback():
                     user.status = "add"
                     db.session.add(user)
                     db.session.commit()
-                    block_int = blockhandler.BlockDate()
-                    block_min = block_int * 10 -1
-                    block_max = block_int * 10 + 10
+                    block_int = blockhandler.BlockDate() #190521
+                    block_min = block_int * 10 -1 #1905209
+                    block_max = block_int * 10 + 10 #1905220
 
                     blocks = Block.query.filter_by(blockid > block_min, blockid < block_max).all()
                     print(blocks[0].blockid)
