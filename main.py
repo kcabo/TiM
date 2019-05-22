@@ -5,7 +5,7 @@ import os
 import json
 import lineapi
 import valueconv
-import lookblock
+import blockhandler
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -31,6 +31,15 @@ class TimeData(db.Model):
     swimmer = db.Column(db.String(40))
     time_string = db.Column(db.String(40))
     style = db.Column(db.String(40))
+
+class Block(db.Model):
+    __tablename__ = "block"
+    keyid = db.Column(db.Integer, primary_key=True)
+    blockid = db.Column(db.Integer, unique = True)
+    # date = db.Column(db.Integer)
+    category = db.Column(db.String(40))
+    description = db.Column(db.String(100))
+    cycle = db.Column(db.String(40))
 
 @app.route("/create")
 def create_db():
@@ -76,6 +85,10 @@ def callback():
             except:
                 lineapi.SendTextMsg(reply_token,["登録に失敗しました。","既に登録されている可能性がございます。"])
 
+        elif event_type == "postback": #ボタン押したときとかのポストバックイベント
+            p_data = event['postback']['data']
+            print(p_data)
+
         elif event_type == "message": #普通にメッセージきたとき
             msg_type = event['message']['type']
             if msg_type == "text":
@@ -117,9 +130,12 @@ def callback():
 
                 #ブロック一覧を表示する
                 elif msg_text == "一覧":
-                    c = lookblock.FlexMsg()
-
-                    lineapi.SendFlexMsg(reply_token,c)
+                    block_int = blockhandler.BlockDate()
+                    block_min = block_int * 10
+                    block_max = block_int * 10 + 9
+                    blocks = Block.query.filter_by(blockid=>block_min, blockid=<block_max).all()
+                    con = blockhandler.BlocksFlex(blocks)
+                    lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
 
 
 
