@@ -15,7 +15,7 @@ def BlockDate():
 
 
 def BlocksFlex(blocks, block_date):
-    if len(blocks) = 0:
+    if len(blocks) == 0:
         object = block_date * 10 + 1
     else:
         object = blocks[-1].blockid + 1
