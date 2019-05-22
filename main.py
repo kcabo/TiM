@@ -141,7 +141,7 @@ def callback():
                     db.session.commit()
 
                     block_date = blockhandler.BlockDate() #19052
-                    blocks = MenuBlock.query.filter_by(date = block_date).order_by(blockid).all()
+                    blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all()
                     con = blockhandler.BlocksFlex(blocks,block_date)
                     lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
 
