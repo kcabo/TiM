@@ -35,7 +35,7 @@ class Block(db.Model):
     __tablename__ = "block"
     keyid = db.Column(db.Integer, primary_key=True)
     blockid = db.Column(db.Integer, unique = True)
-    # date = db.Column(db.Integer)
+    date = db.Column(db.Integer)
     category = db.Column(db.String(40))
     description = db.Column(db.String(100))
     cycle = db.Column(db.String(40))
