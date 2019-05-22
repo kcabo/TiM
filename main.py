@@ -140,10 +140,10 @@ def callback():
                     db.session.add(user)
                     db.session.commit()
                     block_int = blockhandler.BlockDate()
-                    block_min = block_int * 10
-                    block_max = block_int * 10 + 9
+                    block_min = block_int * 10 -1
+                    block_max = block_int * 10 + 10
 
-                    blocks = Block.query.filter_by(blockid=>block_min, blockid=<block_max).all()
+                    blocks = Block.query.filter_by(blockid > block_min, blockid < block_max).all()
                     print(blocks[0].blockid)
                     con = blockhandler.BlocksFlex(blocks)
                     lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
