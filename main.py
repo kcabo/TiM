@@ -38,10 +38,10 @@ def create_db():
 @app.route("/")
 def test():
     q = UserStatus.query.filter_by(keyid = 2).first()
-    if q == None:
-        print("none")
-    else:
+    try:
         print(q.lineid)
+    except:
+        print("failed")
     return "ok"
 
 @app.route("/callback", methods=['POST'])
