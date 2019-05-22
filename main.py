@@ -37,14 +37,14 @@ def create_db():
 
 @app.route("/")
 def test():
-    q = UserStatus.query.filter_by(keyid = 1).first()
-    if q == None:
-        print("nnnon")
-    else:
-        print(q.lineid)
-        q.authorized = True
-        db.session.add(q)
-        db.session.commit()
+    # q = UserStatus.query.filter_by(keyid = 1).first()
+    # if q == None:
+    #     print("nnnon")
+    # else:
+    #     print(q.lineid)
+    #     q.authorized = True
+    #     db.session.add(q)
+    #     db.session.commit()
     pass
     return "ok"
 
@@ -77,14 +77,20 @@ def callback():
                 if msg_text.find("\n") > 0: #改行が含まれるときは登録と判断
                     rows = msg_text.split("\n")
                     swimmer = rows[0]
-
-                    # currentblock =
+                    user = UserStatus.query.filter_by(lineid = lineid).first()
+                    if user == None:
+                        linepost.SendReplyMsg(reply_token,["登録されていないユーザーです。"])
+                        continue
+                    elif user.authorized != True:
+                        linepost.SendReplyMsg(reply_token,["許可されていないユーザーです。"])
+                        continue
+                    currentblock = user.currentblock
                     import valueconv
 
                     for i, row in enumerate(rows):
-                        if i != 0:
+                        if i != 0: #０個目は名前が書いてあるから飛ばす
                             td = TimeData()
-                            td.blockid = 190521
+                            td.blockid = currentblock
                             td.row = i
                             td.swimmer = swimmer
                             r = valueconv.RowSeparator(row)
