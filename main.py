@@ -31,8 +31,8 @@ class TimeData(db.Model):
     time_string = db.Column(db.String(40))
     style = db.Column(db.String(40))
 
-class Block(db.Model):
-    __tablename__ = "block"
+class MenuBlock(db.Model):
+    __tablename__ = "menublock"
     keyid = db.Column(db.Integer, primary_key=True)
     blockid = db.Column(db.Integer, unique = True)
     date = db.Column(db.Integer)
@@ -141,7 +141,7 @@ def callback():
                     db.session.commit()
 
                     block_date = blockhandler.BlockDate() #19052
-                    blocks = Block.query.filter_by(date = block_date).order_by(blockid).all()
+                    blocks = MenuBlock.query.filter_by(date = block_date).order_by(blockid).all()
                     con = blockhandler.BlocksFlex(blocks,block_date)
                     lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
 
