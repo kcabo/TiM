@@ -9,6 +9,11 @@ class RowSeparator():
         self.style = match_obj.group(1)
         self.data = match_obj.group(2)
 
+def fix_time_string(time_int):
+    str = time_int.zfill(5) #最小５文字でゼロ埋め
+    time_string = "{0}:{1}.{2}".format(str[:-4],str[-4:-2],str[-2:])
+    return time_string
+
 def get_time_value(time_int):
     minutes = time_int[-6:-4]
     seconds = int(time_int[-4:]) / 100
