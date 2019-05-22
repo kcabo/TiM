@@ -17,7 +17,7 @@ class UserStatus(db.Model):
     # userid = db.Column(db.Integer)
     lineid = db.Column(db.String(100), unique = True)
     name = db.Column(db.String(100))
-    # authorized = db.Column(db.Boolean)
+    authorized = db.Column(db.Boolean)
     status = db.Column(db.String(40))
     currentblock = db.Column(db.String(40))
 
@@ -37,12 +37,15 @@ def create_db():
 
 @app.route("/")
 def test():
-    q = UserStatus.query.filter_by(keyid = 2).first()
-    if q.lineid == None:
+    q = UserStatus.query.filter_by(keyid = 1).first()
+    if q == None:
         print("nnnon")
     else:
         print(q.lineid)
-
+        q.authorized = True
+        db.session.add(q)
+        db.session.commit()
+    pass
     return "ok"
 
 @app.route("/callback", methods=['POST'])
