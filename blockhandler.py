@@ -56,7 +56,7 @@ def BlocksFlex(blocks):
           {
             "type": "text",
             "text": "<新規作成は上の画像をタップ>",
-            "wrap": true,
+            "wrap": True,
             "weight": "regular",
             "size": "xs",
             "align": "center",
@@ -82,14 +82,14 @@ def BlocksFlex(blocks):
           {
             "type": "text",
             "text": "BlockID:1904281",
-            "wrap": true,
+            "wrap": True,
             "weight": "regular",
             "size": "md"
           },
           {
             "type": "text",
             "text": "Swim",
-            "wrap": true,
+            "wrap": True,
             "weight": "bold",
             "size": "md",
             "margin": "md"
@@ -97,7 +97,7 @@ def BlocksFlex(blocks):
           {
             "type": "text",
             "text": "50*4*1 high average",
-            "wrap": true,
+            "wrap": True,
             "weight": "bold",
             "size": "sm",
             "margin": "none"
@@ -105,7 +105,7 @@ def BlocksFlex(blocks):
           {
             "type": "text",
             "text": "1:00",
-            "wrap": true,
+            "wrap": True,
             "weight": "bold",
             "size": "sm",
             "margin": "none"
