@@ -37,11 +37,11 @@ def create_db():
 
 @app.route("/")
 def test():
-    q = UserStatus.query.filter_by(keyid = 2).first
-    if q == None:
-        print("none")
-    else:
-        print(q.lineid)
+    q = UserStatus.query.filter_by(keyid = 2).first()
+    # if q == None:
+    #     print("none")
+    # else:
+    print(q.lineid)
     return "ok"
 
 @app.route("/callback", methods=['POST'])
