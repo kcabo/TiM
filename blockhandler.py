@@ -15,27 +15,7 @@ def BlockDate():
 
 
 def BlocksFlex(blocks):
-    # contents = {
-    #   "type": "bubble",
-    #   "body": {
-    #     "type": "box",
-    #     "layout": "horizontal",
-    #     "contents": [
-    #       {
-    #         "type": "text",
-    #         "text": "かんざき,"
-    #       },
-    #       {
-    #         "type": "text",
-    #         "text": "flex!"
-    #       }
-    #     ]
-    #   }
-    # }
-    contents = {
-  "type": "carousel",
-  "contents": [
-    {
+    bubbles = [{
       "type": "bubble",
       "hero": {
         "type": "image",
@@ -64,8 +44,9 @@ def BlocksFlex(blocks):
           }
         ]
       }
-    },
-    {
+    }]
+
+    bubble_sample = {
       "type": "bubble",
       "hero": {
         "type": "image",
@@ -140,8 +121,11 @@ def BlocksFlex(blocks):
         ]
       }
     }
-  ]
-}
+
+    bubbles.append(bubble_sample)
+
+    contents = {"type": "carousel", "contents": bubbles}
+
     return contents
 
 
