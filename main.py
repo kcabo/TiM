@@ -17,7 +17,7 @@ class UserStatus(db.Model):
     # userid = db.Column(db.Integer)
     lineid = db.Column(db.String(100), unique = True)
     name = db.Column(db.String(100))
-    authorized = db.Column(db.Boolean)
+    # authorized = db.Column(db.Boolean)
     status = db.Column(db.String(40))
     currentblock = db.Column(db.String(40))
 
