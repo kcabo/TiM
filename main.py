@@ -17,6 +17,7 @@ class UserStatus(db.Model):
     # userid = db.Column(db.Integer)
     lineid = db.Column(db.String(100), unique = True)
     name = db.Column(db.String(100))
+    authorized = db.Column(db.Boolean)
     status = db.Column(db.String(40))
     currentblock = db.Column(db.String(40))
 
@@ -33,6 +34,11 @@ class TimeData(db.Model):
 def create_db():
     db.create_all()
     return "ok"
+
+@app.route("/")
+def test():
+    q = UserStatus.query.filter_by(keyid = 2).first
+    print(q.lineid)
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -63,6 +69,8 @@ def callback():
                 if msg_text.find("\n") > 0: #改行が含まれるときは登録と判断
                     rows = msg_text.split("\n")
                     swimmer = rows[0]
+
+                    # currentblock =
                     import valueconv
 
                     for i, row in enumerate(rows):
