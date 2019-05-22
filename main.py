@@ -23,7 +23,7 @@ class UserStatus(db.Model):
 class TimeData(db.Model):
     __tablename__ = "timedata"
     keyid = db.Column(db.Integer, primary_key=True)
-    blockid = db.Column(db.Integer))
+    blockid = db.Column(db.Integer)
     row = db.Column(db.Integer)
     swimmer = db.Column(db.String(40))
     time_value = db.Column(db.Integer)
