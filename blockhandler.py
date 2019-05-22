@@ -20,7 +20,7 @@ def BlocksFlex(blocks, block_date):
     else:
         object = blocks[-1].blockid + 1
 
-    action_new = {"method":"new","object":str(object)}
+    action_new = {"method": "new", "object": str(object)}
     bubbles = [{
       "type": "bubble",
       "hero": {
@@ -31,7 +31,7 @@ def BlocksFlex(blocks, block_date):
         "url": "https://drive.google.com/uc?export=view&id=1TJf3oWXtG4BF9VpqAxTb9qzAoMkO2u_K",
         "action": {
               "type": "postback",
-              "data": str(object)#action_new
+              "data": action_new
             }
       },
       "footer": {
