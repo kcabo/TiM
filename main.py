@@ -37,7 +37,7 @@ def create_db():
 
 @app.route("/")
 def test():
-    q = UserStatus.query.filter_by(keyid = 2).first()
+    q = UserStatus.query.filter_by(keyid = 1).first()
     try:
         print(q.lineid)
     except:
