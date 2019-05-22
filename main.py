@@ -38,8 +38,11 @@ def create_db():
 @app.route("/")
 def test():
     try:
-        q = UserStatus.query.filter_by(keyid=2).first()
-        print(q.lineid)
+        q = UserStatus.query.filter_by(keyid = 2).first()
+        if q == None:
+            print("nnnon")
+        else:
+            print(q.lineid)
     except:
         print("failed")
     return "ok"
