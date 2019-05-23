@@ -129,9 +129,9 @@ def callback():
             if user.status == "new":
                 new_block = MenuBlock.query.filter_by(blockid = user.currentblock).first()
                 st_list = msg_text.split("\n")
-                new_block.category = st_list.[0]
-                new_block.description = st_list.[1]
-                new_block.cycle = st_list.[2]
+                new_block.category = st_list[0]
+                new_block.description = st_list[1]
+                new_block.cycle = st_list[2]
                 db.session.add(new_block)
                 user.status = "add" #ユーザー情報を更新
                 db.session.add(user)
