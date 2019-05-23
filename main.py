@@ -115,7 +115,7 @@ def callback():
                 db.session.add(mb)
                 db.session.commit()
 
-                new_block_msg = ["新しいブロックが生成されました。例にならってブロックの情報を追加してください。","例：\n--------\nSwim\n50*4*1 HighAverage\n1:00\n--------"]
+                new_block_msg = ["新しいブロックが生成されました。\n例にならってブロックの情報を追加してください。","例：\n--------\nSwim\n50*4*1 HighAverage\n1:00\n--------"]
                 lineapi.SendTextMsg(reply_token,new_block_msg)
 
         elif event_type == "message": #普通にメッセージきたとき
@@ -126,18 +126,34 @@ def callback():
 
             msg_text = event['message']['text']
 
-            #ブロックに名前をつける
-            if user.status == "new":
-                new_block = MenuBlock.query.filter_by(blockid = user.currentblock).first()
-                st_list = msg_text.split("\n")
-                new_block.category = st_list[0]
-                new_block.description = st_list[1]
-                new_block.cycle = st_list[2]
-                db.session.add(new_block)
-                user.status = "add" #ユーザー情報を更新
+            #ブロック一覧を表示する ブロックIDは一覧と入力されればリセットされるから安心
+            if msg_text == "一覧":
+                user.currentblock = 0
+                user.status = "add"
                 db.session.add(user)
                 db.session.commit()
-                lineapi.SendTextMsg(reply_token,["新しいブロックが正しく登録されました。編集を開始してください。"])
+
+                block_date = blockhandler.BlockDate() #19052
+                blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all()
+                print(blocks)
+                con = blockhandler.BlocksFlex(blocks,block_date)
+                lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
+
+            #ブロックに名前をつける
+            elif user.status == "new":
+                new_block = MenuBlock.query.filter_by(blockid = user.currentblock).first()
+                st_list = msg_text.split("\n")
+                if len(st_list) == 3;
+                    new_block.category = st_list[0]
+                    new_block.description = st_list[1]
+                    new_block.cycle = st_list[2]
+                    db.session.add(new_block)
+                    user.status = "add" #ユーザー情報を更新
+                    db.session.add(user)
+                    db.session.commit()
+                    lineapi.SendTextMsg(reply_token,["新しいブロックが正しく登録されました。\n編集を開始してください。"])
+                else:
+                    lineapi.SendTextMsg(reply_token,["なんでもいいから3行で入力してください。"])
 
             #timedataテーブルに新しい記録を追加する
             elif msg_text.find("\n") > 0: #改行が含まれるときは登録と判断
@@ -169,18 +185,7 @@ def callback():
                 except:
                     lineapi.SendTextMsg(reply_token,["登録に失敗しました。"])
 
-            #ブロック一覧を表示する
-            elif msg_text == "一覧":
-                user.currentblock = 0
-                user.status = "add"
-                db.session.add(user)
-                db.session.commit()
 
-                block_date = blockhandler.BlockDate() #19052
-                blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all()
-                print(blocks)
-                con = blockhandler.BlocksFlex(blocks,block_date)
-                lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
 
 
 
