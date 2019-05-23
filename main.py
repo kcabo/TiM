@@ -97,71 +97,89 @@ def callback():
         elif event_type == "postback": #ボタン押したときとかのポストバックイベント
             p_data = event['postback']['data']
             print(p_data)
-            if "new" in p_data:
-                block_date = blockhandler.BlockDate()
-                blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all()
-                if len(blocks) == 0:
-                    object = block_date * 10 + 1
-                else:
-                    object = blocks[-1].blockid + 1
+            pd = p_data.split("_")
+
+            if pd[0] == "new":
+                if user.currentblock != "":
+                    lineapi.SendTextMsg(reply_token,["もう一度一覧からブロックを選択してください。"])
+                    continue
+                object = pd[1]
                 user.currentblock = object
-                user.status = "new"
+                user.status = "new" #この状態で受け取った文字列はブロック名登録となる
                 db.session.add(user)
 
                 mb = MenuBlock()
                 mb.blockid = object
-                mb.date = block_date
+                mb.date = object[:6] #最初の6文字が日付となってる
                 db.session.add(mb)
-
                 db.session.commit()
+
+                new_block_msg = ["新しいブロックが生成されました。例にならってブロックの情報を追加してください。","例：\n--------\nSwim\n50*4*1 HighAverage\n1:00\n--------"]
+                lineapi.SendTextMsg(reply_token,new_block_msg)
 
         elif event_type == "message": #普通にメッセージきたとき
             msg_type = event['message']['type']
-            if msg_type == "text":
-                msg_text = event['message']['text']
+            if msg_type != "text":
+                lineapi.SendTextMsg(reply_token,["(;´･ω･)･･･"])
+                continue
 
-                #timedataテーブルに新しい記録を追加する
-                if msg_text.find("\n") > 0: #改行が含まれるときは登録と判断
-                    rows = msg_text.split("\n")
-                    swimmer = rows[0]
-                    currentblock = user.currentblock
-                    if currentblock == "":
-                        lineapi.SendTextMsg(reply_token,["一覧からブロックを選択してから入力してください。"])
-                        continue
+            msg_text = event['message']['text']
 
-                    for i, row in enumerate(rows):
-                        if i != 0: #０個目は名前が書いてあるから飛ばす
-                            td = TimeData()
-                            td.blockid = currentblock
-                            td.row = i
-                            td.swimmer = swimmer
-                            r = valueconv.RowSeparator(row)
-                            td.style = r.style
-                            if r.data.isdecimal(): #データ部分が数字のみならタイムを変換
-                                time_string = valueconv.fix_time_string(r.data) #ただの整数列を0:00.00の形式にする
-                                td.time_string = time_string
-                            else:
-                                td.time_string = r.data
-                            db.session.add(td)
+            #ブロックに名前をつける
+            if user.status == "new":
+                new_block = MenuBlock.query.filter_by(blockid = user.currentblock).first()
+                st_list = msg_text.split("\n")
+                new_block.category = st_list.[0]
+                new_block.description = st_list.[1]
+                new_block.cycle = st_list.[2]
+                db.session.add(new_block)
+                user.status = "add" #ユーザー情報を更新
+                db.session.add(user)
+                db.session.commit()
+                lineapi.SendTextMsg(reply_token,["新しいブロックが正しく登録されました。編集を開始してください。"])
 
-                    try:
-                        db.session.commit()
-                        lineapi.SendTextMsg(reply_token,["おｋ"])
-                    except:
-                        lineapi.SendTextMsg(reply_token,["登録に失敗しました。"])
+            #timedataテーブルに新しい記録を追加する
+            elif msg_text.find("\n") > 0: #改行が含まれるときは登録と判断
+                rows = msg_text.split("\n")
+                swimmer = rows[0]
+                currentblock = user.currentblock
+                if currentblock == "":
+                    lineapi.SendTextMsg(reply_token,["一覧からブロックを選択してから入力してください。"])
+                    continue
 
-                #ブロック一覧を表示する
-                elif msg_text == "一覧":
-                    user.currentblock = ""
-                    user.status = "add"
-                    db.session.add(user)
+                for i, row in enumerate(rows):
+                    if i != 0: #０個目は名前が書いてあるから飛ばす
+                        td = TimeData()
+                        td.blockid = currentblock
+                        td.row = i
+                        td.swimmer = swimmer
+                        r = valueconv.RowSeparator(row)
+                        td.style = r.style
+                        if r.data.isdecimal(): #データ部分が数字のみならタイムを変換
+                            time_string = valueconv.fix_time_string(r.data) #ただの整数列を0:00.00の形式にする
+                            td.time_string = time_string
+                        else:
+                            td.time_string = r.data
+                        db.session.add(td)
+
+                try:
                     db.session.commit()
+                    lineapi.SendTextMsg(reply_token,["おｋ"])
+                except:
+                    lineapi.SendTextMsg(reply_token,["登録に失敗しました。"])
 
-                    block_date = blockhandler.BlockDate() #19052
-                    blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all()
-                    print(blocks)
-                    con = blockhandler.BlocksFlex(blocks,block_date)
-                    lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
+            #ブロック一覧を表示する
+            elif msg_text == "一覧":
+                user.currentblock = ""
+                user.status = "add"
+                db.session.add(user)
+                db.session.commit()
+
+                block_date = blockhandler.BlockDate() #19052
+                blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all()
+                print(blocks)
+                con = blockhandler.BlocksFlex(blocks,block_date)
+                lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
 
 
 

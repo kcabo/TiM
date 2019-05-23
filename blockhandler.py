@@ -18,7 +18,7 @@ def BlocksFlex(blocks, block_date):
     if len(blocks) == 0:
         object = block_date * 10 + 1
     else:
-        object = blocks[-1].blockid + 1
+        object = blocks[-1].blockid + 1 #並び替えて一番最後になったブロックのIDが最大
 
     bubbles = [{
       "type": "bubble",
@@ -132,7 +132,7 @@ def BlocksFlex(blocks, block_date):
             bubbles.append(bubble_sample)
 
     contents = {"type": "carousel", "contents": bubbles}
-    
+
     return contents
 
 
