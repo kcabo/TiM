@@ -76,7 +76,7 @@ def BlocksFlex(blocks, block_date):
                   },
                   {
                     "type": "text",
-                    "text": "Swim",
+                    "text": b.category,
                     "wrap": True,
                     "weight": "bold",
                     "size": "md",
@@ -84,7 +84,7 @@ def BlocksFlex(blocks, block_date):
                   },
                   {
                     "type": "text",
-                    "text": "50*4*1 high average",
+                    "text": b.description,
                     "wrap": True,
                     "weight": "bold",
                     "size": "sm",
@@ -92,7 +92,7 @@ def BlocksFlex(blocks, block_date):
                   },
                   {
                     "type": "text",
-                    "text": "1:00",
+                    "text": b.cycle,
                     "wrap": True,
                     "weight": "bold",
                     "size": "sm",
