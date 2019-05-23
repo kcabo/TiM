@@ -129,7 +129,7 @@ def callback():
             #ブロック一覧を表示する ブロックIDは一覧と入力されればリセットされるから安心
             if msg_text == "一覧":
                 user.currentblock = 0
-                user.status = "add"
+                user.status = ""
                 db.session.add(user)
                 db.session.commit()
 
