@@ -75,13 +75,14 @@ def callback():
         event_type = event['type']
         lineid = event['source']['userId']
 
-        user = UserStatus.query.filter_by(lineid = lineid).first()
-        if user is None:
-            lineapi.SendTextMsg(reply_token,["登録されていないユーザーです。"])
-            continue
-        elif user.authorized != True:
-            lineapi.SendTextMsg(reply_token,["許可されていないユーザーです。"])
-            continue
+        if event_type != "follow": #追加時はこの操作はしない
+            user = UserStatus.query.filter_by(lineid = lineid).first()
+            if user is None:
+                lineapi.SendTextMsg(reply_token,["登録されていないユーザーです。"])
+                continue
+            elif user.authorized != True:
+                lineapi.SendTextMsg(reply_token,["許可されていないユーザーです。"])
+                continue
 
         if event_type == "follow": #友だち追加ならユーザーテーブルに追加
             name = lineapi.GetProfile(lineid)
