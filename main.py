@@ -86,7 +86,7 @@ def callback():
 
         if event_type == "follow": #友だち追加ならユーザーテーブルに追加
             name = lineapi.GetProfile(lineid)
-            reg = UserStatus(lineid = lineid, name = name, authorized = True, status = "add", currentblock = 190521)
+            reg = UserStatus(lineid = lineid, name = name, authorized = True, status = "", currentblock = 0)
 
             try:    #lineidにunique制約あるので二重登録しようとするとエラー発生
                 db.session.add(reg)
@@ -101,16 +101,16 @@ def callback():
             pd = p_data.split("_")
 
             if pd[0] == "new":
-                if user.currentblock != "":
+                if user.currentblock != 0: #最新のカルーセルから新規作成ボタンを押したなら0のはず
                     lineapi.SendTextMsg(reply_token,["もう一度一覧からブロックを選択してください。"])
                     continue
                 object = pd[1]
-                user.currentblock = object
+                user.currentblock = int(object)
                 user.status = "new" #この状態で受け取った文字列はブロック名登録となる
                 db.session.add(user)
 
                 mb = MenuBlock()
-                mb.blockid = object
+                mb.blockid = int(object)
                 mb.date = object[:6] #最初の6文字が日付となってる
                 db.session.add(mb)
                 db.session.commit()
@@ -144,7 +144,7 @@ def callback():
                 rows = msg_text.split("\n")
                 swimmer = rows[0]
                 currentblock = user.currentblock
-                if currentblock == "":
+                if currentblock == 0:
                     lineapi.SendTextMsg(reply_token,["一覧からブロックを選択してから入力してください。"])
                     continue
 
@@ -171,7 +171,7 @@ def callback():
 
             #ブロック一覧を表示する
             elif msg_text == "一覧":
-                user.currentblock = ""
+                user.currentblock = 0
                 user.status = "add"
                 db.session.add(user)
                 db.session.commit()
