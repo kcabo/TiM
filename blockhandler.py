@@ -76,7 +76,7 @@ def BlocksFlex(blocks, block_date):
                   },
                   {
                     "type": "text",
-                    "text": b.category if b.category != "" else "[空欄]",
+                    "text": b.category if b.category is not None else "[空欄]",
                     "wrap": True,
                     "weight": "bold",
                     "size": "md",
@@ -84,7 +84,7 @@ def BlocksFlex(blocks, block_date):
                   },
                   {
                     "type": "text",
-                    "text": b.description if b.description != "" else "[空欄]",
+                    "text": b.description if b.description is not None else "[空欄]",
                     "wrap": True,
                     "weight": "bold",
                     "size": "sm",
@@ -92,7 +92,7 @@ def BlocksFlex(blocks, block_date):
                   },
                   {
                     "type": "text",
-                    "text": b.cycle if b.cycle != "" else "[空欄]",
+                    "text": b.cycle if b.cycle is not None else "[空欄]",
                     "wrap": True,
                     "weight": "bold",
                     "size": "sm",
