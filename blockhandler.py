@@ -174,6 +174,7 @@ def BlocksFlex(blocks, block_date):
     return contents
 
 def all_data_content_flex():
+    #バブルは最大サイズ10KB カルーセルは50KBらしい
     contents = {
       "type": "bubble",
       "body": {
@@ -199,7 +200,7 @@ def all_data_content_flex():
                 "contents": [
                   {
                     "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79",
                     "wrap": True,
                     "weight": "regular",
                     "size": "xxs",
@@ -226,7 +227,7 @@ def all_data_content_flex():
                 "contents": [
                   {
                     "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79",
                     "wrap": True,
                     "weight": "regular",
                     "size": "xxs",
@@ -253,7 +254,7 @@ def all_data_content_flex():
                 "contents": [
                   {
                     "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79",
                     "wrap": True,
                     "weight": "regular",
                     "size": "xxs",
@@ -291,7 +292,7 @@ def all_data_content_flex():
                 "contents": [
                   {
                     "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79",
                     "wrap": True,
                     "weight": "regular",
                     "size": "xxs",
@@ -318,7 +319,7 @@ def all_data_content_flex():
                 "contents": [
                   {
                     "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79",
                     "wrap": True,
                     "weight": "regular",
                     "size": "xxs",
@@ -345,7 +346,7 @@ def all_data_content_flex():
                 "contents": [
                   {
                     "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79",
                     "wrap": True,
                     "weight": "regular",
                     "size": "xxs",
@@ -383,7 +384,7 @@ def all_data_content_flex():
                 "contents": [
                   {
                     "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79",
                     "wrap": True,
                     "weight": "regular",
                     "size": "xxs",
@@ -410,7 +411,7 @@ def all_data_content_flex():
                 "contents": [
                   {
                     "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79",
                     "wrap": True,
                     "weight": "regular",
                     "size": "xxs",
@@ -437,7 +438,7 @@ def all_data_content_flex():
                 "contents": [
                   {
                     "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79",
                     "wrap": True,
                     "weight": "regular",
                     "size": "xxs",
@@ -475,7 +476,7 @@ def all_data_content_flex():
                 "contents": [
                   {
                     "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79",
                     "wrap": True,
                     "weight": "regular",
                     "size": "xxs",
@@ -502,7 +503,7 @@ def all_data_content_flex():
                 "contents": [
                   {
                     "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79",
                     "wrap": True,
                     "weight": "regular",
                     "size": "xxs",
@@ -529,7 +530,7 @@ def all_data_content_flex():
                 "contents": [
                   {
                     "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79",
                     "wrap": True,
                     "weight": "regular",
                     "size": "xxs",
@@ -567,7 +568,7 @@ def all_data_content_flex():
                 "contents": [
                   {
                     "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79",
                     "wrap": True,
                     "weight": "regular",
                     "size": "xxs",
@@ -594,7 +595,7 @@ def all_data_content_flex():
                 "contents": [
                   {
                     "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79",
                     "wrap": True,
                     "weight": "regular",
                     "size": "xxs",
@@ -621,7 +622,7 @@ def all_data_content_flex():
                 "contents": [
                   {
                     "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79",
                     "wrap": True,
                     "weight": "regular",
                     "size": "xxs",
