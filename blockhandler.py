@@ -136,7 +136,7 @@ def BlocksFlex(blocks, block_date):
     return contents
 
 def ConfirmTemplate(confirm_msg):
-    template =  {
+    template = {
       "type": "confirm",
       "text": confirm_msg,
       "actions": [
@@ -151,5 +151,5 @@ def ConfirmTemplate(confirm_msg):
             "data": "confirm_no"
           }
       ]
-  }
-  return template
+      }
+    return template
