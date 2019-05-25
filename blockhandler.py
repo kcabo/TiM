@@ -166,6 +166,133 @@ def BlocksFlex(blocks, block_date):
 
     return contents
 
+def all_data_content_flex():
+    contents = {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "md",
+        "contents": [
+          {
+            "type": "text",
+            "text": "ID:19052501",
+            "size": "xl",
+            "weight": "bold"
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "spacing": "lg",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "xxs",
+                    "align": "center",
+                    "flex": 1
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "削除",
+                      "uri": "https://linecorp.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "xxs",
+                    "align": "center",
+                    "flex": 1
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "削除",
+                      "uri": "https://linecorp.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "xxs",
+                    "align": "center",
+                    "flex": 1
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "削除",
+                      "uri": "https://linecorp.com"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "horizontal",
+        "spacing": "lg",
+        "contents": [
+          {
+            "type": "button",
+            "style": "primary",
+            "color": "#2e6095",
+            "height": "sm",
+            "action": {
+              "type": "uri",
+              "label": "Add",
+              "uri": "https://linecorp.com"
+            }
+          }
+        ]
+      }
+    }
+
+    return contents
+
+
 def ConfirmTemplate(confirm_msg):
     template = {
       "type": "confirm",
