@@ -140,13 +140,13 @@ def callback():
             elif pd[0] == "confirm": #一覧から削除を押したとき
                 answer = pd[1]
                 if user.status != "delete":
-                    lineapi.SendTextMsg(reply_token,["過去に押したボタンは押さないで～"])
+                    lineapi.SendTextMsg(reply_token,["過去のボタンは押さないで～"])
                     continue
                 if answer == "yes":
                     object = user.currentblock
                     del_block = MenuBlock.query.filter_by(blockid = object).first()
                     db.session.delete(del_block)
-                    de.session.commit()
+                    db.session.commit()
                     msg = "削除しました。"
                 else:
                     msg = "キャンセルしました。"
