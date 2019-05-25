@@ -274,6 +274,378 @@ def all_data_content_flex():
                 ]
               }
             ]
+          },
+          {
+            "type": "separator",
+            "margin": "xl"
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "spacing": "lg",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "xxs",
+                    "align": "center",
+                    "flex": 1
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "削除",
+                      "uri": "https://linecorp.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "xxs",
+                    "align": "center",
+                    "flex": 1
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "削除",
+                      "uri": "https://linecorp.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "xxs",
+                    "align": "center",
+                    "flex": 1
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "削除",
+                      "uri": "https://linecorp.com"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "separator",
+            "margin": "xl"
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "spacing": "lg",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "xxs",
+                    "align": "center",
+                    "flex": 1
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "削除",
+                      "uri": "https://linecorp.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "xxs",
+                    "align": "center",
+                    "flex": 1
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "削除",
+                      "uri": "https://linecorp.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "xxs",
+                    "align": "center",
+                    "flex": 1
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "削除",
+                      "uri": "https://linecorp.com"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "separator",
+            "margin": "xl"
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "spacing": "lg",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "xxs",
+                    "align": "center",
+                    "flex": 1
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "削除",
+                      "uri": "https://linecorp.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "xxs",
+                    "align": "center",
+                    "flex": 1
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "削除",
+                      "uri": "https://linecorp.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "xxs",
+                    "align": "center",
+                    "flex": 1
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "削除",
+                      "uri": "https://linecorp.com"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "separator",
+            "margin": "xl"
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "spacing": "lg",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "xxs",
+                    "align": "center",
+                    "flex": 1
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "削除",
+                      "uri": "https://linecorp.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "xxs",
+                    "align": "center",
+                    "flex": 1
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "削除",
+                      "uri": "https://linecorp.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "神崎\nfr 10:32.54\nfrごめんなさい",
+                    "wrap": True,
+                    "weight": "regular",
+                    "size": "xxs",
+                    "align": "center",
+                    "flex": 1
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#2e6095",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "削除",
+                      "uri": "https://linecorp.com"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "separator",
+            "margin": "xl"
           }
         ]
       },
