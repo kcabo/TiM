@@ -13,9 +13,8 @@ class RowSeparator():
         else:
             self.data = buf
 
-
     def merged_data(self):
-        if self.style == "":
+        if self.style is None:
             merged = self.data
         else:
             merged = self.style + "　" + self.data
