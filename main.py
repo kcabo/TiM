@@ -138,11 +138,15 @@ def callback():
                 user.currentblock = int(object)
                 user.status = "add" #この状態で受け取った文字列は通常のデータ登録となる
                 db.session.commit()
-                all_data = TimeData.query.filter_by(blockid = int(object)).all() #.order_by(TimeData.swimmer, TimeData.row)はいらない？
-                switch_block = MenuBlock.query.filter_by(blockid = int(object)).first()
-                switch_block_contents = blockhandler.get_all_contents_in_text(switch_block, all_data)
-                switch_block_msg = "BlockID:{}に切り替えました。\n編集を開始してください。".format(object)
-                lineapi.SendTextMsg(reply_token,[switch_block_contents, switch_block_msg])
+
+                con = blockhandler.all_data_content_flex()
+                lineapi.SendFlexMsg(reply_token,con,"全データ")
+                #
+                # all_data = TimeData.query.filter_by(blockid = int(object)).all() #.order_by(TimeData.swimmer, TimeData.row)はいらない？
+                # switch_block = MenuBlock.query.filter_by(blockid = int(object)).first()
+                # switch_block_contents = blockhandler.get_all_contents_in_text(switch_block, all_data)
+                # switch_block_msg = "BlockID:{}に切り替えました。\n編集を開始してください。".format(object)
+                # lineapi.SendTextMsg(reply_token,[switch_block_contents, switch_block_msg])
 
             elif pd[0] == "delete": #一覧から削除を押したとき
                 object = pd[1]
