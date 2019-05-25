@@ -19,7 +19,7 @@ def get_all_contents_in_text(block, data):
         if d.row == 1: #１行目なら前の選手のバッファデータを全部listに加えて、次の選手に備える
             list.append("\n".join(buf_l))
             buf_l = [d.swimmer]
-        if d.style == "": #スタイルとデータをあわせたやつをバッファに格納（バッファはリストに加えるときに改行で分ける）
+        if d.style is None: #スタイルとデータをあわせたやつをバッファに格納（バッファはリストに加えるときに改行で分ける）
             buf_l.append(d.data)
         else:
             buf_l.append(d.style + "　" + d.data)
