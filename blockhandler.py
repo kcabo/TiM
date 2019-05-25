@@ -13,8 +13,8 @@ def BlockDate():
     return block_int
 
 def get_all_contents_in_text(block, data):
-    list = ["ID: {}\n{}\n{}\n{}".format(block.blockid, block.category, block.description, block.cycle)]
-    buf_l = []
+    list = []
+    buf_l = ["ID:{}\n{}\n{}\n{}".format(block.blockid, block.category, block.description, block.cycle)]
     for d in data:
         if d.row == 1: #１行目なら前の選手のバッファデータを全部listに加えて、次の選手に備える
             list.append("\n".join(buf_l))
