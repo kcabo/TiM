@@ -120,7 +120,7 @@ def callback():
                     new_block_msg = ["新しいブロックが生成されました。\n例にならってブロックの情報を追加してください。","例：\n--------\nSwim\n50*4*1 HighAverage\n1:00\n--------"]
                     lineapi.SendTextMsg(reply_token,new_block_msg)
 
-            elif pd[0] == "header"
+            elif pd[0] == "header":
                 if user.currentblock != 0: #最新のカルーセルから新規作成ボタンを押したなら0のはず
                     lineapi.SendTextMsg(reply_token,["もう一度一覧を呼び出してから選択してください。"])
                     continue
