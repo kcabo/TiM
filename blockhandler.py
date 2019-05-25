@@ -5,7 +5,7 @@ def BlockDate():
     # date_str = "2019/5/20 06:30" #デバッグ用
     # now = datetime.strptime(date_str, '%Y/%m/%d %H:%M')
     yobi = now.weekday()
-    if yobi == 6 or yobi == 2: #月が0で日が6 水日は時間帯にかかわらず全日を参照
+    if yobi == 6 or yobi == 2: #月が0で日が6 水日は時間帯にかかわらず前日を参照
         nominal_time = now - timedelta(hours=24)
     else:
         nominal_time = now - timedelta(hours=7)
@@ -16,7 +16,7 @@ def BlockDate():
 
 def BlocksFlex(blocks, block_date):
     if len(blocks) == 0:
-        object = block_date * 10 + 1
+        object = block_date * 100 + 1
     else:
         object = blocks[-1].blockid + 1 #並び替えて一番最後になったブロックのIDが最大
 
@@ -111,8 +111,8 @@ def BlocksFlex(blocks, block_date):
                     "color": "#2e6095",
                     "action": {
                       "type": "postback",
-                      "label": "編集",
-                      "data": "受け取れこの文字列を"
+                      "label": "このブロックを削除する",
+                      "data": "delete_{}".format(b.blockid)
                     }
                   },
                   {
@@ -121,8 +121,8 @@ def BlocksFlex(blocks, block_date):
                     "color": "#1d366d",
                     "action": {
                       "type": "postback",
-                      "label": "確認",
-                      "data": "こっちは下のだ"
+                      "label": "このブロックに切り替える",
+                      "data": "switch_{}".format(b.blockid)
                     }
                   }
                 ]
@@ -135,5 +135,21 @@ def BlocksFlex(blocks, block_date):
 
     return contents
 
-
-# print(datetime.date.today())
+def ConfirmTemplate(confirm_msg):
+    template =  {
+      "type": "confirm",
+      "text": confirm_msg,
+      "actions": [
+          {
+            "type": "postback",
+            "label": "はい",
+            "data": "confirm_yes"
+          },
+          {
+            "type": "postback",
+            "label": "いいえ",
+            "data": "confirm_no"
+          }
+      ]
+  }
+  return template

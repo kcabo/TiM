@@ -33,8 +33,8 @@ class TimeData(db.Model):
 
 class MenuBlock(db.Model):
     __tablename__ = "menublock"
-    keyid = db.Column(db.Integer, primary_key=True)
-    blockid = db.Column(db.Integer, unique = True)
+    # keyid = db.Column(db.Integer, primary_key=True)
+    blockid = db.Column(db.Integer, primary_key = True)
     date = db.Column(db.Integer)
     category = db.Column(db.String(40))
     description = db.Column(db.String(100))
@@ -100,23 +100,60 @@ def callback():
             print(p_data)
             pd = p_data.split("_")
 
-            if pd[0] == "new":
+            if pd[0] == "new": #一覧から新規作成を押したとき
                 if user.currentblock != 0: #最新のカルーセルから新規作成ボタンを押したなら0のはず
                     lineapi.SendTextMsg(reply_token,["もう一度一覧からブロックを選択してください。"])
                     continue
                 object = pd[1]
+                try:
+                    mb = MenuBlock()
+                    mb.blockid = int(object)
+                    mb.date = object[:6] #最初の6文字が日付となってる
+                    db.session.add(mb)
+                    db.session.commit() #もしすでに登録されているブロックIDを追加しようとしたらエラーになる
+                except:
+                    lineapi.SendTextMsg(reply_token,["ブロック作成中にエラーが発生しました。\nもう一度一覧から新規作成を試してみてください。"])
+                else:
+                    user.currentblock = int(object)
+                    user.status = "new" #この状態で受け取った文字列はブロック名登録となる
+                    db.session.commit()
+                    new_block_msg = ["新しいブロックが生成されました。\n例にならってブロックの情報を追加してください。","例：\n--------\nSwim\n50*4*1 HighAverage\n1:00\n--------"]
+                    lineapi.SendTextMsg(reply_token,new_block_msg)
+
+            elif pd[0] == "switch": #一覧から切り替えを押したとき
+                object = pd[1]
                 user.currentblock = int(object)
-                user.status = "new" #この状態で受け取った文字列はブロック名登録となる
-                db.session.add(user)
-
-                mb = MenuBlock()
-                mb.blockid = int(object)
-                mb.date = object[:6] #最初の6文字が日付となってる
-                db.session.add(mb)
+                user.status = "add" #この状態で受け取った文字列は通常のデータ登録となる
                 db.session.commit()
-
-                new_block_msg = ["新しいブロックが生成されました。\n例にならってブロックの情報を追加してください。","例：\n--------\nSwim\n50*4*1 HighAverage\n1:00\n--------"]
+                new_block_msg = ["BlockID:{}に切り替えました。編集を開始してください。".format(object)]
                 lineapi.SendTextMsg(reply_token,new_block_msg)
+
+            elif pd[0] == "delete": #一覧から削除を押したとき
+                object = pd[1]
+                user.currentblock = int(object)
+                user.status = "delete" #この状態から「はい」を選択すると削除となる
+                db.session.commit()
+                confirm_msg = ["本当にBlockID:{}を削除しますか？".format(object)]
+                con = blockhandler.ConfirmTemplate(confirm_msg)
+                lineapi.SendTemplatexMsg(reply_token,con,"確認メッセージ(無視しないでね)")
+
+            elif pd[0] == "confirm": #一覧から削除を押したとき
+                answer = pd[1]
+                if user.status != "delete":
+                    lineapi.SendTextMsg(reply_token,["過去に押したボタンは押さないで～"])
+                    continue
+                if answer == "yes":
+                    object = user.currentblock
+                    del_block = MenuBlock.query.filter_by(blockid = object).first()
+                    db.session.delete(del_block)
+                    de.session.commit()
+                    msg = "削除しました。"
+                else:
+                    msg = "キャンセルしました。"
+                user.currentblock = 0
+                user.status = "" #ステータスリセット、一覧をまた呼び出さなくてはならない
+                db.session.commit()
+                lineapi.SendTextMsg(reply_token,[msg])
 
         elif event_type == "message": #普通にメッセージきたとき
             msg_type = event['message']['type']
@@ -130,9 +167,7 @@ def callback():
             if msg_text == "一覧":
                 user.currentblock = 0
                 user.status = ""
-                db.session.add(user)
                 db.session.commit()
-
                 block_date = blockhandler.BlockDate() #19052
                 blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all()
                 print(blocks)
@@ -147,9 +182,8 @@ def callback():
                     new_block.category = st_list[0]
                     new_block.description = st_list[1]
                     new_block.cycle = st_list[2]
-                    db.session.add(new_block)
+
                     user.status = "add" #ユーザー情報を更新
-                    db.session.add(user)
                     db.session.commit()
                     lineapi.SendTextMsg(reply_token,["新しいブロックが正しく登録されました。\n編集を開始してください。"])
                 else:
