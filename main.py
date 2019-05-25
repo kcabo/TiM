@@ -137,7 +137,7 @@ def callback():
                 con = blockhandler.ConfirmTemplate(confirm_msg)
                 lineapi.SendTemplatexMsg(reply_token,con,"確認メッセージ(無視しないでね)")
 
-            elif pd[0] == "confirm": #一覧から削除を押したとき
+            elif pd[0] == "confirm": #削除確認メッセージを選択したとき
                 answer = pd[1]
                 if user.status != "delete":
                     lineapi.SendTextMsg(reply_token,["過去のボタンは押さないで～"])
@@ -145,9 +145,15 @@ def callback():
                 if answer == "yes":
                     object = user.currentblock
                     del_block = MenuBlock.query.filter_by(blockid = object).first()
-                    db.session.delete(del_block)
-                    db.session.commit()
-                    msg = "削除しました。"
+                    del_times = TimeData.query.filter_by(blockid = object).all()
+                    try:
+                        db.session.delete(del_block)
+                        if len(del_times) > 0: #削除するタイムデータが見つかったときのみ削除
+                            db.session.delete(del_times)
+                        db.session.commit()
+                        msg = "削除しました。"
+                    except:
+                        msg = "削除対象が見つかりませんでした。"
                 else:
                     msg = "キャンセルしました。"
                 user.currentblock = 0
