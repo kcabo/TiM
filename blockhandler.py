@@ -35,7 +35,7 @@ def BlocksFlex(blocks, block_date):
         object = blocks[-1].blockid + 1 #並び替えて一番最後になったブロックのIDが最大
 
     # image_url = "https://lh6.googleusercontent.com/6Ev9M6-DKOt-kw0QaG5OnOSbb-FgSy2nwGcxv48T5S4AqjOdhIoHiDmI3MIPHzzUuyKNXw"
-    image_url = "https://drive.google.com/uc?export=view&id=1D75alK7AZ7fZGYUjZyq8lwG170qA7MKl"
+    image_url ="https://lh5.googleusercontent.com/UJ2GhiSGkpLPhoH8VNNLRBz7B-XQlKMkFUruwfp3V04YAOvGooBg0jdDvZpWX3lqmLIYLw"
     #https://drive.google.com/file/d/1D75alK7AZ7fZGYUjZyq8lwG170qA7MKl/view?usp=sharing
     #"url": "https://drive.google.com/uc?export=view&id=1TJf3oWXtG4BF9VpqAxTb9qzAoMkO2u_K",
 
@@ -70,6 +70,8 @@ def BlocksFlex(blocks, block_date):
       }
     }]
 
+    image_url2 = "https://lh3.googleusercontent.com/qrq-d52VAo-GwO5Se9tYw9EgdjYJOr-m6aWvrErVAcDdz242EucZDGUlcCMrdmR1mAysBg"
+    #"https://drive.google.com/uc?export=view&id=11O6iLjfxVbag2sAP3k93C9AkS_qygU0Y"
     if len(blocks) > 0:
         for b in blocks:
             bubble_sample = {
@@ -79,7 +81,7 @@ def BlocksFlex(blocks, block_date):
                 "size": "full",
                 "aspectRatio": "20:7",
                 "aspectMode": "cover",
-                "url": "https://drive.google.com/uc?export=view&id=11O6iLjfxVbag2sAP3k93C9AkS_qygU0Y"
+                "url": image_url2
               },
               "body": {
                 "type": "box",
