@@ -106,14 +106,31 @@ def BlocksFlex(blocks, block_date):
                 "spacing": "sm",
                 "contents": [
                   {
-                    "type": "button",
-                    "style": "primary",
-                    "color": "#2e6095",
-                    "action": {
-                      "type": "postback",
-                      "label": "このブロックを削除する",
-                      "data": "delete_{}".format(b.blockid)
-                    }
+                    "type": "box",
+                    "layout": "horizontal",
+                    "spacing": "lg",
+                    "contents": [
+                      {
+                        "type": "button",
+                        "style": "primary",
+                        "color": "#2e6095",
+                        "action": {
+                          "type": "postback",
+                          "label": "編集",
+                          "data": "header_{}".format(b.blockid)
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "style": "primary",
+                        "color": "#2e6095",
+                        "action": {
+                          "type": "postback",
+                          "label": "削除",
+                          "data": "delete_{}".format(b.blockid)
+                        }
+                      }
+                    ]
                   },
                   {
                     "type": "button",

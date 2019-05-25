@@ -102,7 +102,7 @@ def callback():
 
             if pd[0] == "new": #一覧から新規作成を押したとき
                 if user.currentblock != 0: #最新のカルーセルから新規作成ボタンを押したなら0のはず
-                    lineapi.SendTextMsg(reply_token,["もう一度一覧からブロックを選択してください。"])
+                    lineapi.SendTextMsg(reply_token,["もう一度一覧を呼び出してから選択してください。"])
                     continue
                 object = pd[1]
                 try:
@@ -115,10 +115,20 @@ def callback():
                     lineapi.SendTextMsg(reply_token,["ブロック作成中にエラーが発生しました。\nもう一度一覧から新規作成を試してみてください。"])
                 else:
                     user.currentblock = int(object)
-                    user.status = "new" #この状態で受け取った文字列はブロック名登録となる
+                    user.status = "define" #この状態で受け取った文字列はブロック名編集となる
                     db.session.commit()
                     new_block_msg = ["新しいブロックが生成されました。\n例にならってブロックの情報を追加してください。","例：\n--------\nSwim\n50*4*1 HighAverage\n1:00\n--------"]
                     lineapi.SendTextMsg(reply_token,new_block_msg)
+
+            elif pd[0] == "header"
+                if user.currentblock != 0: #最新のカルーセルから新規作成ボタンを押したなら0のはず
+                    lineapi.SendTextMsg(reply_token,["もう一度一覧を呼び出してから選択してください。"])
+                    continue
+                object = pd[1]
+                user.currentblock = int(object)
+                user.status = "define" #この状態で受け取った文字列はブロック名編集となる
+                db.session.commit()
+                lineapi.SendTextMsg(reply_token,["例にならってブロックの情報を上書きしてください。","例：\n--------\nSwim\n50*4*1 HighAverage\n1:00\n--------"])
 
             elif pd[0] == "switch": #一覧から切り替えを押したとき
                 object = pd[1]
@@ -180,8 +190,8 @@ def callback():
                 con = blockhandler.BlocksFlex(blocks,block_date)
                 lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
 
-            #ブロックに名前をつける
-            elif user.status == "new":
+            #ブロックのヘッダーステータスを編集する
+            elif user.status == "define":
                 new_block = MenuBlock.query.filter_by(blockid = user.currentblock).first()
                 st_list = msg_text.split("\n")
                 if len(st_list) == 3:
@@ -191,7 +201,7 @@ def callback():
 
                     user.status = "add" #ユーザー情報を更新
                     db.session.commit()
-                    lineapi.SendTextMsg(reply_token,["新しいブロックが正しく登録されました。\n編集を開始してください。"])
+                    lineapi.SendTextMsg(reply_token,["新しいブロックが正しく登録されました。\nこのままこのブロックの編集ができます。"])
                 else:
                     lineapi.SendTextMsg(reply_token,["なんでもいいから3行で入力してください。"])
 
