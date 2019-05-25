@@ -32,6 +32,17 @@ def SendFlexMsg(reply_token,contents_dict,altText="メッセージだよ！！")
     requests.post(url, headers=headers, data=json.dumps(data))
     return "ok"
 
+def SendTemplatexMsg(reply_token,contents_dict,altText="メッセージだよ！！"):
+    url = 'https://api.line.me/v2/bot/message/reply'
+    msgs = [{
+      "type": "template",
+      "altText": altText,
+      "template": contents_dict
+    }]
+    data = {'replyToken': reply_token, 'messages': msgs}
+    requests.post(url, headers=headers, data=json.dumps(data))
+    return "ok"
+
 def GetProfile(lineid):
     url = 'https://api.line.me/v2/bot/profile/{lineid}'.format(lineid=lineid)
     response = requests.get(url, headers=headers)
