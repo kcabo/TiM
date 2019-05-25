@@ -34,6 +34,9 @@ def BlocksFlex(blocks, block_date):
     else:
         object = blocks[-1].blockid + 1 #並び替えて一番最後になったブロックのIDが最大
 
+    image_url = "https://lh6.googleusercontent.com/6Ev9M6-DKOt-kw0QaG5OnOSbb-FgSy2nwGcxv48T5S4AqjOdhIoHiDmI3MIPHzzUuyKNXw"
+    #"url": "https://drive.google.com/uc?export=view&id=1TJf3oWXtG4BF9VpqAxTb9qzAoMkO2u_K",
+
     bubbles = [{
       "type": "bubble",
       "hero": {
@@ -41,7 +44,7 @@ def BlocksFlex(blocks, block_date):
         "size": "full",
         "aspectRatio": "20:20",
         "aspectMode": "cover",
-        "url": "https://drive.google.com/uc?export=view&id=1TJf3oWXtG4BF9VpqAxTb9qzAoMkO2u_K",
+        "url": image_url,
         "action": {
               "type": "postback",
               "data": "new_{}".format(str(object))
