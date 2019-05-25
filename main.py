@@ -125,7 +125,7 @@ def callback():
                 user.currentblock = int(object)
                 user.status = "add" #この状態で受け取った文字列は通常のデータ登録となる
                 db.session.commit()
-                new_block_msg = ["BlockID:{}に切り替えました。編集を開始してください。".format(object)]
+                new_block_msg = ["BlockID:{}に切り替えました。\n編集を開始してください。".format(object)]
                 lineapi.SendTextMsg(reply_token,new_block_msg)
 
             elif pd[0] == "delete": #一覧から削除を押したとき
@@ -133,7 +133,7 @@ def callback():
                 user.currentblock = int(object)
                 user.status = "delete" #この状態から「はい」を選択すると削除となる
                 db.session.commit()
-                confirm_msg = ["本当にBlockID:{}を削除しますか？".format(object)]
+                confirm_msg = "本当にBlockID:{}を削除しますか？".format(object)
                 con = blockhandler.ConfirmTemplate(confirm_msg)
                 lineapi.SendTemplatexMsg(reply_token,con,"確認メッセージ(無視しないでね)")
 
