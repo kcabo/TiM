@@ -12,7 +12,21 @@ def BlockDate():
     block_int = int(nominal_time.strftime("%y%m%d"))
     return block_int
 
+def get_all_contents_in_text(block, data):
+    list = ["ID: {}\n{}\n{}\n{}".format(block.id, block.category, block.description, block.cycle)]
+    buf_l = []
+    for d in data:
+        if d.row == 1: #１行目なら前の選手のバッファデータを全部listに加えて、次の選手に備える
+            list.append("\n".join(buf_l))
+            buf_l = [d.swimmer]
+        if d.style == "": #スタイルとデータをあわせたやつをバッファに格納（バッファはリストに加えるときに改行で分ける）
+            buf_l.append(d.data)
+        else:
+            buf_l.append(d.style + "　" + d.data)
 
+    list.append("\n".join(buf_l)) #最後の選手だけバッファ内に残ってるから最後にもっかいリストに加える
+    msg = "\n-------\n".join(list)
+    return msg
 
 def BlocksFlex(blocks, block_date):
     if len(blocks) == 0:

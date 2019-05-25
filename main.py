@@ -28,7 +28,7 @@ class TimeData(db.Model):
     blockid = db.Column(db.Integer)
     row = db.Column(db.Integer)
     swimmer = db.Column(db.String(40))
-    time_string = db.Column(db.String(40))
+    data = db.Column(db.String(40))
     style = db.Column(db.String(40))
 
 class MenuBlock(db.Model):
@@ -86,7 +86,7 @@ def callback():
 
         if event_type == "follow": #友だち追加ならユーザーテーブルに追加
             name = lineapi.GetProfile(lineid)
-            reg = UserStatus(lineid = lineid, name = name, authorized = True, status = "", currentblock = 0)
+            reg = UserStatus(lineid = lineid, name = name, authorized = True, status = "recruit", currentblock = 0)
 
             try:    #lineidにunique制約あるので二重登録しようとするとエラー発生
                 db.session.add(reg)
@@ -101,7 +101,7 @@ def callback():
             pd = p_data.split("_")
 
             if pd[0] == "new": #一覧から新規作成を押したとき
-                if user.currentblock != 0: #最新のカルーセルから新規作成ボタンを押したなら0のはず
+                if user.status != "": #最新のカルーセルから新規作成ボタンを押したなら""のはず
                     lineapi.SendTextMsg(reply_token,["もう一度一覧を呼び出してから選択してください。"])
                     continue
                 object = pd[1]
@@ -121,7 +121,7 @@ def callback():
                     lineapi.SendTextMsg(reply_token,new_block_msg)
 
             elif pd[0] == "header":
-                if user.currentblock != 0: #最新のカルーセルから新規作成ボタンを押したなら0のはず
+                if user.status != "": #最新のカルーセルから新規作成ボタンを押したなら""のはず
                     lineapi.SendTextMsg(reply_token,["もう一度一覧を呼び出してから選択してください。"])
                     continue
                 object = pd[1]
@@ -131,12 +131,18 @@ def callback():
                 lineapi.SendTextMsg(reply_token,["例にならってブロックの情報を上書きしてください。","例：\n--------\nSwim\n50*4*1 HighAverage\n1:00\n--------"])
 
             elif pd[0] == "switch": #一覧から切り替えを押したとき
+                if user.status != "": #最新のカルーセルから新規作成ボタンを押したなら""のはず
+                    lineapi.SendTextMsg(reply_token,["もう一度一覧を呼び出してから選択してください。"])
+                    continue
                 object = pd[1]
                 user.currentblock = int(object)
                 user.status = "add" #この状態で受け取った文字列は通常のデータ登録となる
                 db.session.commit()
-                new_block_msg = ["BlockID:{}に切り替えました。\n編集を開始してください。".format(object)]
-                lineapi.SendTextMsg(reply_token,new_block_msg)
+                all_data = TimeData.query.filter_by(blockid = int(object)).all() #.order_by(TimeData.swimmer, TimeData.row)はいらない？
+                switch_block = MenuBlock.query.filter_by(blockid = int(object)).first()
+                switch_block_contents = blockhandler.get_all_contents_in_text(switch_block, all_data)
+                switch_block_msg = "BlockID:{}に切り替えました。\n編集を開始してください。".format(object)
+                lineapi.SendTextMsg(reply_token,[switch_block_contents, switch_block_msg])
 
             elif pd[0] == "delete": #一覧から削除を押したとき
                 object = pd[1]
@@ -167,7 +173,7 @@ def callback():
                 else:
                     msg = "キャンセルしました。"
                 user.currentblock = 0
-                user.status = "" #ステータスリセット、一覧をまた呼び出さなくてはならない
+                user.status = "completed" #ここからだと一覧呼ばないと新規作成できない
                 db.session.commit()
                 lineapi.SendTextMsg(reply_token,[msg])
 
@@ -179,13 +185,13 @@ def callback():
 
             msg_text = event['message']['text']
 
-            #ブロック一覧を表示する ブロックIDは一覧と入力されればリセットされるから安心
+            #ブロック一覧を表示する ブロックIDとステータスは一覧をみるとリセットされる
             if msg_text == "一覧":
                 user.currentblock = 0
                 user.status = ""
                 db.session.commit()
                 block_date = blockhandler.BlockDate() #19052
-                blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all()
+                blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).limit(9).all()
                 print(blocks)
                 con = blockhandler.BlocksFlex(blocks,block_date)
                 lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
@@ -210,10 +216,11 @@ def callback():
                 rows = msg_text.split("\n")
                 swimmer = rows[0]
                 currentblock = user.currentblock
-                if currentblock == 0:
+                if user.status != "add":
                     lineapi.SendTextMsg(reply_token,["一覧からブロックを選択してから入力してください。"])
                     continue
 
+                commit_data = [swimmer]
                 for i, row in enumerate(rows):
                     if i != 0: #０個目は名前が書いてあるから飛ばす
                         td = TimeData()
@@ -222,16 +229,14 @@ def callback():
                         td.swimmer = swimmer
                         r = valueconv.RowSeparator(row)
                         td.style = r.style
-                        if r.data.isdecimal(): #データ部分が数字のみならタイムを変換
-                            time_string = valueconv.fix_time_string(r.data) #ただの整数列を0:00.00の形式にする
-                            td.time_string = time_string
-                        else:
-                            td.time_string = r.data
+                        td.data = r.data
                         db.session.add(td)
+                        commit_data.append(r.merged_data())
 
                 try:
                     db.session.commit()
-                    lineapi.SendTextMsg(reply_token,["おｋ"])
+                    msg = "\n".join(commit_data)
+                    lineapi.SendTextMsg(reply_token,[msg,"登録成功！"])
                 except:
                     lineapi.SendTextMsg(reply_token,["登録に失敗しました。"])
 

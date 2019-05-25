@@ -7,9 +7,22 @@ class RowSeparator():
     def __init__(self, str):
         match_obj = ptn.match(str)
         self.style = match_obj.group(1)
-        self.data = match_obj.group(2)
+        buf = match_obj.group(2)
+        if buf.isdecimal():  #データ部分が数字のみならタイムを変換
+            self.data = fix_time_string(buf)
+        else:
+            self.data = buf
 
-def fix_time_string(time_int):
+
+    def merged_data(self):
+        if self.style == "":
+            merged = self.data
+        else:
+            merged = self.style + "　" + self.data
+        return merged
+
+
+def fix_time_string(time_int): #ただの整数列を0:00.00の形式にする
     str = time_int.zfill(5) #最小５文字でゼロ埋め
     time_string = "{0}:{1}.{2}".format(str[:-4],str[-4:-2],str[-2:])
     return time_string
