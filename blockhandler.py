@@ -34,7 +34,9 @@ def BlocksFlex(blocks, block_date):
     else:
         object = blocks[-1].blockid + 1 #並び替えて一番最後になったブロックのIDが最大
 
-    image_url = "https://lh6.googleusercontent.com/6Ev9M6-DKOt-kw0QaG5OnOSbb-FgSy2nwGcxv48T5S4AqjOdhIoHiDmI3MIPHzzUuyKNXw"
+    # image_url = "https://lh6.googleusercontent.com/6Ev9M6-DKOt-kw0QaG5OnOSbb-FgSy2nwGcxv48T5S4AqjOdhIoHiDmI3MIPHzzUuyKNXw"
+    image_url = "https://drive.google.com/uc?export=view&id=1D75alK7AZ7fZGYUjZyq8lwG170qA7MKl"
+    #https://drive.google.com/file/d/1D75alK7AZ7fZGYUjZyq8lwG170qA7MKl/view?usp=sharing
     #"url": "https://drive.google.com/uc?export=view&id=1TJf3oWXtG4BF9VpqAxTb9qzAoMkO2u_K",
 
     bubbles = [{
