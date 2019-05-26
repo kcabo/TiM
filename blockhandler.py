@@ -173,87 +173,117 @@ def BlocksFlex(blocks, block_date):
 
     return contents
 
-def all_data_content_flex():
-    row_integrated_list = []
-    #バブルは最大サイズ10KB カルーセルは50KBらしい
-    one_swimmer_data = {
-      "type": "box",
-      "layout": "vertical",
-      "spacing": "md",
-      "contents": [
-        {
-          "type": "text",
-          "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n",
-          "wrap": True,
-          "weight": "regular",
-          "size": "xxs",
-          "align": "center",
-          "flex": 1
-        },
-        {
-          "type": "button",
-          "style": "primary",
-          "color": "#2e6095",
-          "height": "sm",
-          "action": {
-            "type": "uri",
-            "label": "削除",
-            "uri": "https://linecorp.com"
-          }
-        }
-      ]
-    }
+def get_all_contents_in_list(block, data):
+    list = []
+    buf_l = ["ID:{}\n{}\n{}\n{}".format(block.blockid, block.category, block.description, block.cycle)]
+    for d in data:
+        if d.row == 1: #１行目なら前の選手のバッファデータを全部listに加えて、次の選手に備える
+            list.append("\n".join(buf_l))
+            buf_l = [d.swimmer]
+        if d.style is None: #スタイルとデータをあわせたやつをバッファに格納（バッファはリストに加えるときに改行で分ける）
+            buf_l.append(d.data)
+        else:
+            buf_l.append(d.style + "　" + d.data)
 
-    three_swimmers = {
-      "type": "box",
-      "layout": "horizontal",
-      "spacing": "lg",
-      "contents": [one_swimmer_data,one_swimmer_data]
-      }
-    #three_swimmersとseparatorは並立関係。どちらも同じ階層のコンテンツに配列として格納される
+    list.append("\n".join(buf_l)) #最後の選手だけバッファ内に残ってるから最後にもっかいリストに加える
+    msg = "\n-------\n".join(list)
+    return msg
+
+def all_data_content_flex():
+
+    row_integrated_list = ["神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","lk"]
+
+    body_contents = [{
+        "type": "text",
+        "text": "ID:19052501",
+        "size": "xl",
+        "weight": "bold"
+      }]
+
     separator = {
       "type": "separator",
       "margin": "xl"
     }
 
-    contents = {
-      "type": "bubble",
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "spacing": "md",
-        "contents": [
-          {
-            "type": "text",
-            "text": "ID:19052501",
-            "size": "xl",
-            "weight": "bold"
-          },
-          three_swimmers,
-          separator
-        ]
-      },
-      "footer": {
-        "type": "box",
-        "layout": "horizontal",
-        "spacing": "lg",
-        "contents": [
-          {
-            "type": "button",
-            "style": "primary",
-            "color": "#2e6095",
-            "height": "sm",
-            "action": {
-              "type": "uri",
-              "label": "Add",
-              "uri": "https://linecorp.com"
+    #バブルは最大サイズ10KB カルーセルは50KBらしい
+    last_index = len(row_integrated_list) - 1
+    three_swimmers_contents = []
+    for i, str in enumerate(row_integrated_list):
+        one_swimmer_data = {
+          "type": "box",
+          "layout": "vertical",
+          "spacing": "md",
+          "contents": [
+            {
+              "type": "text",
+              "text": str,
+              "wrap": True,
+              "weight": "regular",
+              "size": "xxs",
+              "align": "center",
+              "flex": 1
+            },
+            {
+              "type": "button",
+              "style": "primary",
+              "color": "#2e6095",
+              "height": "sm",
+              "action": {
+                "type": "uri",
+                "label": "削除",
+                "uri": "https://linecorp.com"
+              }
             }
+          ]
+        }
+    three_swimmers_contents.append(one_swimmer_data)
+
+    if: i % 3 == 2 or i == last_index: #horizontalブロックにおいて三個目のとき。いっぱいなので次のブロックに行く。最後の要素のときも残った文追加しておしまい
+        three_swimmers = {
+          "type": "box",
+          "layout": "horizontal",
+          "spacing": "lg",
+          "contents": three_swimmers_contents
           }
-        ]
+        #three_swimmersとseparatorは並立関係。どちらも同じ階層のコンテンツに配列として格納される
+        body_contents.append(three_swimmers)
+        body_contents.append(separator)
+        three_swimmers_contents = [] #また一個目から格納し直す
+
+    msg = {
+      "type": "flex",
+      "altText": "格納されているタイム全部見せちゃうよ",
+      "contents": {
+        "type": "bubble",
+        "body": {
+          "type": "box",
+          "layout": "vertical",
+          "spacing": "md",
+          "contents": body_contents
+        },
+        "footer": {
+          "type": "box",
+          "layout": "horizontal",
+          "spacing": "lg",
+          "contents": [
+            {
+              "type": "button",
+              "style": "primary",
+              "color": "#2e6095",
+              "height": "sm",
+              "action": {
+                "type": "uri",
+                "label": "Add",
+                "uri": "https://linecorp.com"
+              }
+            }
+          ]
+        }
       }
     }
-
-    return contents
+    msgs_list = [] #最終的に返すリスト
+    msgs_list.append(msg)
+    return msgs_list
 
 
 def ConfirmTemplate(confirm_msg):
