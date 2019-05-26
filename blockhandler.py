@@ -173,7 +173,7 @@ def BlocksFlex(blocks, block_date):
 
     return contents
 
-def get_all_contents_in_list(block, data):
+def get_all_contents_in_list(data):
     list = []
     buf_l = ["ID:{}\n{}\n{}\n{}".format(block.blockid, block.category, block.description, block.cycle)]
     for d in data:
@@ -186,19 +186,28 @@ def get_all_contents_in_list(block, data):
             buf_l.append(d.style + "　" + d.data)
 
     list.append("\n".join(buf_l)) #最後の選手だけバッファ内に残ってるから最後にもっかいリストに加える
-    msg = "\n-------\n".join(list)
-    return msg
+
+    return list
 
 def all_data_content_flex():
-
+    block_id = "19052501"
+    category = "swim"
+    description = "50*4*1 Hard"
+    cycle = "1:00"
     row_integrated_list = ["神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","lk"]
 
     body_contents = [{
         "type": "text",
-        "text": "ID:19052501",
+        "text": "ID:{}".format(block_id),
         "size": "xl",
         "weight": "bold"
-      }]
+      },
+      {
+          "type": "text",
+          "text": "{}\n{}\n{}".format(category,description,cycle),
+          "size": "xxs",
+          "weight": "bold"
+        }]
 
     separator = {
       "type": "separator",
@@ -229,7 +238,7 @@ def all_data_content_flex():
               "action": {
                 "type": "message",
                 "label": "削除",
-                "text": str.split("\n")[0],
+                "text": "remove_{}_{}".format(block_id, str.split("\n")[0]),
               }
             }
           ]
