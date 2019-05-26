@@ -27,6 +27,10 @@ def SendFlexMsg(reply_token,contents_dict,altText="メッセージだよ！！")
       "type": "flex",
       "altText": altText,
       "contents": contents_dict
+    },{
+      "type": "flex",
+      "altText": altText,
+      "contents": contents_dict
     }]
     data = {'replyToken': reply_token, 'messages': msgs}
     requests.post(url, headers=headers, data=json.dumps(data))

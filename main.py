@@ -141,7 +141,6 @@ def callback():
 
                 con = blockhandler.all_data_content_flex()
                 lineapi.SendFlexMsg(reply_token,con,"全データ")
-                lineapi.SendTextMsg(reply_token,["aa"])
                 #
                 # all_data = TimeData.query.filter_by(blockid = int(object)).all() #.order_by(TimeData.swimmer, TimeData.row)はいらない？
                 # switch_block = MenuBlock.query.filter_by(blockid = int(object)).first()
