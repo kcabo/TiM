@@ -175,6 +175,46 @@ def BlocksFlex(blocks, block_date):
 
 def all_data_content_flex():
     #バブルは最大サイズ10KB カルーセルは50KBらしい
+    one_swimmer_data = {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "md",
+      "contents": [
+        {
+          "type": "text",
+          "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n",
+          "wrap": True,
+          "weight": "regular",
+          "size": "xxs",
+          "align": "center",
+          "flex": 1
+        },
+        {
+          "type": "button",
+          "style": "primary",
+          "color": "#2e6095",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "削除",
+            "uri": "https://linecorp.com"
+          }
+        }
+      ]
+    }
+
+    three_swimmers = {
+      "type": "box",
+      "layout": "horizontal",
+      "spacing": "lg",
+      "contents": [one_swimmer_data,one_swimmer_data,one_swimmer_data]
+      }
+    #three_swimmersとseparatorは並立関係。どちらも同じ階層のコンテンツに配列として格納される
+    separator = {
+      "type": "separator",
+      "margin": "xl"
+    }
+
     contents = {
       "type": "bubble",
       "body": {
@@ -188,374 +228,8 @@ def all_data_content_flex():
             "size": "xl",
             "weight": "bold"
           },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "spacing": "lg",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "md",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n",
-                    "wrap": True,
-                    "weight": "regular",
-                    "size": "xxs",
-                    "align": "center",
-                    "flex": 1
-                  },
-                  {
-                    "type": "button",
-                    "style": "primary",
-                    "color": "#2e6095",
-                    "height": "sm",
-                    "action": {
-                      "type": "uri",
-                      "label": "削除",
-                      "uri": "https://linecorp.com"
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "md",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n",
-                    "wrap": True,
-                    "weight": "regular",
-                    "size": "xxs",
-                    "align": "center",
-                    "flex": 1
-                  },
-                  {
-                    "type": "button",
-                    "style": "primary",
-                    "color": "#2e6095",
-                    "height": "sm",
-                    "action": {
-                      "type": "uri",
-                      "label": "削除",
-                      "uri": "https://linecorp.com"
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "md",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n",
-                    "wrap": True,
-                    "weight": "regular",
-                    "size": "xxs",
-                    "align": "center",
-                    "flex": 1
-                  },
-                  {
-                    "type": "button",
-                    "style": "primary",
-                    "color": "#2e6095",
-                    "height": "sm",
-                    "action": {
-                      "type": "uri",
-                      "label": "削除",
-                      "uri": "https://linecorp.com"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "separator",
-            "margin": "xl"
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "spacing": "lg",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "md",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n",
-                    "wrap": True,
-                    "weight": "regular",
-                    "size": "xxs",
-                    "align": "center",
-                    "flex": 1
-                  },
-                  {
-                    "type": "button",
-                    "style": "primary",
-                    "color": "#2e6095",
-                    "height": "sm",
-                    "action": {
-                      "type": "uri",
-                      "label": "削除",
-                      "uri": "https://linecorp.com"
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "md",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n",
-                    "wrap": True,
-                    "weight": "regular",
-                    "size": "xxs",
-                    "align": "center",
-                    "flex": 1
-                  },
-                  {
-                    "type": "button",
-                    "style": "primary",
-                    "color": "#2e6095",
-                    "height": "sm",
-                    "action": {
-                      "type": "uri",
-                      "label": "削除",
-                      "uri": "https://linecorp.com"
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "md",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n",
-                    "wrap": True,
-                    "weight": "regular",
-                    "size": "xxs",
-                    "align": "center",
-                    "flex": 1
-                  },
-                  {
-                    "type": "button",
-                    "style": "primary",
-                    "color": "#2e6095",
-                    "height": "sm",
-                    "action": {
-                      "type": "uri",
-                      "label": "削除",
-                      "uri": "https://linecorp.com"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "separator",
-            "margin": "xl"
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "spacing": "lg",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "md",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n",
-                    "wrap": True,
-                    "weight": "regular",
-                    "size": "xxs",
-                    "align": "center",
-                    "flex": 1
-                  },
-                  {
-                    "type": "button",
-                    "style": "primary",
-                    "color": "#2e6095",
-                    "height": "sm",
-                    "action": {
-                      "type": "uri",
-                      "label": "削除",
-                      "uri": "https://linecorp.com"
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "md",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n",
-                    "wrap": True,
-                    "weight": "regular",
-                    "size": "xxs",
-                    "align": "center",
-                    "flex": 1
-                  },
-                  {
-                    "type": "button",
-                    "style": "primary",
-                    "color": "#2e6095",
-                    "height": "sm",
-                    "action": {
-                      "type": "uri",
-                      "label": "削除",
-                      "uri": "https://linecorp.com"
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "md",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n",
-                    "wrap": True,
-                    "weight": "regular",
-                    "size": "xxs",
-                    "align": "center",
-                    "flex": 1
-                  },
-                  {
-                    "type": "button",
-                    "style": "primary",
-                    "color": "#2e6095",
-                    "height": "sm",
-                    "action": {
-                      "type": "uri",
-                      "label": "削除",
-                      "uri": "https://linecorp.com"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "separator",
-            "margin": "xl"
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "spacing": "lg",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "md",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n",
-                    "wrap": True,
-                    "weight": "regular",
-                    "size": "xxs",
-                    "align": "center",
-                    "flex": 1
-                  },
-                  {
-                    "type": "button",
-                    "style": "primary",
-                    "color": "#2e6095",
-                    "height": "sm",
-                    "action": {
-                      "type": "uri",
-                      "label": "削除",
-                      "uri": "https://linecorp.com"
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "md",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n",
-                    "wrap": True,
-                    "weight": "regular",
-                    "size": "xxs",
-                    "align": "center",
-                    "flex": 1
-                  },
-                  {
-                    "type": "button",
-                    "style": "primary",
-                    "color": "#2e6095",
-                    "height": "sm",
-                    "action": {
-                      "type": "uri",
-                      "label": "削除",
-                      "uri": "https://linecorp.com"
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "md",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n\n0:29.18\n1:23.79\nfrごめんなさい\n",
-                    "wrap": True,
-                    "weight": "regular",
-                    "size": "xxs",
-                    "align": "center",
-                    "flex": 1
-                  },
-                  {
-                    "type": "button",
-                    "style": "primary",
-                    "color": "#2e6095",
-                    "height": "sm",
-                    "action": {
-                      "type": "uri",
-                      "label": "削除",
-                      "uri": "https://linecorp.com"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "separator",
-            "margin": "xl"
-          }
+          three_swimmers,
+          separator
         ]
       },
       "footer": {
