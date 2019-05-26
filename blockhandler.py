@@ -236,14 +236,15 @@ def all_data_content_flex():
         }
         three_swimmers_contents.append(one_swimmer_data)
 
-        if i == last_index:
-            filled = len(three_swimmers_contents)
-            if filled != 3:
-                filler = {
-                  "type": "filler"
-                }
-                for i in range(3 - filled):
-                    three_swimmers_contents.append(filler)
+        #なぜかーうまくーこれがー動かないー
+        # if i == last_index:
+        #     filled = len(three_swimmers_contents)
+        #     if filled != 3:
+        #         filler = {
+        #           "type": "filler"
+        #         }
+        #         for i in range(3 - filled):
+        #             three_swimmers_contents.append(filler)
 
         if i % 3 == 2 or i == last_index: #horizontalブロックにおいて三個目のとき。いっぱいなので次のブロックに行く。最後の要素のときも残った文追加しておしまい
             three_swimmers = {
