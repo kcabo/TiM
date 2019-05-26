@@ -236,19 +236,19 @@ def all_data_content_flex():
             }
           ]
         }
-    three_swimmers_contents.append(one_swimmer_data)
+        three_swimmers_contents.append(one_swimmer_data)
 
-    if i % 3 == 0 or i == last_index: #horizontalブロックにおいて三個目のとき。いっぱいなので次のブロックに行く。最後の要素のときも残った文追加しておしまい
-        three_swimmers = {
-          "type": "box",
-          "layout": "horizontal",
-          "spacing": "lg",
-          "contents": three_swimmers_contents
-          }
-        #three_swimmersとseparatorは並立関係。どちらも同じ階層のコンテンツに配列として格納される
-        body_contents.append(three_swimmers)
-        body_contents.append(separator)
-        three_swimmers_contents = [] #また一個目から格納し直す
+        if i % 3 == 2 or i == last_index: #horizontalブロックにおいて三個目のとき。いっぱいなので次のブロックに行く。最後の要素のときも残った文追加しておしまい
+            three_swimmers = {
+              "type": "box",
+              "layout": "horizontal",
+              "spacing": "lg",
+              "contents": three_swimmers_contents
+              }
+            #three_swimmersとseparatorは並立関係。どちらも同じ階層のコンテンツに配列として格納される
+            body_contents.append(three_swimmers)
+            body_contents.append(separator)
+            three_swimmers_contents = [] #また一個目から格納し直す
 
     msg = {
       "type": "flex",
