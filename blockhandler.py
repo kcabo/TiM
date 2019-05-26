@@ -207,7 +207,7 @@ def all_data_content_flex():
       "type": "box",
       "layout": "horizontal",
       "spacing": "lg",
-      "contents": [one_swimmer_data,one_swimmer_data,one_swimmer_data]
+      "contents": [one_swimmer_data,one_swimmer_data]
       }
     #three_swimmersとseparatorは並立関係。どちらも同じ階層のコンテンツに配列として格納される
     separator = {
