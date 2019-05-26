@@ -27,11 +27,13 @@ def SendFlexMsg(reply_token,contents_dict,altText="メッセージだよ！！")
       "type": "flex",
       "altText": altText,
       "contents": contents_dict
-    },{
-      "type": "flex",
-      "altText": altText,
-      "contents": contents_dict
     }]
+    data = {'replyToken': reply_token, 'messages': msgs}
+    requests.post(url, headers=headers, data=json.dumps(data))
+    return "ok"
+
+def versatile_send_msgs(reply_token,msgs):
+    url = 'https://api.line.me/v2/bot/message/reply'
     data = {'replyToken': reply_token, 'messages': msgs}
     requests.post(url, headers=headers, data=json.dumps(data))
     return "ok"

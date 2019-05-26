@@ -140,7 +140,7 @@ def callback():
                 db.session.commit()
 
                 con = blockhandler.all_data_content_flex()
-                lineapi.SendFlexMsg(reply_token,con,"全データ")
+                lineapi.versatile_send_msgs(reply_token,con)
                 #
                 # all_data = TimeData.query.filter_by(blockid = int(object)).all() #.order_by(TimeData.swimmer, TimeData.row)はいらない？
                 # switch_block = MenuBlock.query.filter_by(blockid = int(object)).first()
