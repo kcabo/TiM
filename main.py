@@ -224,6 +224,11 @@ def callback():
                     lineapi.SendTextMsg(reply_token,["一覧からブロックを選択してから入力してください。"])
                     continue
 
+                already_exists = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer).first()
+                if already_exists != None:
+                    lineapi.SendTextMsg(reply_token,["既にその選手のデータは登録されているよん"])
+                    continue
+
                 commit_data = [swimmer]
                 for i, row in enumerate(rows):
                     if i != 0: #０個目は名前が書いてあるから飛ばす
