@@ -174,6 +174,7 @@ def BlocksFlex(blocks, block_date):
     return contents
 
 def all_data_content_flex():
+    row_integrated_list = []
     #バブルは最大サイズ10KB カルーセルは50KBらしい
     one_swimmer_data = {
       "type": "box",
