@@ -227,9 +227,9 @@ def all_data_content_flex():
               "color": "#2e6095",
               "height": "sm",
               "action": {
-                "type": "uri",
+                "type": "message",
                 "label": "削除",
-                "uri": "https://linecorp.com"
+                "text": str.split("\n")[0],
               }
             }
           ]
