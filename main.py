@@ -139,7 +139,10 @@ def callback():
                 user.status = "add" #この状態で受け取った文字列は通常のデータ登録となる
                 db.session.commit()
 
-                con = blockhandler.all_data_content_flex()
+                all_data = TimeData.query.filter_by(blockid = int(object)).all()
+                switch_block = MenuBlock.query.filter_by(blockid = int(object)).first()
+                list = blockhandler.get_all_contents_in_list(all_data)
+                con = blockhandler.all_data_content_flex(switch_block,list)
                 lineapi.versatile_send_msgs(reply_token,con)
                 #
                 # all_data = TimeData.query.filter_by(blockid = int(object)).all() #.order_by(TimeData.swimmer, TimeData.row)はいらない？
