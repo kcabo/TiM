@@ -190,7 +190,7 @@ def callback():
                 lineapi.SendTextMsg(reply_token,[msg])
 
             elif pd[0] == "remove": #データ一覧から削除する選手を選択したとき
-
+                lineapi.SendTextMsg(reply_token,[pd[1],pd[2]])
 
         elif event_type == "message": #普通にメッセージきたとき
             msg_type = event['message']['type']
