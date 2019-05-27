@@ -206,8 +206,8 @@ def callback():
                     continue
                 if pd[1] != "no":
                     object = int(pd[1])
-                    del_times = TimeData.query.filter_by(blockid = object, swimmer = pd[2]).all()
-                    # print(del_times)
+                    del_times = TimeData.query.filter_by(blockid = object, swimmer = pd[2]).first()
+                    print(del_times)
                     # if len(del_times) > 0: #削除するタイムデータが見つかったときのみ削除
                     db.session.delete(del_times)
                     db.session.commit()
