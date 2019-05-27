@@ -126,7 +126,7 @@ def callback():
                 #     continue
                 object = int(pd[1])
                 is_it_exist = MenuBlock.query.filter_by(blockid = object).first()
-                if is_it_exist != None:
+                if is_it_exist == None:
                     lineapi.SendTextMsg(reply_token,["対象のブロックが見つかりません。"])
                     continue
                 user.currentblock = object
@@ -137,7 +137,7 @@ def callback():
             elif pd[0] == "switch": #一覧から切り替えを押したとき
                 object = int(pd[1])
                 is_it_exist = MenuBlock.query.filter_by(blockid = object).first()
-                if is_it_exist != None:
+                if is_it_exist == None:
                     lineapi.SendTextMsg(reply_token,["対象のブロックが見つかりません。"])
                     continue
                 user.currentblock = object
