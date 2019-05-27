@@ -142,7 +142,9 @@ def callback():
                 all_data = TimeData.query.filter_by(blockid = int(object)).all()
                 switch_block = MenuBlock.query.filter_by(blockid = int(object)).first()
                 list = blockhandler.get_all_contents_in_list(all_data)
+                print(list)
                 con = blockhandler.all_data_content_flex(switch_block,list)
+                print(con)
                 lineapi.versatile_send_msgs(reply_token,con)
                 #
                 # all_data = TimeData.query.filter_by(blockid = int(object)).all() #.order_by(TimeData.swimmer, TimeData.row)はいらない？
