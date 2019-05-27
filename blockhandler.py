@@ -301,6 +301,55 @@ def all_data_content_flex(block, row_integrated_list):
 
     return msg
 
+def confirm_flex_data_remove(blockid, swimmer):
+    contents = {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "lg",
+        "contents": [
+          {
+            "type": "text",
+            "text": "本当に{}の記録を削除しますか？".format(swimmer),
+            "wrap": True,
+            "size": "md"
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "spacing": "lg",
+            "contents": [
+              {
+                "type": "button",
+                "style": "link",
+                "color": "#9a073c",
+                "height": "sm",
+                "action": {
+                  "type": "postback",
+                  "label": "削除する",
+                  "data": "rmconfirm_{}_{}".format(blockid,swimmer)
+                }
+              },
+              {
+                "type": "button",
+                "style": "link",
+                "color": "#1d366d",
+                "height": "sm",
+                "action": {
+                  "type": "postback",
+                  "label": "キャンセル",
+                  "data": "rmconfirm_no"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+
+
+    return contents
 
 def ConfirmTemplate(confirm_msg):
     template = {
