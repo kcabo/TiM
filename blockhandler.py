@@ -239,7 +239,7 @@ def all_data_content_flex(block, row_integrated_list):
               "action": {
                 "type": "message",
                 "label": "削除",
-                "text": "remove_{}_{}".format(block_id, str.split("\n")[0]),
+                "text": "remove_{}_{}".format(block.blockid, str.split("\n")[0]),
               }
             }
           ]
