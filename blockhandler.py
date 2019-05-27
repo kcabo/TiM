@@ -248,13 +248,18 @@ def all_data_content_flex():
 
         #なぜかーうまくーこれがー動かないー
         if i == last_index:
+            print(i)
             filled = len(three_swimmers_contents)
             if filled != 3:
                 filler = {
                   "type": "box",
                   "layout": "vertical",
                   "spacing": "md",
-                  "contents": [{"type": "text","text": " ",}]
+                  "contents": [{"type": "text","text": " ",},{"type": "button","style": "primary", "action": {
+                     "type": "message",
+                     "label": "削除",
+                     "text": "remov"
+                   }}]
                 }
                 for i in range(3 - filled):
                     three_swimmers_contents.append(filler)
