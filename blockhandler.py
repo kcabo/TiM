@@ -215,6 +215,8 @@ def all_data_content_flex(block, row_integrated_list):
     last_index = len(row_integrated_list) - 1
     three_swimmers_contents = []
     for i, str in enumerate(row_integrated_list):
+        if str == "":
+            str = " "
         one_swimmer_data = {
           "type": "box",
           "layout": "vertical",
