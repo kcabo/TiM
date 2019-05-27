@@ -194,7 +194,7 @@ def all_data_content_flex():
     category = "swim"
     description = "50*4*1 Hard"
     cycle = "1:00"
-    row_integrated_list = ["神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","lk","a;afjd;\npp","doudemoiideyos\n"]
+    row_integrated_list = ["神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","lk","a;afjd;\npp","doudemoiideyos\n"]
 
     body_contents = [{
         "type": "text",
