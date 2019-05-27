@@ -28,16 +28,8 @@ def get_all_contents_in_text(block, data):
     msg = "\n-------\n".join(list)
     return msg
 
-def BlocksFlex(blocks, block_date):
-    if len(blocks) == 0:
-        object = block_date * 100 + 1
-    else:
-        object = blocks[-1].blockid + 1 #並び替えて一番最後になったブロックのIDが最大
-
-    # image_url = "https://lh6.googleusercontent.com/6Ev9M6-DKOt-kw0QaG5OnOSbb-FgSy2nwGcxv48T5S4AqjOdhIoHiDmI3MIPHzzUuyKNXw"
+def BlocksFlex(blocks):
     image_url ="https://lh5.googleusercontent.com/UJ2GhiSGkpLPhoH8VNNLRBz7B-XQlKMkFUruwfp3V04YAOvGooBg0jdDvZpWX3lqmLIYLw"
-    #https://drive.google.com/file/d/1D75alK7AZ7fZGYUjZyq8lwG170qA7MKl/view?usp=sharing
-    #"url": "https://drive.google.com/uc?export=view&id=1TJf3oWXtG4BF9VpqAxTb9qzAoMkO2u_K",
 
     bubbles = [{
       "type": "bubble",
@@ -49,7 +41,7 @@ def BlocksFlex(blocks, block_date):
         "url": image_url,
         "action": {
               "type": "postback",
-              "data": "new_{}".format(str(object))
+              "data": "new"
             }
       },
       "footer": {
@@ -71,7 +63,6 @@ def BlocksFlex(blocks, block_date):
     }]
 
     image_url2 = "https://lh3.googleusercontent.com/qrq-d52VAo-GwO5Se9tYw9EgdjYJOr-m6aWvrErVAcDdz242EucZDGUlcCMrdmR1mAysBg"
-    #"https://drive.google.com/uc?export=view&id=11O6iLjfxVbag2sAP3k93C9AkS_qygU0Y"
     if len(blocks) > 0:
         for b in blocks:
             bubble_sample = {
@@ -279,24 +270,6 @@ def all_data_content_flex(block, row_integrated_list):
           "layout": "vertical",
           "spacing": "md",
           "contents": body_contents
-        },
-        "footer": {
-          "type": "box",
-          "layout": "horizontal",
-          "spacing": "lg",
-          "contents": [
-            {
-              "type": "button",
-              "style": "primary",
-              "color": "#2e6095",
-              "height": "sm",
-              "action": {
-                "type": "postback",
-                "label": "編集",
-                "data": "header_{}".format(block.blockid)
-              }
-            }
-          ]
         }
       }
     }
