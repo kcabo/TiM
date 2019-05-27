@@ -175,7 +175,7 @@ def BlocksFlex(blocks, block_date):
 
 def get_all_contents_in_list(data):
     list = []
-    buf_l = ["ID:{}\n{}\n{}\n{}".format(block.blockid, block.category, block.description, block.cycle)]
+    buf_l = []
     for d in data:
         if d.row == 1: #１行目なら前の選手のバッファデータを全部listに加えて、次の選手に備える
             list.append("\n".join(buf_l))
@@ -205,6 +205,7 @@ def all_data_content_flex():
       {
           "type": "text",
           "text": "{}\n{}\n{}".format(category,description,cycle),
+          "wrap": True
           "size": "xxs",
           "weight": "bold"
         }]
@@ -246,14 +247,17 @@ def all_data_content_flex():
         three_swimmers_contents.append(one_swimmer_data)
 
         #なぜかーうまくーこれがー動かないー
-        # if i == last_index:
-        #     filled = len(three_swimmers_contents)
-        #     if filled != 3:
-        #         filler = {
-        #           "type": "filler"
-        #         }
-        #         for i in range(3 - filled):
-        #             three_swimmers_contents.append(filler)
+        if i == last_index:
+            filled = len(three_swimmers_contents)
+            if filled != 3:
+                filler = {
+                  "type": "box",
+                  "layout": "vertical",
+                  "spacing": "md",
+                  "contents": [{"type": "text","text": " ",}]
+                }
+                for i in range(3 - filled):
+                    three_swimmers_contents.append(filler)
 
         if i % 3 == 2 or i == last_index: #horizontalブロックにおいて三個目のとき。いっぱいなので次のブロックに行く。最後の要素のときも残った文追加しておしまい
             three_swimmers = {
