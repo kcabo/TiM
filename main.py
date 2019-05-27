@@ -144,16 +144,17 @@ def callback():
                 list = blockhandler.get_all_contents_in_list(all_data)
                 msgs = []
                 count_data = len(list)
-                print(count_data)
+                print("出力するデータ数：{}".format(count_data))
                 for i in range(count_data // 12 + 1): #データの入っているリストを１２個毎に分割する
                     start = i * 12
                     end = start + 12
                     max_12_list = list[start:end]
-                    print(max_12_list)
+                    print("データリスト：{}".format(max_12_list))
                     msg = blockhandler.all_data_content_flex(switch_block,max_12_list)
                     msgs.append(msg)
                 switch_block_msg = "BlockID:{}に切り替えました。\n編集を開始してください。".format(object)
                 msgs.append(switch_block_msg)
+                print(msgs)
                 lineapi.versatile_send_msgs(reply_token,msgs)
 
             elif pd[0] == "delete": #一覧から削除を押したとき
