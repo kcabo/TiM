@@ -178,7 +178,8 @@ def get_all_contents_in_list(data):
     buf_l = []
     for d in data:
         if d.row == 1: #１行目なら前の選手のバッファデータを全部listに加えて、次の選手に備える
-            list.append("\n".join(buf_l))
+            if len(buf_l) > 0:
+                list.append("\n".join(buf_l))
             buf_l = [d.swimmer]
         if d.style is None: #スタイルとデータをあわせたやつをバッファに格納（バッファはリストに加えるときに改行で分ける）
             buf_l.append(d.data)
@@ -190,11 +191,6 @@ def get_all_contents_in_list(data):
     return list
 
 def all_data_content_flex(block, row_integrated_list):
-    # block_id = "19052501"
-    # category = "swim"
-    # description = "50*4*1 Hard"
-    # cycle = "1:00"
-    # row_integrated_list = ["神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","lk","a;afjd;\npp","doudemoiideyos\n"]
 
     body_contents = [{
         "type": "text",
