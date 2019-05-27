@@ -175,16 +175,9 @@ def callback():
                     continue
                 if answer == "yes":
                     object = user.currentblock
-                    del_block = MenuBlock.query.filter_by(blockid = object).first()
-                    del_times = TimeData.query.filter_by(blockid = object).all()
-                    try:
-                        db.session.delete(del_block)
-                        if len(del_times) > 0: #削除するタイムデータが見つかったときのみ削除
-                            db.session.delete(del_times)
-                        db.session.commit()
-                        msg = "削除しました。"
-                    except:
-                        msg = "削除対象が見つかりませんでした。"
+                    MenuBlock.query.filter_by(blockid = object).delete()
+                    TimeData.query.filter_by(blockid = object).delete()
+                    msg = "削除しました。"
                 else:
                     msg = "キャンセルしました。"
                 user.currentblock = 0
@@ -204,19 +197,11 @@ def callback():
                 if user.status != "remove":
                     lineapi.SendTextMsg(reply_token,["過去のボタンは押さないで～"])
                     continue
-                if pd[1] != "no":
-                    object = int(pd[1])
-                    TimeData.query.filter_by(blockid = object, swimmer = pd[2]).delete()
-                    # del_times = TimeData.query.filter_by(blockid = object, swimmer = pd[2]).first()
-                    # print(del_times)
-                    # if len(del_times) > 0: #削除するタイムデータが見つかったときのみ削除
-                    # db.session.delete(del_times)
-                    db.session.commit()
-                    msg = "削除しました。"
-                    # else:
-                    #     msg = "削除対象が見つかりませんでした。"
-                else:
+                if pd[1] == "no":
                     msg = "キャンセルしました。"
+                else:
+                    TimeData.query.filter_by(blockid = int(pd[1]), swimmer = pd[2]).delete()
+                    msg = "削除しました。"
                 user.status = "add"
                 db.session.commit()
                 lineapi.SendTextMsg(reply_token,[msg])
