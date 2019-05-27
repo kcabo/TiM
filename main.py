@@ -152,8 +152,8 @@ def callback():
                     print("データリスト：{}".format(max_12_list))
                     msg = blockhandler.all_data_content_flex(switch_block,max_12_list)
                     msgs.append(msg)
-                switch_block_msg = "BlockID:{}に切り替えました。\n編集を開始してください。".format(object)
-                msgs.append(switch_block_msg)
+                # switch_block_msg = "BlockID:{}に切り替えました。\n編集を開始してください。".format(object)
+                # msgs.append(switch_block_msg)
                 print(msgs)
                 lineapi.versatile_send_msgs(reply_token,msgs)
 
