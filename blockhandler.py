@@ -256,13 +256,13 @@ def all_data_content_flex(block, row_integrated_list):
               "contents": three_swimmers_contents
               }
             #three_swimmersとseparatorは並立関係。どちらも同じ階層のコンテンツに配列として格納される
-            body_contents.append(three_swimmers)
             body_contents.append(separator)
+            body_contents.append(three_swimmers)
             three_swimmers_contents = [] #また一個目から格納し直す
 
     msg = {
       "type": "flex",
-      "altText": "格納されているタイム全部見せちゃうよ",
+      "altText": "入力したタイムの一覧",
       "contents": {
         "type": "bubble",
         "body": {
