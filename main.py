@@ -47,14 +47,6 @@ def create_db():
 
 @app.route("/")
 def test():
-    # q = UserStatus.query.filter_by(keyid = 1).first()
-    # if q is None:
-    #     print("nnnon")
-    # else:
-    #     print(q.lineid)
-    #     q.authorized = True
-    #     db.session.add(q)
-    #     db.session.commit()
     pass
     return "ok"
 
@@ -65,7 +57,6 @@ def callback():
     body_json = json.loads(body)
 
     for event in body_json['events']:
-
         try:
             reply_token = event['replyToken']
         except:
@@ -95,30 +86,34 @@ def callback():
             except:
                 lineapi.SendTextMsg(reply_token,["登録に失敗しました。","既に登録されている可能性がございます。"])
 
+
         elif event_type == "postback": #ボタン押したときとかのポストバックイベント
             p_data = event['postback']['data']
             print(p_data)
             pd = p_data.split("_")
 
+
             if pd[0] == "new": #一覧から新規作成を押したとき
-                if user.status != "": #最新のカルーセルから新規作成ボタンを押したなら""のはず
-                    lineapi.SendTextMsg(reply_token,["もう一度一覧を呼び出してから選択してください。"])
-                    continue
-                object = pd[1]
+                block_date = blockhandler.BlockDate() #19052
+                blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all() #今日使ってるブロックを全部持ってくる
+                if len(blocks) == 0:
+                    new_block_id = block_date * 100 + 1
+                else:
+                    new_block_id = blocks[-1].blockid + 1 #並び替えて一番最後になったブロックのIDが最大
+
                 try:
-                    mb = MenuBlock()
-                    mb.blockid = int(object)
-                    mb.date = object[:6] #最初の6文字が日付となってる
+                    mb = MenuBlock(mb.blockid = new_block_id, mb.date = block_date)
                     db.session.add(mb)
                     db.session.commit() #もしすでに登録されているブロックIDを追加しようとしたらエラーになる
                 except:
                     lineapi.SendTextMsg(reply_token,["ブロック作成中にエラーが発生しました。\nもう一度一覧から新規作成を試してみてください。"])
                 else:
-                    user.currentblock = int(object)
+                    user.currentblock = new_block_id
                     user.status = "define" #この状態で受け取った文字列はブロック名編集となる
                     db.session.commit()
                     new_block_msg = ["新しいブロックが生成されました。\n例にならってブロックの情報を追加してください。","例：\n--------\nSwim\n50*4*1 HighAverage\n1:00\n--------"]
                     lineapi.SendTextMsg(reply_token,new_block_msg)
+
 
             elif pd[0] == "header":
                 object = int(pd[1])
@@ -130,6 +125,7 @@ def callback():
                 user.status = "define" #この状態で受け取った文字列はブロック名編集となる
                 db.session.commit()
                 lineapi.SendTextMsg(reply_token,["例にならってブロックの情報を上書きしてください。","例：\n--------\nSwim\n50*4*1 HighAverage\n1:00\n--------"])
+
 
             elif pd[0] == "switch": #一覧から切り替えを押したとき
                 object = int(pd[1])
@@ -159,6 +155,7 @@ def callback():
                 print(msgs)
                 lineapi.versatile_send_msgs(reply_token,msgs)
 
+
             elif pd[0] == "delete": #一覧から削除を押したとき
                 object = pd[1]
                 user.currentblock = int(object)
@@ -167,6 +164,7 @@ def callback():
                 confirm_msg = "本当にBlockID:{}を削除しますか？".format(object)
                 con = blockhandler.ConfirmTemplate(confirm_msg)
                 lineapi.SendTemplatexMsg(reply_token,con,"確認メッセージ(無視しないでね)")
+
 
             elif pd[0] == "confirm": #ブロック削除確認メッセージを選択したとき
                 answer = pd[1]
@@ -185,6 +183,7 @@ def callback():
                 db.session.commit()
                 lineapi.SendTextMsg(reply_token,[msg])
 
+
             elif pd[0] == "remove": #データ一覧から削除する選手を選択したとき
                 object_block = int(pd[1])
                 user.currentblock = int(object_block)
@@ -192,6 +191,7 @@ def callback():
                 db.session.commit()
                 con = blockhandler.confirm_flex_data_remove(pd[1],pd[2])
                 lineapi.SendFlexMsg(reply_token,con,"確認メッセージ(無視しないでね)")
+
 
             elif pd[0] == "rmconfirm": #ブロック削除確認メッセージを選択したとき
                 if user.status != "remove":
@@ -205,6 +205,7 @@ def callback():
                 user.status = "add"
                 db.session.commit()
                 lineapi.SendTextMsg(reply_token,[msg])
+
 
         elif event_type == "message": #普通にメッセージきたとき
             msg_type = event['message']['type']
@@ -222,8 +223,9 @@ def callback():
                 block_date = blockhandler.BlockDate() #19052
                 blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).limit(9).all()
                 print(blocks)
-                con = blockhandler.BlocksFlex(blocks,block_date)
+                con = blockhandler.BlocksFlex(blocks)
                 lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
+
 
             #ブロックのヘッダーステータスを編集する
             elif user.status == "define":
@@ -239,6 +241,7 @@ def callback():
                     lineapi.SendTextMsg(reply_token,["新しいブロックが正しく登録されました。\nこのままこのブロックの編集ができます。"])
                 else:
                     lineapi.SendTextMsg(reply_token,["なんでもいいから3行で入力してください。"])
+
 
             #timedataテーブルに新しい記録を追加する
             elif msg_text.find("\n") > 0: #改行が含まれるときは登録と判断
@@ -275,7 +278,11 @@ def callback():
                     lineapi.SendTextMsg(reply_token,["登録に失敗しました。"])
 
 
-
+            #どれにも当てはまらない文字列にも一応返す
+            else:
+                length = len(msg_text)
+                msg = "😇" * length
+                lineapi.SendTextMsg(reply_token,[msg])
 
 
     return "ok"
