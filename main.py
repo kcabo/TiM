@@ -144,7 +144,7 @@ def callback():
                 list = blockhandler.get_all_contents_in_list(all_data)
                 msgs = []
                 count_data = len(list)
-                print(commit_data)
+                print(count_data)
                 for i in range(count_data // 12 + 1): #データの入っているリストを１２個毎に分割する
                     start = i * 12
                     end = start + 12
@@ -155,7 +155,7 @@ def callback():
                 switch_block_msg = "BlockID:{}に切り替えました。\n編集を開始してください。".format(object)
                 msgs.append(switch_block_msg)
                 lineapi.versatile_send_msgs(reply_token,msgs)
-            
+
             elif pd[0] == "delete": #一覧から削除を押したとき
                 object = pd[1]
                 user.currentblock = int(object)
@@ -165,7 +165,7 @@ def callback():
                 con = blockhandler.ConfirmTemplate(confirm_msg)
                 lineapi.SendTemplatexMsg(reply_token,con,"確認メッセージ(無視しないでね)")
 
-            elif pd[0] == "confirm": #削除確認メッセージを選択したとき
+            elif pd[0] == "confirm": #ブロック削除確認メッセージを選択したとき
                 answer = pd[1]
                 if user.status != "delete":
                     lineapi.SendTextMsg(reply_token,["過去のボタンは押さないで～"])
@@ -188,6 +188,9 @@ def callback():
                 user.status = "completed" #ここからだと一覧呼ばないと新規作成できない
                 db.session.commit()
                 lineapi.SendTextMsg(reply_token,[msg])
+
+            elif pd[0] == "remove": #データ一覧から削除する選手を選択したとき
+
 
         elif event_type == "message": #普通にメッセージきたとき
             msg_type = event['message']['type']
