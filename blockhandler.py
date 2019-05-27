@@ -216,7 +216,7 @@ def all_data_content_flex(block, row_integrated_list):
     three_swimmers_contents = []
     for i, str in enumerate(row_integrated_list):
         if str == "":
-            str = " "
+            continue
         one_swimmer_data = {
           "type": "box",
           "layout": "vertical",
