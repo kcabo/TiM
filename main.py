@@ -121,26 +121,31 @@ def callback():
                     lineapi.SendTextMsg(reply_token,new_block_msg)
 
             elif pd[0] == "header":
-                if user.status != "": #最新のカルーセルから新規作成ボタンを押したなら""のはず
-                    lineapi.SendTextMsg(reply_token,["もう一度一覧を呼び出してから選択してください。"])
+                # if user.status != "": #最新のカルーセルから新規作成ボタンを押したなら""のはず
+                #     lineapi.SendTextMsg(reply_token,["もう一度一覧を呼び出してから選択してください。"])
+                #     continue
+                object = int(pd[1])
+                is_it_exist = MenuBlock.query.filter_by(blockid = object).first()
+                if is_it_exist != None:
+                    lineapi.SendTextMsg(reply_token,["対象のブロックが見つかりません。"])
                     continue
-                object = pd[1]
-                user.currentblock = int(object)
+                user.currentblock = object
                 user.status = "define" #この状態で受け取った文字列はブロック名編集となる
                 db.session.commit()
                 lineapi.SendTextMsg(reply_token,["例にならってブロックの情報を上書きしてください。","例：\n--------\nSwim\n50*4*1 HighAverage\n1:00\n--------"])
 
             elif pd[0] == "switch": #一覧から切り替えを押したとき
-                if user.status != "": #最新のカルーセルから新規作成ボタンを押したなら""のはず
-                    lineapi.SendTextMsg(reply_token,["もう一度一覧を呼び出してから選択してください。"])
+                object = int(pd[1])
+                is_it_exist = MenuBlock.query.filter_by(blockid = object).first()
+                if is_it_exist != None:
+                    lineapi.SendTextMsg(reply_token,["対象のブロックが見つかりません。"])
                     continue
-                object = pd[1]
-                user.currentblock = int(object)
+                user.currentblock = object
                 user.status = "add" #この状態で受け取った文字列は通常のデータ登録となる
                 db.session.commit()
 
-                all_data = TimeData.query.filter_by(blockid = int(object)).all()
-                switch_block = MenuBlock.query.filter_by(blockid = int(object)).first()
+                all_data = TimeData.query.filter_by(blockid = object).all()
+                switch_block = MenuBlock.query.filter_by(blockid = object).first()
                 list = blockhandler.get_all_contents_in_list(all_data)
                 msgs = []
                 count_data = len(list)
