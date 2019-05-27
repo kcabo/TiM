@@ -233,9 +233,9 @@ def all_data_content_flex(block, row_integrated_list):
               "color": "#2e6095",
               "height": "sm",
               "action": {
-                "type": "message",
+                "type": "postback",
                 "label": "削除",
-                "text": "remove_{}_{}".format(block.blockid, str.split("\n")[0]),
+                "data": "remove_{}_{}".format(block.blockid, str.split("\n")[0]),
               }
             }
           ]
