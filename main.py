@@ -152,14 +152,10 @@ def callback():
                     print(max_12_list)
                     msg = blockhandler.all_data_content_flex(switch_block,max_12_list)
                     msgs.append(msg)
+                switch_block_msg = "BlockID:{}に切り替えました。\n編集を開始してください。".format(object)
+                msgs.append(switch_block_msg)
                 lineapi.versatile_send_msgs(reply_token,msgs)
-                #
-                # all_data = TimeData.query.filter_by(blockid = int(object)).all() #.order_by(TimeData.swimmer, TimeData.row)はいらない？
-                # switch_block = MenuBlock.query.filter_by(blockid = int(object)).first()
-                # switch_block_contents = blockhandler.get_all_contents_in_text(switch_block, all_data)
-                # switch_block_msg = "BlockID:{}に切り替えました。\n編集を開始してください。".format(object)
-                # lineapi.SendTextMsg(reply_token,[switch_block_contents, switch_block_msg])
-
+            
             elif pd[0] == "delete": #一覧から削除を押したとき
                 object = pd[1]
                 user.currentblock = int(object)
