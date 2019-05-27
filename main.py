@@ -102,7 +102,7 @@ def callback():
                     new_block_id = blocks[-1].blockid + 1 #並び替えて一番最後になったブロックのIDが最大
 
                 try:
-                    mb = MenuBlock(mb.blockid = new_block_id, mb.date = block_date)
+                    mb = MenuBlock(blockid = new_block_id, date = block_date)
                     db.session.add(mb)
                     db.session.commit() #もしすでに登録されているブロックIDを追加しようとしたらエラーになる
                 except:
