@@ -237,12 +237,15 @@ def callback():
                 with open('csvdata.txt', 'w'):
                     pass
 
-                # block_date = blockhandler.BlockDate() #19052
-                # blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).limit(9).all()
-                # all_data = TimeData.query.filter_by(blockid = object).all()
-                # print(blocks)
-                # con = blockhandler.BlocksFlex(blocks)
-                # lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
+                block_date = blockhandler.BlockDate() #19052
+                blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all()
+
+                for b in blocks:
+                    all_data_in_block = TimeData.query.filter_by(blockid = b.blockid).all()
+
+
+                # csvmail
+                lineapi.SendTextMsg(reply_token,["メールで送信したと思う多分"])
 
 
             #ブロックのヘッダーステータスを編集する

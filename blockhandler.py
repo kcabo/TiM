@@ -30,8 +30,8 @@ def get_all_contents_in_text(block, data):
 
 def BlocksFlex(blocks):
     image_url ="https://lh5.googleusercontent.com/UJ2GhiSGkpLPhoH8VNNLRBz7B-XQlKMkFUruwfp3V04YAOvGooBg0jdDvZpWX3lqmLIYLw"
-
-    bubbles = [{
+    bubbles = []
+    new_bubble = {
       "type": "bubble",
       "hero": {
         "type": "image",
@@ -60,7 +60,7 @@ def BlocksFlex(blocks):
           }
         ]
       }
-    }]
+    }
 
     image_url2 = "https://lh3.googleusercontent.com/qrq-d52VAo-GwO5Se9tYw9EgdjYJOr-m6aWvrErVAcDdz242EucZDGUlcCMrdmR1mAysBg"
     if len(blocks) > 0:
@@ -160,6 +160,7 @@ def BlocksFlex(blocks):
 
             bubbles.append(bubble_sample)
 
+    bubbles.append(new_bubble)
     contents = {"type": "carousel", "contents": bubbles}
 
     return contents
