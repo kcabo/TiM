@@ -289,18 +289,17 @@ def all_data_content_flex(block, row_integrated_list):
               "color": "#2e6095",
               "height": "sm",
               "action": {
-                "type": "uri",
-                "label": "Add",
-                "uri": "https://linecorp.com"
+                "type": "postback",
+                "label": "編集",
+                "data": "header_{}".format(block.blockid)
               }
             }
           ]
         }
       }
     }
-    msgs_list = [] #最終的に返すリスト
-    msgs_list.append(msg)
-    return msgs_list
+
+    return msg
 
 
 def ConfirmTemplate(confirm_msg):
