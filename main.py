@@ -6,6 +6,7 @@ import json
 import lineapi
 import valueconv
 import blockhandler
+import csvmail
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -225,6 +226,23 @@ def callback():
                 print(blocks)
                 con = blockhandler.BlocksFlex(blocks)
                 lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
+
+
+            #データを全取得しメールで送信する
+            elif msg_text == "メール":
+                user.currentblock = 0
+                user.status = ""
+                db.session.commit()
+
+                with open('csvdata.txt', 'w'):
+                    pass
+
+                # block_date = blockhandler.BlockDate() #19052
+                # blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).limit(9).all()
+                # all_data = TimeData.query.filter_by(blockid = object).all()
+                # print(blocks)
+                # con = blockhandler.BlocksFlex(blocks)
+                # lineapi.SendFlexMsg(reply_token,con,"現在利用可能なブロック一覧だよ～")
 
 
             #ブロックのヘッダーステータスを編集する
