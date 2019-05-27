@@ -209,11 +209,13 @@ def callback():
                     del_times = TimeData.query.filter_by(blockid = object, swimmer = pd[2]).all()
                     if len(del_times) > 0: #削除するタイムデータが見つかったときのみ削除
                         db.session.delete(del_times)
-                    db.session.commit()
-                    msg = "削除しました。"
+                        db.session.commit()
+                        msg = "削除しました。"
+                    else:
+                        msg = "削除対象が見つかりませんでした。"
                 else:
                     msg = "キャンセルしました。"
-                user.status = "add" 
+                user.status = "add"
                 db.session.commit()
                 lineapi.SendTextMsg(reply_token,[msg])
 
