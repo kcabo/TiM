@@ -198,7 +198,7 @@ def all_data_content_flex(block, row_integrated_list):
 
     body_contents = [{
         "type": "text",
-        "text": "ID:{}".format(block.block_id),
+        "text": "ID:{}".format(block.blockid),
         "size": "xl",
         "weight": "bold"
       },
