@@ -248,9 +248,7 @@ def all_data_content_flex():
 
         #なぜかーうまくーこれがー動かないー
         if i == last_index:
-            print(i)
             filled = len(three_swimmers_contents)
-            print(filled)
             filler = {
               "type": "box",
               "layout": "vertical",
@@ -258,7 +256,7 @@ def all_data_content_flex():
               "contents": [{"type": "text","text": " ",}]
             }
             if filled != 3:
-                for i in range(3 - filled):
+                for j in range(3 - filled):
                     three_swimmers_contents.append(filler)
 
         if i % 3 == 2 or i == last_index: #horizontalブロックにおいて三個目のとき。いっぱいなので次のブロックに行く。最後の要素のときも残った文追加しておしまい
