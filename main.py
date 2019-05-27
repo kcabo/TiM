@@ -121,9 +121,6 @@ def callback():
                     lineapi.SendTextMsg(reply_token,new_block_msg)
 
             elif pd[0] == "header":
-                # if user.status != "": #最新のカルーセルから新規作成ボタンを押したなら""のはず
-                #     lineapi.SendTextMsg(reply_token,["もう一度一覧を呼び出してから選択してください。"])
-                #     continue
                 object = int(pd[1])
                 is_it_exist = MenuBlock.query.filter_by(blockid = object).first()
                 if is_it_exist == None:
@@ -196,7 +193,29 @@ def callback():
                 lineapi.SendTextMsg(reply_token,[msg])
 
             elif pd[0] == "remove": #データ一覧から削除する選手を選択したとき
-                lineapi.SendTextMsg(reply_token,[pd[1],pd[2]])
+                object_block = int(pd[1])
+                user.currentblock = int(object_block)
+                user.status = "remove" #この状態から「はい」を選択すると削除となる
+                db.session.commit()
+                con = blockhandler.confirm_flex_data_remove(pd[1],pd[2])
+                lineapi.SendFlexMsg(reply_token,con,"確認メッセージ(無視しないでね)")
+
+            elif pd[0] == "rmconfirm": #ブロック削除確認メッセージを選択したとき
+                if user.status != "remove":
+                    lineapi.SendTextMsg(reply_token,["過去のボタンは押さないで～"])
+                    continue
+                if pd[1] != "no":
+                    object = int(pd[1])
+                    del_times = TimeData.query.filter_by(blockid = object, swimmer = pd[2]).all()
+                    if len(del_times) > 0: #削除するタイムデータが見つかったときのみ削除
+                        db.session.delete(del_times)
+                    db.session.commit()
+                    msg = "削除しました。"
+                else:
+                    msg = "キャンセルしました。"
+                user.status = "add" 
+                db.session.commit()
+                lineapi.SendTextMsg(reply_token,[msg])
 
         elif event_type == "message": #普通にメッセージきたとき
             msg_type = event['message']['type']
