@@ -207,13 +207,13 @@ def callback():
                 if pd[1] != "no":
                     object = int(pd[1])
                     del_times = TimeData.query.filter_by(blockid = object, swimmer = pd[2]).all()
-                    print(del_times)
-                    if len(del_times) > 0: #削除するタイムデータが見つかったときのみ削除
-                        db.session.delete(del_times)
-                        db.session.commit()
-                        msg = "削除しました。"
-                    else:
-                        msg = "削除対象が見つかりませんでした。"
+                    # print(del_times)
+                    # if len(del_times) > 0: #削除するタイムデータが見つかったときのみ削除
+                    db.session.delete(del_times)
+                    db.session.commit()
+                    #     msg = "削除しました。"
+                    # else:
+                    #     msg = "削除対象が見つかりませんでした。"
                 else:
                     msg = "キャンセルしました。"
                 user.status = "add"
