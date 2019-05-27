@@ -205,7 +205,7 @@ def all_data_content_flex():
       {
           "type": "text",
           "text": "{}\n{}\n{}".format(category,description,cycle),
-          "wrap": True
+          "wrap": True,
           "size": "xxs",
           "weight": "bold"
         }]
