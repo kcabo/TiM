@@ -189,22 +189,22 @@ def get_all_contents_in_list(data):
 
     return list
 
-def all_data_content_flex():
-    block_id = "19052501"
-    category = "swim"
-    description = "50*4*1 Hard"
-    cycle = "1:00"
-    row_integrated_list = ["神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","lk","a;afjd;\npp","doudemoiideyos\n"]
+def all_data_content_flex(block, row_integrated_list):
+    # block_id = "19052501"
+    # category = "swim"
+    # description = "50*4*1 Hard"
+    # cycle = "1:00"
+    # row_integrated_list = ["神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","神崎\nfr 10:32.54\nfrごめんなさい\n\n0:29.18\n1:23.79","lk","a;afjd;\npp","doudemoiideyos\n"]
 
     body_contents = [{
         "type": "text",
-        "text": "ID:{}".format(block_id),
+        "text": "ID:{}".format(block.block_id),
         "size": "xl",
         "weight": "bold"
       },
       {
           "type": "text",
-          "text": "{}\n{}\n{}".format(category,description,cycle),
+          "text": "{}\n{}\n{}".format(block.category,block.description,block.cycle),
           "wrap": True,
           "size": "xxs",
           "weight": "bold"
@@ -246,7 +246,7 @@ def all_data_content_flex():
         }
         three_swimmers_contents.append(one_swimmer_data)
 
-        #なぜかーうまくーこれがー動かないー
+        #なぜかーうまくーこれがー動かないー →うごいたあああああ
         if i == last_index:
             filled = len(three_swimmers_contents)
             filler = {
