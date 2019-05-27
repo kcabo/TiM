@@ -142,8 +142,17 @@ def callback():
                 all_data = TimeData.query.filter_by(blockid = int(object)).all()
                 switch_block = MenuBlock.query.filter_by(blockid = int(object)).first()
                 list = blockhandler.get_all_contents_in_list(all_data)
-                msg = blockhandler.all_data_content_flex(switch_block,list)
-                lineapi.versatile_send_msgs(reply_token,[msg])
+                msgs = []
+                count_data = len(list)
+                print(commit_data)
+                for i in range(count_data // 12 + 1): #データの入っているリストを１２個毎に分割する
+                    start = i * 12
+                    end = start + 12
+                    max_12_list = list[start:end]
+                    print(max_12_list)
+                    msg = blockhandler.all_data_content_flex(switch_block,max_12_list)
+                    msgs.append(msg)
+                lineapi.versatile_send_msgs(reply_token,msgs)
                 #
                 # all_data = TimeData.query.filter_by(blockid = int(object)).all() #.order_by(TimeData.swimmer, TimeData.row)はいらない？
                 # switch_block = MenuBlock.query.filter_by(blockid = int(object)).first()
