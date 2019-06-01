@@ -242,8 +242,14 @@ def callback():
                     all_data_in_block = TimeData.query.filter_by(blockid = b.blockid).all()
                     write_data = csvmail.make_all_data_lists(b,all_data_in_block)
 
+                convined_lines = []
+                for line in write_data:
+                    convined_lines.append(",".join(line))
+
+                write_string = "\n".join(convined_lines)
+
                 with open('csvdata.txt', 'w') as f:
-                    f.write(write_data)
+                    f.write(write_string)
 
 
                 csvmail.send_mail()
