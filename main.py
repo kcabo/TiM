@@ -234,17 +234,19 @@ def callback():
                 user.status = ""
                 db.session.commit()
 
-                with open('csvdata.txt', 'w'):
-                    pass
 
                 block_date = blockhandler.BlockDate() #19052
                 blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all()
 
                 for b in blocks:
                     all_data_in_block = TimeData.query.filter_by(blockid = b.blockid).all()
-                    csvmail.make_all_data_lists(b,all_data_in_block)
+                    write_data = csvmail.make_all_data_lists(b,all_data_in_block)
+
+                with open('csvdata.txt', 'w') as f:
+                    f.write(write_data)
 
 
+                csvmail.send_mail()
                 # csvmail
                 lineapi.SendTextMsg(reply_token,["メールで送信したと思う多分"])
 
