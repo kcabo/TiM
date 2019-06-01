@@ -1,6 +1,8 @@
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
+from email.header import Header
+
 import smtplib
 
 def make_all_data_lists(block, all_data):
@@ -56,7 +58,7 @@ def send_mail():
 
     # msg = MIMEMultipart()
     msg = MIMEText("body")
-    msg["Subject"] = "title"
+    msg["Subject"] = Header('メールの件名を記載する', 'utf-8')
     msg["To"] = "k7cabo@gmail.com"
     msg["From"] = "gin.mail.bot@gmail.com"
     # msg.attach(MIMEText("bodydayo"))
@@ -74,13 +76,17 @@ def send_mail():
     # msg.attach(part)
 
     # メール送信処理
-    server = smtplib.SMTP("smtp.gmail.com", 587)
-    server.ehlo() #必要？
-    server.starttls()
-    server.ehlo()
-    server.login(account, password)
-    server.send_message(account, "k7cabo@gmail.com", msg.as_string())
-    server.close()
+    # server = smtplib.SMTP("smtp.gmail.com", 587)
+    # server.ehlo() #必要？
+    # server.starttls()
+    # server.ehlo()
+    # server.login(account, password)
+    # server.send_message(account, "k7cabo@gmail.com", msg.as_string())
+    # server.close()
+
+    with smtplib.SMTP_SSL('smtp.gmail.com') as smtp:
+        smtp.login('gin.mail.bot', 'jmikmbdekiwuwzax')
+        smtp.send_message(msg)
 
 
 class bb():
