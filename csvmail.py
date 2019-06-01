@@ -54,11 +54,12 @@ def send_mail():
     account = "gin.mail.bot@gmail.com"
     password = "gineikai"
 
-    msg = MIMEMultipart()
+    # msg = MIMEMultipart()
+    msg = MIMEText(body)
     msg["Subject"] = "title"
     msg["To"] = "k7cabo@gmail.com"
     msg["From"] = "gin.mail.bot@gmail.com"
-    msg.attach(MIMEText("bodydayo"))
+    # msg.attach(MIMEText("bodydayo"))
 
     # ファイルを添付
     # path = "csvdata.txt"
@@ -76,9 +77,10 @@ def send_mail():
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.ehlo() #必要？
     server.starttls()
+    server.ehlo()
     server.login(account, password)
-    server.send_message(msg)
-    server.quit()
+    server.send_message(account, "k7cabo@gmail.com", msg.as_string())
+    server.close()
 
 
 class bb():
