@@ -61,16 +61,16 @@ def send_mail():
     msg.attach(MIMEText("bodydayo"))
 
     # ファイルを添付
-    path = "csvdata.txt"
-    # f = open(path,"w")
-    # f.write("hello")
-    # f.close
-
-    with open(path, 'rb') as afile:
-        part = MIMEApplication(afile.read(),Name="test.text")
-
-    part.add_header('Content-Disposition', 'attachment', filename="test.text")
-    msg.attach(part)
+    # path = "csvdata.txt"
+    # # f = open(path,"w")
+    # # f.write("hello")
+    # # f.close
+    #
+    # with open(path, 'rb') as afile:
+    #     part = MIMEApplication(afile.read(),Name="test.text")
+    #
+    # part.add_header('Content-Disposition', 'attachment', filename="test.text")
+    # msg.attach(part)
 
     # メール送信処理
     server = smtplib.SMTP("smtp.gmail.com", 587)
