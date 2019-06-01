@@ -55,7 +55,7 @@ def send_mail():
     password = "gineikai"
 
     # msg = MIMEMultipart()
-    msg = MIMEText(body)
+    msg = MIMEText("body")
     msg["Subject"] = "title"
     msg["To"] = "k7cabo@gmail.com"
     msg["From"] = "gin.mail.bot@gmail.com"
