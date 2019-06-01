@@ -247,7 +247,7 @@ def callback():
                     convined_lines.append(",".join(line))
 
                 write_string = "\n".join(convined_lines)
-
+                print(write_string)
                 with open('csvdata.txt', 'w',encoding='utf-8') as f:
                     f.write(write_string)
 
