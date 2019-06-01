@@ -242,6 +242,7 @@ def callback():
 
                 for b in blocks:
                     all_data_in_block = TimeData.query.filter_by(blockid = b.blockid).all()
+                    csvmail.make_all_data_lists(b,all_data_in_block)
 
 
                 # csvmail
