@@ -53,8 +53,8 @@ def make_all_data_lists(block, all_data):
 def send_mail():
 
     # SMTP認証情報
-    account = "gin.mail.bot@gmail.com"
-    password = "gineikai"
+    # account = "gin.mail.bot@gmail.com"
+    # password = "gineikai"
 
     # msg = MIMEMultipart()
     msg = MIMEText("body")
@@ -85,7 +85,7 @@ def send_mail():
     # server.close()
 
     with smtplib.SMTP_SSL('smtp.gmail.com') as smtp:
-        smtp.login('gin.mail.bot', 'jmikmbdekiwuwzax')
+        smtp.login('gin.mail.bot', 'imikmbdekiwuwzax')
         smtp.send_message(msg)
 
 
