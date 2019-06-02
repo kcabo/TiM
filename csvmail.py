@@ -72,7 +72,7 @@ def send_mail():
     with open(path, 'r', encoding="utf-8") as afile:
         rd = afile.read()
         print(rd,type(rd))
-        part = MIMEApplication("どどｄ",Name="test.txt")
+        part = MIMEApplication(u"どどｄ",Name="test.txt")
 
     part.add_header('Content-Disposition', 'attachment', filename="test.text")
     msg.attach(part)
