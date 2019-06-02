@@ -69,7 +69,7 @@ def send_mail():
     # f.write("hello")
     # f.close
     #
-    with open(path, 'rb', encoding="utf-8") as afile:
+    with open(path, 'r', encoding="utf-8") as afile:
         print(afile.read())
         part = MIMEApplication(afile.read(),Name="test.text")
 
