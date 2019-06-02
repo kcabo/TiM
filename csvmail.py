@@ -2,7 +2,7 @@ from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.header import Header
-from email import Encoders
+from email import encoders
 
 import smtplib
 
@@ -74,7 +74,7 @@ def send_mail():
         rd = afile.read()
         print(rd,type(rd))
         part.set_payload(MIMEApplication(u"どどｄ",Name="test.txt"),charset = "utf-8")
-        Encoders.encode_base64(part)
+        encoders.encode_base64(part)
 
     part.add_header('Content-Disposition', 'attachment', filename="test.text")
     msg.attach(part)
