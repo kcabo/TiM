@@ -70,13 +70,15 @@ def send_mail():
     # f.write("hello")
     # f.close
     #
-    with open(path, 'r', encoding="utf-8") as afile:
-        rd = afile.read()
-        print(rd,type(rd))
-        part = MIMEApplication(u"どどｄ",Name="test.txt")
-        encoders.encode_base64(part)
+    # with open(path, 'r', encoding="utf-8") as afile:
+    #     rd = afile.read()
+    #     print(rd,type(rd))
+    #     part = MIMEApplication("どどｄ",Name="test.txt")
+    #     encoders.encode_base64(part)
 
-    part.add_header('Content-Disposition', 'attachment', filename="test.text")
+    part = MIMEText("thisisあああ21") 
+
+    part.add_header('Content-Disposition', 'attachment', filename="test.txt")
     msg.attach(part)
 
     # メール送信処理
