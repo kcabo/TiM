@@ -79,6 +79,7 @@ def send_mail():
     part = MIMEText("thisisあああ21",'plain','utf-8')
 
     part.add_header('Content-Disposition', 'attachment', filename="test.txt", charset='utf-8')
+    encoders.encode_base64(part)
     msg.attach(part)
 
     # メール送信処理
