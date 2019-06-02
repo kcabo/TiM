@@ -76,8 +76,8 @@ def send_mail():
     #     part = MIMEApplication("どどｄ",Name="test.txt")
     #     encoders.encode_base64(part)
 
-    part = MIMEText(u"thisisあああ21",'plain','utf-8')
-
+    part = MIMEText("thisisあああ21".encode('utf-8'),'plain','utf-8')
+    part["Subject"] = Header('kemめー', 'utf-8')
     part.add_header('Content-Disposition', 'attachment', filename="waaい.txt", charset='utf-8')
     encoders.encode_base64(part)
     msg.attach(part)
