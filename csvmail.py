@@ -65,7 +65,7 @@ def send_mail():
     msg.attach(MIMEText("これが本文dadd2"))
 
     # ファイルを添付
-    path = "csvdata.txt"
+    # path = "csvdata.txt"
     # f = open(path,"w")
     # f.write("hello")
     # f.close
@@ -78,7 +78,7 @@ def send_mail():
 
     part = MIMEText("thisisあああ21",'plain','utf-8')
 
-    part.add_header('Content-Disposition', 'attachment', filename="test.txt", charset='utf-8')
+    part.add_header('Content-Disposition', 'attachment', filename="waaい.txt", charset='utf-8')
     encoders.encode_base64(part)
     msg.attach(part)
 
