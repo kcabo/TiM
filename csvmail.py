@@ -62,7 +62,7 @@ def send_mail():
     msg["Subject"] = Header('メールの件名を記載する', 'utf-8')
     msg["To"] = "k7cabo@gmail.com"
     msg["From"] = "gin.mail.bot@gmail.com"
-    msg.attach(MIMEText("bodydayo"))
+    msg.attach(MIMEText("これが本文dadd2"))
 
     # ファイルを添付
     path = "csvdata.txt"
