@@ -235,22 +235,22 @@ def callback():
                 db.session.commit()
 
 
-                block_date = blockhandler.BlockDate() #19052
-                blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all()
-
-                for b in blocks:
-                    all_data_in_block = TimeData.query.filter_by(blockid = b.blockid).all()
-                    write_data = csvmail.make_all_data_lists(b,all_data_in_block)
-
-                convined_lines = []
-                for line in write_data:
-                    convined_lines.append(",".join(line))
-
-                write_string = "\n".join(convined_lines)
-                print(write_string)
-                with open('csvdata.txt', 'w',encoding='utf-8') as f:
-                    f.write(write_string)
-
+                # block_date = blockhandler.BlockDate() #19052
+                # blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all()
+                #
+                # for b in blocks:
+                #     all_data_in_block = TimeData.query.filter_by(blockid = b.blockid).all()
+                #     write_data = csvmail.make_all_data_lists(b,all_data_in_block)
+                #
+                # convined_lines = []
+                # for line in write_data:
+                #     convined_lines.append(",".join(line))
+                #
+                # write_string = "\n".join(convined_lines)
+                # print(write_string)
+                # with open('csvdata.txt', 'w',encoding='utf-8') as f:
+                #     f.write(write_string)
+                #
 
                 csvmail.send_mail()
                 # csvmail
