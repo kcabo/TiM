@@ -59,7 +59,7 @@ def send_mail():
 
     msg = MIMEMultipart()
     # msg = MIMEText("body")
-    msg["Subject"] = Header('メールの件名を記載する', 'utf-8')
+    msg["Subject"] = Header('kemめー', 'utf-8')
     msg["To"] = "k7cabo@gmail.com"
     msg["From"] = "gin.mail.bot@gmail.com"
     msg.attach(MIMEText("これが本文dadd2"))
@@ -76,7 +76,7 @@ def send_mail():
     #     part = MIMEApplication("どどｄ",Name="test.txt")
     #     encoders.encode_base64(part)
 
-    part = MIMEText("thisisあああ21".encode('utf-8'),'plain','utf-8')
+    part = MIMEText("thisisあああ21",'plain','utf-8')
 
     part.add_header('Content-Disposition', 'attachment', filename="test.txt", charset='utf-8')
     msg.attach(part)
