@@ -56,24 +56,24 @@ def send_mail():
     # account = "gin.mail.bot@gmail.com"
     # password = "gineikai"
 
-    # msg = MIMEMultipart()
-    msg = MIMEText("body")
+    msg = MIMEMultipart()
+    # msg = MIMEText("body")
     msg["Subject"] = Header('メールの件名を記載する', 'utf-8')
     msg["To"] = "k7cabo@gmail.com"
     msg["From"] = "gin.mail.bot@gmail.com"
-    # msg.attach(MIMEText("bodydayo"))
+    msg.attach(MIMEText("bodydayo"))
 
     # ファイルを添付
-    # path = "csvdata.txt"
-    # # f = open(path,"w")
-    # # f.write("hello")
-    # # f.close
+    path = "csvdata.txt"
+    # f = open(path,"w")
+    # f.write("hello")
+    # f.close
     #
-    # with open(path, 'rb') as afile:
-    #     part = MIMEApplication(afile.read(),Name="test.text")
-    #
-    # part.add_header('Content-Disposition', 'attachment', filename="test.text")
-    # msg.attach(part)
+    with open(path, 'rb') as afile:
+        part = MIMEApplication(afile.read(),Name="test.text")
+
+    part.add_header('Content-Disposition', 'attachment', filename="test.text")
+    msg.attach(part)
 
     # メール送信処理
     # server = smtplib.SMTP("smtp.gmail.com", 587)
@@ -85,7 +85,7 @@ def send_mail():
     # server.close()
 
     with smtplib.SMTP_SSL('smtp.gmail.com') as smtp:
-        smtp.login('gin.mail.bot', 'imikmbdekiwuwzax')
+        smtp.login('gin.mail.bot', 'jmikmbdekiwuwzax')
         smtp.send_message(msg)
 
 
