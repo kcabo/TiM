@@ -64,7 +64,7 @@ def send_mail():
 
     # ファイルを添付
     path = "csvdata.txt"
-    filename = '添付ファイル.txt'
+    filename = '添付ファイル.csv'
     # f = open(path,"w")
     # f.write("hello")
     # f.close
