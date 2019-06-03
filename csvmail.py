@@ -49,8 +49,6 @@ def make_all_data_lists(block, all_data):
     print(reversed_two_dimensions)
     return reversed_two_dimensions
 
-
-
 def send_mail():
 
     # SMTP認証情報
@@ -62,10 +60,11 @@ def send_mail():
     msg["Subject"] = Header('kemめー', 'utf-8')
     msg["To"] = "k7cabo@gmail.com"
     msg["From"] = "gin.mail.bot@gmail.com"
-    msg.attach(MIMEText("これが本文dadd2"))
+    msg.attach(MIMEText("これが本文dadd2",'plain','utf-8'))
 
     # ファイルを添付
-    # path = "csvdata.txt"
+    path = "csvdata.txt"
+    filename = '添付ファイル.txt'
     # f = open(path,"w")
     # f.write("hello")
     # f.close
@@ -76,11 +75,18 @@ def send_mail():
     #     part = MIMEApplication("どどｄ",Name="test.txt")
     #     encoders.encode_base64(part)
 
-    part = MIMEText("thisisあああ21".encode('utf-8'))#,'plain','utf-8')
-    part["Subject"] = Header('kemめー', 'utf-8')
-    part.add_header('Content-Disposition', 'attachment', filename="waaい.txt", charset='utf-8')
-    encoders.encode_base64(part)
-    msg.attach(part)
+    # part = MIMEText("thisisあああ21".encode('utf-8'),'plain','utf-8')
+    # part.add_header('Content-Disposition', 'attachment', filename="waaい.txt", charset='utf-8')
+    # encoders.encode_base64(part)
+    # msg.attach(part)
+
+
+    with open(path, 'rt', encoding='utf-8') as f:
+        content = f.read()
+        print(f.read())
+    attachment = MIMEText(content, 'plain', 'utf-8')
+    attachment.add_header('Content-Disposition', 'attachment', filename=('utf-8', '', filename))
+    msg.attach(attachment)
 
     # メール送信処理
     # server = smtplib.SMTP("smtp.gmail.com", 587)
