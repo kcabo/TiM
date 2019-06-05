@@ -86,7 +86,7 @@ def send_mail():
     #     print(f.read())
 
     content = "thisisあああ21,niko2\n３こめ"
-    attachment = MIMEText(content, 'plain', 'utf-8')
+    attachment = MIMEText(content, 'plain', 'utf-8-sig')
     attachment.add_header('Content-Disposition', 'attachment', filename=('utf-8', '', filename))
     msg.attach(attachment)
 
