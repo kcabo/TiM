@@ -30,7 +30,7 @@ def make_all_data_lists(block, all_data):
         for j in range(max_row):
             target = all_data[index + j]
             one_swimmer_time_data.append(target.data)
-            one_swimmer_styles.append(target.style)
+            one_swimmer_styles.append(target.style if target.style != None else "")
 
         time_values = []
         lap_indicator = []
