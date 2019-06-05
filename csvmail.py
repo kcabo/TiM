@@ -42,20 +42,32 @@ def make_all_data_lists(block, all_data):
             else:
                 lap_indicator.append(1)
 
-        rows_length = len(lap_indicator)
-        for x in range(rows_length):
+        count_rows = len(lap_indicator)
+        for x in range(count_rows):
             if lap_indicator[x] > 0:
                 if lap_indicator[x-1] > 0: #上のとandでつなげると一個目がindexエラーになる
                     gap = time_values[x] - time_values[x-1]
                     if gap > 2200:
                          lap_indicator[x] = lap_indicator[x-1] + 1
 
-        print(lap_indicator,time_values)
         max_len_styles = max(one_swimmer_styles,key=len)
         if max_len_styles != "": #スタイルが一つでも存在している
             reversed_two_dimensions.append(one_swimmer_styles)
 
         reversed_two_dimensions.append(one_swimmer_time_data)
+
+        print(lap_indicator,time_values)
+
+        if max(lap_indicator) > 1: #50mごとのラップ出す
+            lap_50m = []
+            for x_50 in range(count_rows):
+                if lap_indicator[x_50] > 1:
+                    lap = conv_from_100sec(time_values[x_50] - time_values[x_50 - 1])
+                    lap_50m.append(' {} '.format(lap))
+                else:
+                    lap_50m.append("")
+            reversed_two_dimensions.append(lap_50m)
+
         blank = []
         reversed_two_dimensions.append(blank)
         index += max_row #次の選手のデータが始まるindexを指定
@@ -63,7 +75,7 @@ def make_all_data_lists(block, all_data):
     print(reversed_two_dimensions)
     return reversed_two_dimensions
 
-def fix_reversed_lists(list):
+def fix_reversed_lists(list): #行列入れ替え
     max_row = len(max(list,key=len))
     fields = []
     for r in range(max_row):
@@ -71,7 +83,6 @@ def fix_reversed_lists(list):
         for child in list:
             if len(child) < r + 1: #rはindex、それ足す１が長さ
                 rows.append("")
-                print("notfound",r)
             else:
                 rows.append(child[r])
         print(rows)
@@ -92,6 +103,13 @@ def conv_to_100sec(time_str):
             return time_value
     except:
         return None
+
+def conv_from_100sec(time_val): #8912とかを1:29.12にする
+    minutes = time_val // 6000
+    seconds = str(time_val % 6000).zfill(4)
+    time_str = "{0}:{1}.{2}".format(str(minutes),seconds[-4:-2],seconds[-2:])
+    return time_str
+
 def send_mail(content):
     #iPhoneのgmailアプリではBOMつけないと文字化けする utf-8-sigがBOM付きUTF-8
     #Excelのデフォルト文字コードはShiftJISであり、UTF-8はBOM付きでないと認識されない。文字化けする
@@ -131,12 +149,10 @@ def send_mail(content):
 #     print(rd,type(rd))
 #     part = MIMEApplication("どどｄ",Name="test.txt")
 #     encoders.encode_base64(part)
-
 # part = MIMEText("thisisあああ21".encode('utf-8'),'plain','utf-8')
 # part.add_header('Content-Disposition', 'attachment', filename="waaい.txt", charset='utf-8')
 # encoders.encode_base64(part)
 # msg.attach(part)
-
 # メール送信処理
 # server = smtplib.SMTP("smtp.gmail.com", 587)
 # server.ehlo() #必要？
