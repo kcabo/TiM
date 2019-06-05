@@ -1,4 +1,4 @@
-lap_100mfrom email.mime.text import MIMEText
+from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
 import smtplib
