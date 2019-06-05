@@ -240,7 +240,8 @@ def callback():
 
                 for b in blocks:
                     all_data_in_block = TimeData.query.filter_by(blockid = b.blockid).all()
-                    write_data = csvmail.make_all_data_lists(b,all_data_in_block)
+                    rev_lists = csvmail.make_all_data_lists(b,all_data_in_block)
+                    write_data = csvmail.fix_reversed_lists(rev_lists)
                     for wd_row in write_data:
                         one_row = ",".join(wd_row)
                         text_file_content += one_row + "\n"
