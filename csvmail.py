@@ -57,9 +57,8 @@ def send_mail():
     body_text = "本文です。"
     filename = '添付ファイル.csv'
     atch_content = "thisisあああ21,niko2\r\n３こめ"
-    user
-
-
+    sender = "gin.mail.bot"
+    application_pw = 'jmikmbdekiwuwzax'
 
     msg = MIMEMultipart()
     msg["Subject"] = Subject
@@ -71,9 +70,8 @@ def send_mail():
     attachment.add_header('Content-Disposition', 'attachment', filename=filename)
     msg.attach(attachment)
 
-
     with smtplib.SMTP_SSL('smtp.gmail.com') as smtp:
-        smtp.login('gin.mail.bot', 'jmikmbdekiwuwzax')
+        smtp.login(sender, application_pw)
         smtp.send_message(msg)
 
 class bb():
