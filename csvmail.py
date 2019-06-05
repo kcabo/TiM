@@ -64,10 +64,11 @@ def make_all_data_lists(block, all_data):
     return reversed_two_dimensions
 
 def fix_reversed_lists(list):
-    length_of_each = [] #[2,2,6,0,6,0]とかになる
-    for l in list:
-        length_of_each.append(len(l))
-    count_rows = max(length_of_each)
+    # length_of_each = [] #[2,2,6,0,6,0]とかになる
+    # for l in list:
+    #     length_of_each.append(len(l))
+    # count_rows = max(length_of_each)
+    count_rows = max(list,key=len)
     fields = []
     current_row = 1
     for r in range(count_rows):
@@ -79,7 +80,7 @@ def fix_reversed_lists(list):
             else:
                 rows.append(child[current_row - 1]) #indexだから引く1
         fields.append(rows)
-    return field
+    return fields
 
 def conv_to_100sec(time_str):
     try:
