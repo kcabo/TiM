@@ -29,7 +29,7 @@ def make_all_data_lists(block, all_data):
         #jはゼロから始まる indexに値を足していく その選手が持つ行分繰り返す
         for j in range(max_row):
             target = all_data[index + j]
-            one_swimmer_time_data.append(target.data)
+            one_swimmer_time_data.append("'{}".format(target.data))
             one_swimmer_styles.append(target.style if target.style != None else "")
 
         time_values = []
@@ -62,6 +62,26 @@ def make_all_data_lists(block, all_data):
 
     print(reversed_two_dimensions)
     return reversed_two_dimensions
+
+def fix_reversed_lists(list):
+    length_of_each = [] #[2,2,6,0,6,0]とかになる
+    for l in list:
+        length_of_each.append(len(l))
+
+    count_rows = max(length_of_each,key=len)
+    # count_columns = len(length_of_each)
+    fields = []
+    current_row = 1
+    for r in range(count_rows):
+        current_row += r
+        rows = []
+        for child in list:
+            if len(child) < current_row:
+                rows.append("")
+            else:
+                rows.append(child[current_row - 1]) #indexだから引く1
+        fields.append(rows)
+    return field
 
 def conv_to_100sec(time_str):
     try:
@@ -104,17 +124,6 @@ def send_mail(content):
     with smtplib.SMTP_SSL('smtp.gmail.com') as smtp:
         smtp.login(sender, application_pw)
         smtp.send_message(msg)
-
-class bb():
-    category = "swim"
-    description = "50*4*1 Hard"
-    cycle = "1:00"
-
-if __name__ == '__main__':
-    all_data = [1,2,3,4,1,2,1,1,1,2,3]
-    bl = bb()
-    make_all_data_lists(bl,all_data)
-
 
 #以下試行錯誤の軌跡
 # from email.header import Header
