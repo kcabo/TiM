@@ -1,9 +1,6 @@
 from email.mime.text import MIMEText
-from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.header import Header
-from email import encoders
-
 import smtplib
 
 def make_all_data_lists(block, all_data):
@@ -50,59 +47,32 @@ def make_all_data_lists(block, all_data):
     return reversed_two_dimensions
 
 def send_mail():
+    #iPhoneのgmailアプリではBOMつけないと文字化けする utf-8-sigがBOM付きUTF-8
+    #Excelのデフォルト文字コードはShiftJISであり、UTF-8はBOM付きでないと認識されない。文字化けする
+    #\nはラインフィード、\rはキャリッジリターンである。
+    #つまり\nだけだとWindows純正メモソフトで開いたときに改行してくれない。まあそれだけなんだけど
+    Subject = "これは件名"
+    addr_to = "k7cabo@gmail.com"
+    addr_from = "gin.mail.bot@gmail.com"
+    body_text = "本文です。"
+    filename = '添付ファイル.csv'
+    atch_content = "thisisあああ21,niko2\r\n３こめ"
 
-    # SMTP認証情報
-    # account = "gin.mail.bot@gmail.com"
-    # password = "gineikai"
 
     msg = MIMEMultipart()
-    # msg = MIMEText("body")
-    msg["Subject"] = Header('kemめー', 'utf-8')
-    msg["To"] = "k7cabo@gmail.com"
-    msg["From"] = "gin.mail.bot@gmail.com"
-    msg.attach(MIMEText("これが本文dadd2",'plain','utf-8'))
+    msg["Subject"] = Header(Subject, 'utf-8')
+    msg["To"] = addr_to
+    msg["From"] = addr_from
+    msg.attach(MIMEText(body_text,'plain','utf-8'))
 
-    # ファイルを添付
-    path = "csvdata.txt"
-    filename = '添付ファイル.csv'
-    # f = open(path,"w")
-    # f.write("hello")
-    # f.close
-    #
-    # with open(path, 'r', encoding="utf-8") as afile:
-    #     rd = afile.read()
-    #     print(rd,type(rd))
-    #     part = MIMEApplication("どどｄ",Name="test.txt")
-    #     encoders.encode_base64(part)
-
-    # part = MIMEText("thisisあああ21".encode('utf-8'),'plain','utf-8')
-    # part.add_header('Content-Disposition', 'attachment', filename="waaい.txt", charset='utf-8')
-    # encoders.encode_base64(part)
-    # msg.attach(part)
-
-
-    # with open(path, 'rt', encoding='utf-8') as f:
-    #     content = f.read()
-    #     print(f.read())
-
-    content = "thisisあああ21,niko2\r\n３こめ"
-    attachment = MIMEText(content, 'plain', 'utf-8-sig')
+    attachment = MIMEText(atch_content, 'plain', 'utf-8-sig')
     attachment.add_header('Content-Disposition', 'attachment', filename=('utf-8', '', filename))
     msg.attach(attachment)
 
-    # メール送信処理
-    # server = smtplib.SMTP("smtp.gmail.com", 587)
-    # server.ehlo() #必要？
-    # server.starttls()
-    # server.ehlo()
-    # server.login(account, password)
-    # server.send_message(account, "k7cabo@gmail.com", msg.as_string())
-    # server.close()
 
     with smtplib.SMTP_SSL('smtp.gmail.com') as smtp:
         smtp.login('gin.mail.bot', 'jmikmbdekiwuwzax')
         smtp.send_message(msg)
-
 
 class bb():
     category = "swim"
@@ -115,3 +85,29 @@ if __name__ == '__main__':
     all_data = [1,2,3,4,1,2,1,1,1,2,3]
     bl = bb()
     make_all_data_lists(bl,all_data)
+
+
+#以下試行錯誤の軌跡
+# from email import encoders
+# from email.mime.application import MIMEApplication
+# ファイルを添付
+# path = "csvdata.txt"
+# with open(path, 'r', encoding="utf-8") as afile:
+#     rd = afile.read()
+#     print(rd,type(rd))
+#     part = MIMEApplication("どどｄ",Name="test.txt")
+#     encoders.encode_base64(part)
+
+# part = MIMEText("thisisあああ21".encode('utf-8'),'plain','utf-8')
+# part.add_header('Content-Disposition', 'attachment', filename="waaい.txt", charset='utf-8')
+# encoders.encode_base64(part)
+# msg.attach(part)
+
+# メール送信処理
+# server = smtplib.SMTP("smtp.gmail.com", 587)
+# server.ehlo() #必要？
+# server.starttls()
+# server.ehlo()
+# server.login(account, password)
+# server.send_message(account, "k7cabo@gmail.com", msg.as_string())
+# server.close()
