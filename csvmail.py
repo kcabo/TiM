@@ -1,4 +1,4 @@
-from email.mime.text import MIMEText
+lap_100mfrom email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
 import smtplib
@@ -37,7 +37,7 @@ def make_all_data_lists(block, all_data):
         for td in one_swimmer_time_data:
             val = conv_to_100sec(td)
             time_values.append(val)
-            if val == None:
+            if val == 0:
                 lap_indicator.append(0)
             else:
                 lap_indicator.append(1)
@@ -58,7 +58,7 @@ def make_all_data_lists(block, all_data):
 
         print(lap_indicator,time_values)
 
-        if max(lap_indicator) > 1: #50mごとのラップ出す
+        if max(lap_indicator) >= 2: #50mごとのラップ出す
             lap_50m = []
             for x_50 in range(count_rows):
                 if lap_indicator[x_50] > 1:
@@ -67,6 +67,16 @@ def make_all_data_lists(block, all_data):
                 else:
                     lap_50m.append("")
             reversed_two_dimensions.append(lap_50m)
+
+        if max(lap_indicator) >= 4: #100mごとのラップ出す
+            lap_100m = []
+            for x_100 in range(count_rows):
+                if lap_indicator[x_100] in [2, 4]:
+                    lap = conv_from_100sec(time_values[x_100] - time_values[x_100 - 2])
+                    lap_100m.append(' {} '.format(lap))
+                else:
+                    lap_100m.append("")
+            reversed_two_dimensions.append(lap_100m)
 
         blank = []
         reversed_two_dimensions.append(blank)
@@ -93,7 +103,7 @@ def conv_to_100sec(time_str):
     try:
         posi = time_str.find(":")
         if posi == -1:
-            return None
+            return 0
         else:
             minutes = time_str[:posi]
             seconds = float(time_str[posi + 1:])
@@ -102,7 +112,7 @@ def conv_to_100sec(time_str):
             time_value = int(time_value * 100)
             return time_value
     except:
-        return None
+        return 0
 
 def conv_from_100sec(time_val): #8912とかを1:29.12にする
     minutes = time_val // 6000
