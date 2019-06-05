@@ -1,6 +1,7 @@
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 # from email.header import Header
+import os
 import smtplib
 
 def make_all_data_lists(block, all_data):
