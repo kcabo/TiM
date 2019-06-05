@@ -78,6 +78,16 @@ def make_all_data_lists(block, all_data):
                     lap_100m.append("")
             reversed_two_dimensions.append(lap_100m)
 
+        if max(lap_indicator) >= 6: #200mごとのラップ出す
+            lap_200m = []
+            for x_100 in range(count_rows):
+                if lap_indicator[x_200] in [4, 6, 8]:
+                    lap = conv_from_100sec(time_values[x_200] - time_values[x_200 - 4])
+                    lap_200m.append(' {} '.format(lap))
+                else:
+                    lap_200m.append("")
+            reversed_two_dimensions.append(lap_200m)
+
         blank = []
         reversed_two_dimensions.append(blank)
         index += max_row #次の選手のデータが始まるindexを指定
