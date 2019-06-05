@@ -64,7 +64,7 @@ def send_mail():
 
     # ファイルを添付
     path = "csvdata.txt"
-    filename = '添付ファイル.txt'
+    filename = '添付ファイル.csv'
     # f = open(path,"w")
     # f.write("hello")
     # f.close
@@ -85,7 +85,7 @@ def send_mail():
     #     content = f.read()
     #     print(f.read())
 
-    content = "thisisあああ21,niko2\n３こめ"
+    content = "thisisあああ21,niko2\r\n３こめ"
     attachment = MIMEText(content, 'plain', 'utf-8-sig')
     attachment.add_header('Content-Disposition', 'attachment', filename=('utf-8', '', filename))
     msg.attach(attachment)
