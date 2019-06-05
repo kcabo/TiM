@@ -67,7 +67,6 @@ def fix_reversed_lists(list):
     count_rows = len(max(list,key=len))
     fields = []
     current_row = 1
-    print("count_rows:{}".format(count_rows))
     for r in range(count_rows):
         current_row += r
         rows = []
@@ -76,6 +75,7 @@ def fix_reversed_lists(list):
                 rows.append("")
             else:
                 rows.append(child[current_row - 1]) #indexだから引く1
+        print(rows)
         fields.append(rows)
     return fields
 
