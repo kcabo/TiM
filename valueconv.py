@@ -26,14 +26,14 @@ def fix_time_string(time_int): #ただの整数列を0:00.00の形式にする
     time_string = "{0}:{1}.{2}".format(str[:-4],str[-4:-2],str[-2:])
     return time_string
 
-def get_time_value(time_int):
-    minutes = time_int[-6:-4]
-    seconds = int(time_int[-4:]) / 100
-    time_value = 0.0
-
-    if minutes == "":
-        time_value = seconds
-    else:
-        time_value = seconds + int(minutes) * 60
-
-    return time_value
+# def get_time_value(time_int):
+#     minutes = time_int[-6:-4]
+#     seconds = int(time_int[-4:]) / 100
+#     time_value = 0.0
+#
+#     if minutes == "":
+#         time_value = seconds
+#     else:
+#         time_value = seconds + int(minutes) * 60
+#
+#     return time_value
