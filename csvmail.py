@@ -1,6 +1,5 @@
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-# from email.header import Header
 import os
 import smtplib
 
@@ -11,43 +10,73 @@ def make_all_data_lists(block, all_data):
     col_2 = ["",block.cycle]
     reversed_two_dimensions.append(col_1)
     reversed_two_dimensions.append(col_2)
-    # print(reversed_two_dimensions)
 
-    # str = ""
-    # for child in reversed_two_dimensions:
-    #     str += child[0]
-    #     print(str)
-
+    #各選手のデータがいくつ行を持っているか
     max_row_list = []
     length = len(all_data)
-
     for i in range(length):
-        if i == length - 1:
+        if i == length - 1: #一番最後の行データ
             max_row_list.append(all_data[i].row)
         elif all_data[i+1].row == 1:
             max_row_list.append(all_data[i].row)
 
-    print(max_row_list)
-
     index = 0
-
     for max_row in max_row_list:
-        #max_rowのひとつひとつが選手一人分
-        main_data = [all_data[index].swimmer]
-        styles = [""]
+        #max_rowが一選手の持つデータ数
+        one_swimmer_time_data = [all_data[index].swimmer]
+        one_swimmer_styles = [""]
 
         #jはゼロから始まる indexに値を足していく その選手が持つ行分繰り返す
         for j in range(max_row):
-            main_data.append(all_data[index + j].data)
-            styles.append(all_data[index + j].style)
+            target = all_data[index + j]
+            one_swimmer_time_data.append(target.data)
+            one_swimmer_styles.append(target.style)
 
-        reversed_two_dimensions.append(main_data)
-        index += max_row #次の要素についても
+        time_values = []
+        lap_indicator = []
+        for td in one_swimmer_time_data:
+            val = conv_to_100sec(td)
+            time_values.append(val)
+            if val == None:
+                lap_indicator.append(0)
+            else:
+                lap_indicator.append(1)
+
+        for x in enumerate(lap_indicator):
+            if lap_indicator[x] > 0:
+                if lap_indicator[x-1] > 0: #上のとandでつなげると一個目がindexエラーになる
+                    gap = time_values[x] - time_values[x-1]
+                    if gap > 2200:
+                         lap_indicator[x] = lap_indicator[x-1] + 1
+
+        print(lap_indicator,time_values)
+        max_len_styles = max(one_swimmer_styles,key=len)
+        if max_len_styles != "": #スタイルが一つでも存在している
+            reversed_two_dimensions.append(one_swimmer_styles)
+
+        reversed_two_dimensions.append(one_swimmer_time_data)
+        blank = []
+        reversed_two_dimensions.append(blank)
+        index += max_row #次の選手のデータが始まるindexを指定
 
     print(reversed_two_dimensions)
     return reversed_two_dimensions
 
-def send_mail():
+def conv_to_100sec(time_str):
+    try:
+        posi = time_str.find(":")
+        if posi == -1:
+            return None
+        else:
+            minutes = time_str[:posi]
+            seconds = float(time_str[posi + 1:])
+            time_value = 0.0
+            time_value = seconds + int(minutes) * 60
+            time_value = int(time_value * 100)
+            return time_value
+    except:
+        return None
+def send_mail(content):
     #iPhoneのgmailアプリではBOMつけないと文字化けする utf-8-sigがBOM付きUTF-8
     #Excelのデフォルト文字コードはShiftJISであり、UTF-8はBOM付きでないと認識されない。文字化けする
     #\nはラインフィード、\rはキャリッジリターンである。
@@ -57,7 +86,7 @@ def send_mail():
     addr_from = os.environ['SENDER_GMAIL_ACCOUNT']
     body_text = "本文です。"
     filename = '添付ファイル.csv'
-    atch_content = "thisisあああ21,niko2\r\n３こめ"
+    atch_content = content
     sender = os.environ['SENDER_GMAIL_ACCOUNT']
     application_pw = os.environ['GMAIL_APPLICATION_PASSWORD']
 
@@ -87,6 +116,7 @@ if __name__ == '__main__':
 
 
 #以下試行錯誤の軌跡
+# from email.header import Header
 # from email import encoders
 # from email.mime.application import MIMEApplication
 # ファイルを添付
