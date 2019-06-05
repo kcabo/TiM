@@ -73,6 +73,7 @@ def fix_reversed_lists(list):
         for child in list:
             if len(child) < current_row:
                 rows.append("")
+                print("notfound",current_row)
             else:
                 rows.append(child[current_row - 1]) #indexだから引く1
         print(rows)
