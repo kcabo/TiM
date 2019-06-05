@@ -105,11 +105,9 @@ def conv_to_100sec(time_str):
         if posi == -1:
             return 0
         else:
-            minutes = time_str[:posi]
-            seconds = float(time_str[posi + 1:])
-            time_value = 0.0
-            time_value = seconds + int(minutes) * 60
-            time_value = int(time_value * 100)
+            minutes = int(time_str[:posi])
+            seconds = int(time_str[posi + 1:].replace(".","")) #100倍した秒数
+            time_value = seconds + minutes * 6000
             return time_value
     except:
         return 0
