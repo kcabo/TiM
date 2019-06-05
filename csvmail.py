@@ -64,18 +64,16 @@ def make_all_data_lists(block, all_data):
     return reversed_two_dimensions
 
 def fix_reversed_lists(list):
-    count_rows = len(max(list,key=len))
+    max_row = len(max(list,key=len))
     fields = []
-    current_row = 1
-    for r in range(count_rows):
-        current_row += r
+    for r in range(max_row):
         rows = []
         for child in list:
-            if len(child) < current_row:
+            if len(child) < r + 1: #rはindex、それ足す１が長さ
                 rows.append("")
-                print("notfound",current_row)
+                print("notfound",r)
             else:
-                rows.append(child[current_row - 1]) #indexだから引く1
+                rows.append(child[r])
         print(rows)
         fields.append(rows)
     return fields
