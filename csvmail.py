@@ -1,6 +1,6 @@
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from email.header import Header
+# from email.header import Header
 import smtplib
 
 def make_all_data_lists(block, all_data):
@@ -52,13 +52,13 @@ def send_mail():
     #\nはラインフィード、\rはキャリッジリターンである。
     #つまり\nだけだとWindows純正メモソフトで開いたときに改行してくれない。まあそれだけなんだけど
     Subject = "これは件名"
-    addr_to = "k7cabo@gmail.com"
-    addr_from = "gin.mail.bot@gmail.com"
+    addr_to = os.environ['TO_ADDRESS']
+    addr_from = os.environ['SENDER_GMAIL_ACCOUNT']
     body_text = "本文です。"
     filename = '添付ファイル.csv'
     atch_content = "thisisあああ21,niko2\r\n３こめ"
-    sender = "gin.mail.bot"
-    application_pw = 'jmikmbdekiwuwzax'
+    sender = os.environ['SENDER_GMAIL_ACCOUNT']
+    application_pw = os.environ['GMAIL_APPLICATION_PASSWORD']
 
     msg = MIMEMultipart()
     msg["Subject"] = Subject
@@ -78,8 +78,6 @@ class bb():
     category = "swim"
     description = "50*4*1 Hard"
     cycle = "1:00"
-
-
 
 if __name__ == '__main__':
     all_data = [1,2,3,4,1,2,1,1,1,2,3]
