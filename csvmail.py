@@ -68,7 +68,7 @@ def fix_reversed_lists(list):
     # for l in list:
     #     length_of_each.append(len(l))
     # count_rows = max(length_of_each)
-    count_rows = max(list,key=len)
+    count_rows = len(max(list,key=len))
     fields = []
     current_row = 1
     for r in range(count_rows):
