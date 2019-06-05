@@ -57,16 +57,18 @@ def send_mail():
     body_text = "本文です。"
     filename = '添付ファイル.csv'
     atch_content = "thisisあああ21,niko2\r\n３こめ"
+    user
+
 
 
     msg = MIMEMultipart()
-    msg["Subject"] = Header(Subject, 'utf-8')
+    msg["Subject"] = Subject
     msg["To"] = addr_to
     msg["From"] = addr_from
     msg.attach(MIMEText(body_text,'plain','utf-8'))
 
     attachment = MIMEText(atch_content, 'plain', 'utf-8-sig')
-    attachment.add_header('Content-Disposition', 'attachment', filename=('utf-8', '', filename))
+    attachment.add_header('Content-Disposition', 'attachment', filename=filename)
     msg.attach(attachment)
 
 
