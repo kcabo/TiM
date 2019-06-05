@@ -42,7 +42,8 @@ def make_all_data_lists(block, all_data):
             else:
                 lap_indicator.append(1)
 
-        for x in enumerate(lap_indicator):
+        rows_length = len(lap_indicator)
+        for x in range(rows_length):
             if lap_indicator[x] > 0:
                 if lap_indicator[x-1] > 0: #上のとandでつなげると一個目がindexエラーになる
                     gap = time_values[x] - time_values[x-1]
