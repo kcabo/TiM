@@ -29,7 +29,7 @@ def make_all_data_lists(block, all_data):
         #jはゼロから始まる indexに値を足していく その選手が持つ行分繰り返す
         for j in range(max_row):
             target = all_data[index + j]
-            one_swimmer_time_data.append('"{}"'.format(target.data))
+            one_swimmer_time_data.append(' {} '.format(target.data))
             one_swimmer_styles.append(target.style if target.style != None else "")
 
         time_values = []
@@ -67,6 +67,7 @@ def fix_reversed_lists(list):
     count_rows = len(max(list,key=len))
     fields = []
     current_row = 1
+    print("count_rows:{}".format(count_rows))
     for r in range(count_rows):
         current_row += r
         rows = []
