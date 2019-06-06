@@ -14,6 +14,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #これ書かないとログがうるさくなる
 db = SQLAlchemy(app)
+db.create_all()
 
 #以下DBのテーブルの定義
 class UserStatus(db.Model):
