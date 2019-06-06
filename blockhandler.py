@@ -5,28 +5,9 @@ def BlockDate():
     # date_str = "2019/5/20 06:30" #デバッグ用
     # now = datetime.strptime(date_str, '%Y/%m/%d %H:%M')
     yobi = now.weekday()
-    if yobi == 6 or yobi == 2: #月が0で日が6 水日は時間帯にかかわらず前日を参照
-        nominal_time = now - timedelta(hours=24)
-    else:
-        nominal_time = now - timedelta(hours=7)
+    nominal_time = now - timedelta(hours=6) #6時間前 つまり次の日の朝６時までは前日のデータを編集できる
     block_int = int(nominal_time.strftime("%y%m%d"))
     return block_int
-
-def get_all_contents_in_text(block, data):
-    list = []
-    buf_l = ["ID:{}\n{}\n{}\n{}".format(block.blockid, block.category, block.description, block.cycle)]
-    for d in data:
-        if d.row == 1: #１行目なら前の選手のバッファデータを全部listに加えて、次の選手に備える
-            list.append("\n".join(buf_l))
-            buf_l = [d.swimmer]
-        if d.style is None: #スタイルとデータをあわせたやつをバッファに格納（バッファはリストに加えるときに改行で分ける）
-            buf_l.append(d.data)
-        else:
-            buf_l.append(d.style + "　" + d.data)
-
-    list.append("\n".join(buf_l)) #最後の選手だけバッファ内に残ってるから最後にもっかいリストに加える
-    msg = "\n-------\n".join(list)
-    return msg
 
 def BlocksFlex(blocks):
     image_url ="https://lh5.googleusercontent.com/UJ2GhiSGkpLPhoH8VNNLRBz7B-XQlKMkFUruwfp3V04YAOvGooBg0jdDvZpWX3lqmLIYLw"
@@ -64,6 +45,11 @@ def BlocksFlex(blocks):
 
     image_url2 = "https://lh3.googleusercontent.com/qrq-d52VAo-GwO5Se9tYw9EgdjYJOr-m6aWvrErVAcDdz242EucZDGUlcCMrdmR1mAysBg"
     if len(blocks) > 0:
+        block_date_int = blocks[0].date
+        block_date = datetime.strptime(str(block_date_int), "%y%m%d")
+        yobi_list = ["月","火","水","木","金","土","日"]
+        yobi = yobi_list[block_date.weekday()]
+        date_info = "📅 {}月{}日({})".format(block_date.month, block_date.day, yobi)
         for b in blocks:
             bubble_sample = {
               "type": "bubble",
@@ -81,14 +67,14 @@ def BlocksFlex(blocks):
                 "contents": [
                   {
                     "type": "text",
-                    "text": "BlockID:{}".format(b.blockid),
+                    "text": "{}　🆔 {}".format(date_info, b.blockid),
                     "wrap": True,
                     "weight": "regular",
-                    "size": "md"
+                    "size": "sm"
                   },
                   {
                     "type": "text",
-                    "text": "[空欄]" if b.category is None or b.category == "" else b.category,
+                    "text": " " if b.category is None or b.category == "" else b.category,
                     "wrap": True,
                     "weight": "bold",
                     "size": "md",
@@ -96,7 +82,7 @@ def BlocksFlex(blocks):
                   },
                   {
                     "type": "text",
-                    "text":"[空欄]" if b.description is None or b.description == "" else b.description,
+                    "text": " " if b.description is None or b.description == "" else b.description,
                     "wrap": True,
                     "weight": "bold",
                     "size": "sm",
@@ -104,7 +90,7 @@ def BlocksFlex(blocks):
                   },
                   {
                     "type": "text",
-                    "text": "[空欄]" if b.cycle is None or b.cycle == "" else b.cycle,
+                    "text": " " if b.cycle is None or b.cycle == "" else b.cycle,
                     "wrap": True,
                     "weight": "bold",
                     "size": "sm",
@@ -118,31 +104,26 @@ def BlocksFlex(blocks):
                 "spacing": "sm",
                 "contents": [
                   {
-                    "type": "box",
-                    "layout": "horizontal",
-                    "spacing": "lg",
-                    "contents": [
-                      {
-                        "type": "button",
-                        "style": "primary",
-                        "color": "#2e6095",
-                        "action": {
-                          "type": "postback",
-                          "label": "編集",
-                          "data": "header_{}".format(b.blockid)
-                        }
-                      },
-                      {
-                        "type": "button",
-                        "style": "primary",
-                        "color": "#2e6095",
-                        "action": {
-                          "type": "postback",
-                          "label": "削除",
-                          "data": "delete_{}".format(b.blockid)
-                        }
-                      }
-                    ]
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#006699",
+                    "height": "sm",
+                    "action": {
+                      "type": "postback",
+                      "label": "ブロックごと削除する",
+                      "data": "delete_{}".format(b.blockid)
+                    }
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#006699",
+                    "height": "sm",
+                    "action": {
+                      "type": "postback",
+                      "label": "見出しを編集する",
+                      "data": "header_{}".format(b.blockid)
+                    }
                   },
                   {
                     "type": "button",
@@ -150,7 +131,7 @@ def BlocksFlex(blocks):
                     "color": "#1d366d",
                     "action": {
                       "type": "postback",
-                      "label": "このブロックに切り替える",
+                      "label": "✨このブロックに切り替える✨",
                       "data": "switch_{}".format(b.blockid)
                     }
                   }
@@ -159,13 +140,12 @@ def BlocksFlex(blocks):
             }
 
             bubbles.append(bubble_sample)
-
     bubbles.append(new_bubble)
     contents = {"type": "carousel", "contents": bubbles}
-
     return contents
 
-def get_all_contents_in_list(data):
+
+def get_time_data_all_list(data):
     list = []
     buf_l = []
     for d in data:
@@ -177,13 +157,11 @@ def get_all_contents_in_list(data):
             buf_l.append(d.data)
         else:
             buf_l.append(d.style + "　" + d.data)
-
     list.append("\n".join(buf_l)) #最後の選手だけバッファ内に残ってるから最後にもっかいリストに加える
-
     return list
 
-def all_data_content_flex(block, row_integrated_list):
 
+def all_data_content_flex(block, row_integrated_list):
     body_contents = [{
         "type": "text",
         "text": "ID:{}".format(block.blockid),
@@ -274,9 +252,10 @@ def all_data_content_flex(block, row_integrated_list):
         }
       }
     }
-
     return msg
 
+
+#ごめん、これより下はスパゲッティ ぶっちゃけあんまいじりたくない
 def confirm_flex_data_remove(blockid, swimmer):
     contents = {
       "type": "bubble",
@@ -326,6 +305,22 @@ def confirm_flex_data_remove(blockid, swimmer):
 
 
     return contents
+
+def get_all_contents_in_text(block, data): #これだととんでもない長さになるから使ってない アルゴリズム自体は他の関数に応用
+    list = []
+    buf_l = ["ID:{}\n{}\n{}\n{}".format(block.blockid, block.category, block.description, block.cycle)]
+    for d in data:
+        if d.row == 1: #１行目なら前の選手のバッファデータを全部listに加えて、次の選手に備える
+            list.append("\n".join(buf_l))
+            buf_l = [d.swimmer]
+        if d.style is None: #スタイルとデータをあわせたやつをバッファに格納（バッファはリストに加えるときに改行で分ける）
+            buf_l.append(d.data)
+        else:
+            buf_l.append(d.style + "　" + d.data)
+
+    list.append("\n".join(buf_l)) #最後の選手だけバッファ内に残ってるから最後にもっかいリストに加える
+    msg = "\n-------\n".join(list)
+    return msg
 
 def ConfirmTemplate(confirm_msg):
     template = {
