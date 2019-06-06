@@ -1,6 +1,6 @@
 import  re
 
-regex = "(fr|fly|ba|br|IM|im|pull|kick|Fr|Fly|Ba|Br|Pull|Kick)*(\w*)"
+regex = "(fr|fly|ba|br|IM|im|FR|MR|pull|kick|Fr|Fly|Ba|Br|Pull|Kick)*(\w*)"
 ptn = re.compile(regex)
 
 class RowSeparator():
