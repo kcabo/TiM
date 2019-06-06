@@ -76,9 +76,10 @@ def callback():
                 db.session.add(reg)
                 db.session.commit()
                 lineapi.SendTextMsg(reply_token,["ようこそ{}さん、よろしくおねがいします！🤧🤧".format(name),"あなたのauthorizedステータスは{}です。".format(authorized_flag)])
+                print("REGISTER by {}. AUTHORIZED = {}".format(name,authorized_flag))
             except:
                 lineapi.SendTextMsg(reply_token,["登録に失敗しました。","既に登録されている可能性がございます。"])
-
+                print("REGISTER by {}. CONFLICTED in database.".format(name))
 
         elif event_type == "postback": #ボタン押したときとかのポストバックイベント
             p_data = event['postback']['data']
