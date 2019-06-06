@@ -49,7 +49,7 @@ def SendTemplatexMsg(reply_token,contents_dict,altText="メッセージだよ！
     requests.post(url, headers=headers, data=json.dumps(data))
     return "ok"
 
-def GetProfile(lineid):
+def get_line_profile(lineid):
     url = 'https://api.line.me/v2/bot/profile/{lineid}'.format(lineid=lineid)
     response = requests.get(url, headers=headers)
     js = response.json()

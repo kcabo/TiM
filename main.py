@@ -3,57 +3,47 @@ from flask_sqlalchemy import SQLAlchemy
 
 import os
 import json
+
 import lineapi
 import valueconv
 import blockhandler
 import csvmail
 
+#詳しくはFlaskとsqlalchemyの仕様を読んでください。
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #これ書かないとログがうるさくなる
 db = SQLAlchemy(app)
 
+#以下DBのテーブルの定義
 class UserStatus(db.Model):
     __tablename__ = "userstatus"
-    keyid = db.Column(db.Integer, primary_key=True)
-    # userid = db.Column(db.Integer)
-    lineid = db.Column(db.String(100), unique = True)
+    keyid = db.Column(db.Integer, primary_key = True)
+    lineid = db.Column(db.String(100), unique = True, nullable = False)
     name = db.Column(db.String(100))
-    authorized = db.Column(db.Boolean)
+    authorized = db.Column(db.Boolean, server_default = False)
     status = db.Column(db.String(40))
     currentblock = db.Column(db.Integer)
 
 class TimeData(db.Model):
     __tablename__ = "timedata"
     keyid = db.Column(db.Integer, primary_key=True)
-    blockid = db.Column(db.Integer)
-    row = db.Column(db.Integer)
+    blockid = db.Column(db.Integer, nullable = False)
+    row = db.Column(db.Integer, nullable = False)
     swimmer = db.Column(db.String(40))
     data = db.Column(db.String(40))
     style = db.Column(db.String(40))
 
 class MenuBlock(db.Model):
     __tablename__ = "menublock"
-    # keyid = db.Column(db.Integer, primary_key=True)
     blockid = db.Column(db.Integer, primary_key = True)
-    date = db.Column(db.Integer)
+    date = db.Column(db.Integer, nullable = False)
     category = db.Column(db.String(40))
     description = db.Column(db.String(100))
     cycle = db.Column(db.String(40))
 
-@app.route("/create")
-def create_db():
-    db.create_all()
-    return "ok"
-
-@app.route("/")
-def test():
-    pass
-    return "ok"
-
 @app.route("/callback", methods=['POST'])
 def callback():
-
     body = request.get_data(as_text=True)
     body_json = json.loads(body)
 
@@ -77,13 +67,14 @@ def callback():
                 continue
 
         if event_type == "follow": #友だち追加ならユーザーテーブルに追加
-            name = lineapi.GetProfile(lineid)
-            reg = UserStatus(lineid = lineid, name = name, authorized = True, status = "recruit", currentblock = 0)
+            name = lineapi.get_line_profile(lineid)
+            authorized_flag = True #ここ普段はFalseで
+            reg = UserStatus(lineid = lineid, name = name, authorized = authorized_flag, status = "recruit", currentblock = 0)
 
             try:    #lineidにunique制約あるので二重登録しようとするとエラー発生
                 db.session.add(reg)
                 db.session.commit()
-                lineapi.SendTextMsg(reply_token,["おｋ"])
+                lineapi.SendTextMsg(reply_token,["ようこそ{}さん、よろしくおねがいします！🤧🤧".format(name),"あなたのauthorizedステータスは{}です。".format(authorized_flag)])
             except:
                 lineapi.SendTextMsg(reply_token,["登録に失敗しました。","既に登録されている可能性がございます。"])
 
@@ -311,6 +302,17 @@ def callback():
 
 
     return "ok"
+
+@app.route("/create")
+def create_db():
+    db.create_all()
+    return "ok"
+
+@app.route("/")
+def test():
+    pass
+    return "できたぜべいべえ"
+
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
