@@ -252,7 +252,7 @@ def callback():
                     },
                     {
                       'type' : 'text',
-                      'text' : "メールで送ったよ！✉ありがとう おつかれさま！😆😆"
+                      'text' : "メールで送ったよ！おつかれさま！😆😆😆😆"
                     }]
                     lineapi.versatile_send_msgs(reply_token,msg_otsukaresama)
                     print("{} ――MAIL date:{}".format(user.name, block_date))
