@@ -83,7 +83,7 @@ def callback():
 
         elif event_type == "postback": #ボタン押したときとかのポストバックイベント
             p_data = event['postback']['data']
-            print("postback event data:{} user:{}".format(p_data,user.name)
+            print("postback event data:{} user:{}".format(p_data,user.name))
             pd = p_data.split("_")
 
             if pd[0] == "new": #一覧から新規作成を押したとき
