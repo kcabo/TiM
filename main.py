@@ -244,7 +244,7 @@ def callback():
                     write_data = csvmail.fix_reversed_lists(rev_lists)
                     for wd_row in write_data:
                         one_row = ",".join(wd_row)
-                        text_file_content += one_row + "\n"
+                        text_file_content += one_row + "\n\n"
 
                 csvmail.send_mail(text_file_content)
                 lineapi.SendTextMsg(reply_token,["メールで送信したと思う多分"])
@@ -255,9 +255,11 @@ def callback():
                 new_block = MenuBlock.query.filter_by(blockid = user.currentblock).first()
                 st_list = msg_text.split("\n")
                 if len(st_list) == 3:
-                    new_block.category = st_list[0]
-                    new_block.description = st_list[1]
-                    new_block.cycle = st_list[2]
+                    #replaceで通常のコンマを､(HALFWIDTH IDEOGRAPHIC COMMA)に置換している
+                    #これをしないとCSVに書き出したときに区切り文字と混同してしまう
+                    new_block.category = st_list[0].replace(",","､")
+                    new_block.description = st_list[1].replace(",","､")
+                    new_block.cycle = st_list[2].replace(",","､")
 
                     user.status = "add" #ユーザー情報を更新
                     db.session.commit()
