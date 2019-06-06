@@ -30,7 +30,7 @@ def make_all_data_lists(block, all_data):
         for j in range(max_row):
             target = all_data[index + j]
             one_swimmer_time_data.append(' {} '.format(target.data))
-            one_swimmer_styles.append(target.style if target.style != None else "")
+            one_swimmer_styles.append(target.style if target.style is not None else "")
 
         time_values = []
         lap_indicator = []
@@ -71,7 +71,7 @@ def make_all_data_lists(block, all_data):
         if max(lap_indicator) >= 4: #100mごとのラップ出す
             lap_100m = []
             for x_100 in range(count_rows):
-                if lap_indicator[x_100] in [2, 4]:
+                if lap_indicator[x_100] > 0 and lap_indicator[x_100] % 2 == 0:
                     lap = conv_from_100sec(time_values[x_100] - time_values[x_100 - 2])
                     lap_100m.append(' {} '.format(lap))
                 else:
@@ -80,13 +80,23 @@ def make_all_data_lists(block, all_data):
 
         if max(lap_indicator) >= 6: #200mごとのラップ出す
             lap_200m = []
-            for x_100 in range(count_rows):
-                if lap_indicator[x_200] in [4, 6, 8]:
+            for x_200 in range(count_rows):
+                if lap_indicator[x_200] > 0 and lap_indicator[x_200] % 4 == 0:
                     lap = conv_from_100sec(time_values[x_200] - time_values[x_200 - 4])
                     lap_200m.append(' {} '.format(lap))
                 else:
                     lap_200m.append("")
             reversed_two_dimensions.append(lap_200m)
+
+        if max(lap_indicator) >= 8: #400mごとのラップ出す
+            lap_400m = []
+            for x_400 in range(count_rows):
+                if lap_indicator[x_400] > 0 and lap_indicator[x_400] % 8 == 0:
+                    lap = conv_from_100sec(time_values[x_400] - time_values[x_400 - 8])
+                    lap_400m.append(' {} '.format(lap))
+                else:
+                    lap_400m.append("")
+            reversed_two_dimensions.append(lap_400m)
 
         blank = []
         reversed_two_dimensions.append(blank)
