@@ -22,7 +22,7 @@ class UserStatus(db.Model):
     keyid = db.Column(db.Integer, primary_key = True)
     lineid = db.Column(db.String(100), unique = True, nullable = False)
     name = db.Column(db.String(100))
-    authorized = db.Column(db.Boolean, server_default = False)
+    authorized = db.Column(db.Boolean, nullable = False)
     status = db.Column(db.String(40))
     currentblock = db.Column(db.Integer)
 
