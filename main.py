@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 import os
 import json
+import time
 
 import lineapi
 import valueconv
@@ -104,7 +105,7 @@ def callback():
                     user.currentblock = new_block_id
                     user.status = "define" #この状態で受け取った文字列はブロック名編集となる
                     db.session.commit()
-                    new_block_msg = ["メニューの情報を３行で教えて！😮例：\nSwim\n50*8*1 HighAverage\n1:00"]
+                    new_block_msg = ["メニューの情報を３行で教えて！😮\n例：\nSwim\n50*8*1 HighAverage\n1:00"]
                     lineapi.SendTextMsg(reply_token,new_block_msg)
 
 
@@ -117,7 +118,7 @@ def callback():
                 user.currentblock = target_blc
                 user.status = "define" #この状態で受け取った文字列はブロック名編集となる
                 db.session.commit()
-                lineapi.SendTextMsg(reply_token,["メニューの情報を３行で教えて！😮例：\nSwim\n50*8*1 HighAverage\n1:00"])
+                lineapi.SendTextMsg(reply_token,["メニューの情報を３行で教えて！😮\n例：\nSwim\n50*8*1 HighAverage\n1:00"])
 
 
             elif pd[0] == "switch": #一覧から切り替えを押したとき
@@ -151,7 +152,7 @@ def callback():
                 user.currentblock = int(target_blc)
                 user.status = "delete" #この状態から「はい」を選択すると削除となる
                 db.session.commit()
-                confirm_msg = "本当にBlockID:{}を削除しますか？⚠⚠この操作はもとに戻せません！！⚠⚠".format(target_blc)
+                confirm_msg = "本当にBlockID:{}を削除しますか？\n⚠⚠この操作は元に戻せません！！⚠⚠".format(target_blc)
                 con = blockhandler.ConfirmTemplate(confirm_msg)
                 lineapi.SendTemplatexMsg(reply_token,con,"確認メッセージ(無視しないでね)")
 
@@ -223,6 +224,7 @@ def callback():
 
             #データを全取得しメールで送信する
             elif msg_text == "メール":
+                start_t = time.time()
                 user.currentblock = 0
                 user.status = ""
                 db.session.commit()
@@ -241,7 +243,8 @@ def callback():
                 if text_file_content == "":
                     lineapi.SendTextMsg(reply_token,["メールで送るデータがないよ👻"])
                 else:
-                    csvmail.send_mail(text_file_content)
+                    elapsed_time = time.time() - start_t
+                    csvmail.send_mail(text_file_content, str(block_date), elapsed_time)
                     msg_otsukaresama = [{
                     "type": "sticker",
                     "packageId": "11537",
@@ -288,6 +291,9 @@ def callback():
                 show_data_as_reply = [swimmer]
                 for i, row in enumerate(rows):
                     if i != 0: #０個目は名前が書いてあるから飛ばす
+                        if len(row) > 12: #変に長い文字列を見つけた瞬間に処理をやめる
+                            lineapi.SendTextMsg(reply_token,["一行あたりの文字数が12を超えたのでデータ登録でないと判断しました。処理を中断します。"])
+                            break
                         td = TimeData()
                         td.blockid = currentblock
                         td.row = i

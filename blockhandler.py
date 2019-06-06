@@ -17,7 +17,7 @@ def BlocksFlex(blocks):
       "hero": {
         "type": "image",
         "size": "full",
-        "aspectRatio": "20:20",
+        "aspectRatio": "20:22",
         "aspectMode": "cover",
         "url": image_url,
         "action": {
