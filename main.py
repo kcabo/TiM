@@ -57,20 +57,21 @@ def callback():
         event_type = event['type']
         lineid = event['source']['userId']
 
-        if event_type != "follow": #追加時はこの操作はしない
+        if event_type != "follow": #アクセス制限管理だが、追加時はこの操作はしない
             user = UserStatus.query.filter_by(lineid = lineid).first()
             if user is None:
-                lineapi.SendTextMsg(reply_token,["登録されていないユーザーです。"])
+                lineapi.SendTextMsg(reply_token,["あなたは登録されていないユーザーです。一度ブロックして解除すれば再登録できます。"])
+                print("Unknown user's access\tlineid = {}".format(lineid))
                 continue
             elif user.authorized != True:
-                lineapi.SendTextMsg(reply_token,["許可されていないユーザーです。"])
+                lineapi.SendTextMsg(reply_token,["あなたの使用権限はただ今管理者によって制限されています。"])
+                print("ACCESS DENIED (by {})".format(user.name))
                 continue
 
-        if event_type == "follow": #友だち追加ならユーザーテーブルに追加
+        if event_type == "follow": #友だち追加と同時にユーザーに追加
             name = lineapi.get_line_profile(lineid)
             authorized_flag = True #ここ普段はFalseで
             reg = UserStatus(lineid = lineid, name = name, authorized = authorized_flag, status = "recruit", currentblock = 0)
-
             try:    #lineidにunique制約あるので二重登録しようとするとエラー発生
                 db.session.add(reg)
                 db.session.commit()
@@ -82,12 +83,11 @@ def callback():
 
         elif event_type == "postback": #ボタン押したときとかのポストバックイベント
             p_data = event['postback']['data']
-            print(p_data)
+            print("postback event data:{} user:{}".format(p_data,user.name)
             pd = p_data.split("_")
 
-
             if pd[0] == "new": #一覧から新規作成を押したとき
-                block_date = blockhandler.BlockDate() #19052
+                block_date = blockhandler.BlockDate() #190520
                 blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).all() #今日使ってるブロックを全部持ってくる
                 if len(blocks) == 0:
                     new_block_id = block_date * 100 + 1
