@@ -239,7 +239,7 @@ def callback():
                     for wd_row in write_data:
                         one_row = ",".join(wd_row)
                         text_file_content += one_row + "\n"
-                    text_file_content += " \n"
+                    text_file_content += "-\n"
 
                 if text_file_content == "":
                     lineapi.SendTextMsg(reply_token,["メールで送るデータがないよ👻"])
