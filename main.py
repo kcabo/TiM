@@ -14,7 +14,6 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #これ書かないとログがうるさくなる
 db = SQLAlchemy(app)
-db.create_all()
 
 #以下DBのテーブルの定義
 class UserStatus(db.Model):
@@ -308,12 +307,12 @@ def callback():
 @app.route("/create")
 def create_db():
     db.create_all()
-    return "ok"
+    return "all tables have just created successfully!\nやったね！"
 
 @app.route("/")
 def test():
     pass
-    return "できたぜべいべえ"
+    return "This is a test route."
 
 
 if __name__ == "__main__":
