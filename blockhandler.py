@@ -134,7 +134,7 @@ def BlocksFlex(blocks):
                     "color": "#1d366d",
                     "action": {
                       "type": "postback",
-                      "label": "✨このブロックに切り替える✨",
+                      "label": "✨このブロックを選択する✨",
                       "data": "switch_{}".format(b.blockid)
                     }
                   }
