@@ -344,7 +344,9 @@ def callback():
             else:
                 length = len(msg_text)
                 if length > 500:
-                    msg = "うるせえ調子のるな"
+                    msg = "やかましいわ"
+                elif length > 200:
+                    msg = "怒りますよ…"
                 else:
                     msg = "🗿" * length
                 lineapi.SendTextMsg(reply_token,[msg])
