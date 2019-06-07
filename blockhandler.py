@@ -168,7 +168,7 @@ def all_data_content_flex(block, row_integrated_list):
     body_contents = [{
         "type": "text",
         "text": "ID:{}".format(block.blockid),
-        "size": "xl",
+        "size": "lg",
         "weight": "bold"
       },
       {
@@ -181,7 +181,7 @@ def all_data_content_flex(block, row_integrated_list):
 
     separator = {
       "type": "separator",
-      "margin": "xl"
+      "margin": "md"
     }
 
     #バブルは最大サイズ10KB カルーセルは50KBらしい
