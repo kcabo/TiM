@@ -193,7 +193,7 @@ def callback():
                 else:
                     TimeData.query.filter_by(blockid = int(pd[1]), swimmer = pd[2]).delete()
                     msg = "削除したよ！💀💀"
-                user.status = "add"
+                user.status = "add" #一選手のデータを削除しただけなのでそのまま編集できる
                 db.session.commit()
                 lineapi.SendTextMsg(reply_token,[msg])
 
