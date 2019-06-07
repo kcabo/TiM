@@ -5,7 +5,10 @@ def BlockDate():
     # date_str = "2019/5/20 06:30" #デバッグ用
     # now = datetime.strptime(date_str, '%Y/%m/%d %H:%M')
     yobi = now.weekday()
-    nominal_time = now - timedelta(hours=6) #6時間前 つまり次の日の朝６時までは前日のデータを編集できる
+    if yobi == 6:
+        nominal_time = now - timedelta(hours=24) #日曜日は無条件で土曜日となる
+    else:
+        nominal_time = now - timedelta(hours=6) #6時間前 つまり次の日の朝６時までは前日のデータを編集できる
     block_int = int(nominal_time.strftime("%y%m%d"))
     return block_int
 

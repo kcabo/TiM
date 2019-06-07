@@ -222,6 +222,33 @@ def callback():
                 lineapi.SendFlexMsg(reply_token, con, "メニュー一覧だよ！どれかを選択してデータを登録してね✨")
                 print(blocks)
 
+            elif msg_text == "確認" or msg_text == "修正":
+                target_blc = user.currentblock
+                if_exist = MenuBlock.query.filter_by(blockid = target_blc).first()
+                if target_blc == 0 or user.status != "add":
+                    lineapi.SendTextMsg(reply_token,["ブロックが選択されてないよ！😭😭一覧からどれか選択してね"])
+                    continue
+                elif if_exist == None:
+                    lineapi.SendTextMsg(reply_token,["対象のブロックが見つからないよ！😭😭"])
+                    user.status = ""
+                    db.session.commit()
+                    continue
+
+                all_data = TimeData.query.filter_by(blockid = target_blc).all()
+                switch_block = MenuBlock.query.filter_by(blockid = target_blc).first()
+                list = blockhandler.get_time_data_all_list(all_data)
+                msgs = []
+                count_data = len(list)
+                print("出力するデータ数：{}".format(count_data))
+                for i in range(count_data // 12 + 1): #データの入っているリストを１２個毎に分割する
+                    start = i * 12
+                    end = start + 12
+                    max_12_list = list[start:end]
+                    print("データリスト：{}".format(max_12_list))
+                    msg = blockhandler.all_data_content_flex(switch_block,max_12_list)
+                    msgs.append(msg)
+                lineapi.versatile_send_msgs(reply_token,msgs)
+
             #データを全取得しメールで送信する
             elif msg_text == "メール":
                 start_t = time.time()
