@@ -170,7 +170,7 @@ def callback():
                 else:
                     msg = "キャンセルしたよ💨"
                 user.currentblock = 0
-                user.status = "completed" #ここからだと一覧呼ばないと新規作成できない
+                user.status = "" #ここからだと一覧呼ばないと新規作成できない
                 db.session.commit()
                 lineapi.SendTextMsg(reply_token,[msg])
 
@@ -184,7 +184,7 @@ def callback():
                 lineapi.SendFlexMsg(reply_token,con,"確認メッセージ(無視しないでね)")
 
 
-            elif pd[0] == "rmconfirm": #ブロック削除確認メッセージを選択したとき
+            elif pd[0] == "rmconfirm": #データ一覧から削除確認メッセージを選択したとき
                 if user.status != "remove":
                     lineapi.SendTextMsg(reply_token,["過去のボタンは押さないで～🗿"])
                     continue
