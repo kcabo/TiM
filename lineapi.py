@@ -53,3 +53,8 @@ def get_line_profile(lineid):
     response = requests.get(url, headers=headers)
     js = response.json()
     return js['displayName']
+
+def get_content_binary(msg_id):
+    url = 'https://api.line.me/v2/bot/message/{}/content'.format(msg_id)
+    response = requests.get(url, headers=headers)
+    return response
