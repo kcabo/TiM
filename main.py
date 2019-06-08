@@ -205,7 +205,7 @@ def callback():
                 if msg_type in msg_type_list:
                     msg_id =  event['message']['id']
                     res = lineapi.get_content_binary(msg_id)
-                    print(res)
+                    print(repr(res))
                 msg_reply_sticker = {
                 "type": "sticker",
                 "packageId": "11539",
