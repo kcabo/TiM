@@ -185,7 +185,7 @@ def send_notify_image_mail(content):
     msg["From"] = addr_from
     msg.attach(MIMEText(body_text,'plain','utf-8'))
 
-    attachment = MIMEImage(atch_content, _subtype='jpeg')
+    attachment = MIMEImage(atch_content)
     attachment.add_header('Content-Disposition', 'attachment', filename=filename)
     msg.attach(attachment)
 
