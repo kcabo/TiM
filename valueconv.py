@@ -1,23 +1,32 @@
 import  re
-
-regex = "(fr|fly|ba|br|IM|im|FR|MR|pull|kick|Fr|Fly|Ba|Br|Pull|Kick)*(\w*)"
+# regex = "(fr|fly|ba|br|IM|im|FR|MR|pull|kick|Fr|Fly|Ba|Br|Pull|Kick)*(\w*)"
+# 適当な文字列のあとに続くfrやmをスタイルとする
+# 冒頭の.*がすべての文字列の意味、つまり200mfrとかはmの文字すらもその中に含まれ(無視されてfrが合致する)、結果的に200mfrが抽出される
+regex = ".*(fr|fly|ba|br|IM|im|FR|MR|pull|kick|Fr|Fly|Ba|Br|Pull|Kick|m|ｍ)"
 ptn = re.compile(regex)
 
 class RowSeparator():
     def __init__(self, str):
-        match_obj = ptn.match(str)
-        self.style = match_obj.group(1)
-        buf = match_obj.group(2)
-        if buf.isdecimal():  #データ部分が数字のみならタイムを変換
-            self.data = fix_time_string(buf)
+        # match_obj = ptn.mtch(str)
+        boundary = 0 #styleの終わる境界 デフォルトは0文字目で終わる＝存在しない
+        match_obj = re.search(ptn, str)
+        if match_obj is None:
+            style = None
         else:
-            self.data = buf
+            boundary = match_obj.end() #スタイルと判定された部分が終わる位置
+            style = str[:boundary]
+        data = str[boundary:]
+        if data.isdecimal():  #データ部分が数字のみならタイムを変換
+            data = fix_time_string(data)
+
+        self.style = style
+        self.data = data
 
     def merged_data(self):
         if self.style is None:
             merged = self.data
         else:
-            merged = self.style + "　" + self.data
+            merged = self.style + "  " + self.data
         return merged
 
 
