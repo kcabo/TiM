@@ -57,4 +57,4 @@ def get_line_profile(lineid):
 def get_content_binary(msg_id):
     url = 'https://api.line.me/v2/bot/message/{}/content'.format(msg_id)
     response = requests.get(url, headers=headers)
-    return response
+    return response.content
