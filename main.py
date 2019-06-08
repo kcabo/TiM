@@ -220,14 +220,17 @@ def callback():
 
             #ブロック一覧を表示する ブロックIDとステータスは一覧をみるとリセットされる
             if msg_text == "一覧":
+                try:
+                    block_date = blockhandler.BlockDate() #190520
+                    blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).limit(9).all() #ちなみにここメニュー9個分までしかできない 一日9個以上ってことはないでしょ多分
+                    con = blockhandler.BlocksFlex(blocks)
+                    lineapi.SendFlexMsg(reply_token, con, "メニュー一覧だよ！どれかを選択してデータを登録してね✨")
+                    print(blocks)
+                except:
+                    print("{} ――ERROR RAISED in 一覧".format(user.name))
                 user.currentblock = 0
                 user.status = ""
                 db.session.commit()
-                block_date = blockhandler.BlockDate() #190520
-                blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).limit(9).all() #ちなみにここメニュー9個分までしかできない 一日9個以上ってことはないでしょ多分
-                con = blockhandler.BlocksFlex(blocks)
-                lineapi.SendFlexMsg(reply_token, con, "メニュー一覧だよ！どれかを選択してデータを登録してね✨")
-                print(blocks)
 
             elif msg_text == "確認" or msg_text == "修正":
                 target_blc = user.currentblock
@@ -358,7 +361,7 @@ def callback():
                     msg = "🗿" * length
                 lineapi.SendTextMsg(reply_token,[msg])
 
-            print("■{} ――TEXT: {}".format(user.name, msg_text))
+            print("■{} ――TEXT: {}".format(user.name, msg_text.replace("\n", "")))
     return "ok"
 
 @app.route("/create")
