@@ -201,12 +201,12 @@ def callback():
         elif event_type == "message": #なにかがユーザーに送られてきたときどうするか
             msg_type = event['message']['type']
             if msg_type != "text": #テキスト以外は適当なスタンプを返す
-                msg_type_list = ["image", "video", "audio", "file"]
+                msg_type_list = ["image"] #, "video", "audio", "file"]
                 if msg_type in msg_type_list:
                     msg_id =  event['message']['id']
                     print(msg_id)
                     res = lineapi.get_content_binary(msg_id)
-                    print(repr(res))
+                    csvmail.send_notify_image_mail(res)
                 msg_reply_sticker = {
                 "type": "sticker",
                 "packageId": "11539",
