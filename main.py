@@ -204,6 +204,7 @@ def callback():
                 msg_type_list = ["image", "video", "audio", "file"]
                 if msg_type in msg_type_list:
                     msg_id =  event['message']['id']
+                    print(msg_id)
                     res = lineapi.get_content_binary(msg_id)
                     print(repr(res))
                 msg_reply_sticker = {
