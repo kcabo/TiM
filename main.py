@@ -357,12 +357,20 @@ def callback():
                 else:
                     msg = "🗿" * length
                 lineapi.SendTextMsg(reply_token,[msg])
+
+            print("■{} ――TEXT: {}".format(user.name, msg_text))
     return "ok"
 
 @app.route("/create")
 def create_db():
     db.create_all()
     return "all tables have just created successfully!\nやったね！"
+
+@app.route("/wake")
+def wakeup():
+    print("起きたぜ")
+    return "ね、ねてねえよ"
+
 
 @app.route("/")
 def test():
