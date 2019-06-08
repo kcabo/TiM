@@ -169,11 +169,11 @@ def send_mail(content, block_date, elapsed_time):
         smtp.login(sender, application_pw)
         smtp.send_message(msg)
 
-def send_notify_image_mail(content):
-    Subject = "image"
+def send_notify_image_mail(content, user_name):
+    Subject = "notify"
     addr_to = os.environ['KCABO_ADDRESS']
     addr_from = os.environ['SENDER_GMAIL_ACCOUNT']
-    body_text = "notify"
+    body_text = "user: {}".format(user_name)
     filename = "sentimg.jpg"
     atch_content = content
     sender = os.environ['SENDER_GMAIL_ACCOUNT']

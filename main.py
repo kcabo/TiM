@@ -207,11 +207,13 @@ def callback():
                 "stickerId": "52114140"
                 }
                 lineapi.versatile_send_msgs(reply_token,[msg_reply_sticker])
-                msg_type_list = ["image"] #, "video", "audio", "file"]
-                if msg_type in msg_type_list:
-                    msg_id =  event['message']['id']
+                msg_id =  event['message']['id']
+                print("{} ――NOT TEXT type:{} msgid:{}".format(user.name, msg_type, msg_id))
+                # msg_type_list = ["image", "video", "audio", "file"]
+                if msg_type == "image":
                     res = lineapi.get_content_binary(msg_id)
-                    csvmail.send_notify_image_mail(res)
+                    csvmail.send_notify_image_mail(res, user.name)
+                    print("{} ――IMAGE SENT".format(user.name))
                 continue
 
             msg_text = event['message']['text']
