@@ -71,7 +71,7 @@ def callback():
 
         if event_type == "follow": #友だち追加と同時にユーザーに追加
             name = lineapi.get_line_profile(lineid)
-            authorized_flag = True #ここ普段はFalseで
+            authorized_flag = False #ここ普段はFalseで
             reg = UserStatus(lineid = lineid, name = name, authorized = authorized_flag, status = "recruit", currentblock = 0)
             try:    #lineidにunique制約あるので二重登録しようとするとエラー発生
                 db.session.add(reg)
@@ -96,7 +96,7 @@ def callback():
                     new_block_id = blocks[-1].blockid + 1 #並び替えて一番最後になったブロックのIDが最大
 
                 try:
-                    mb = MenuBlock(blockid = new_block_id, date = block_date)
+                    mb = MenuBlock(blockid = new_block_id, date = block_date, category = "", description = "", cycle = "")
                     db.session.add(mb)
                     db.session.commit() #もしすでに登録されているブロックIDを追加しようとしたらエラーになる
                 except:
