@@ -145,7 +145,7 @@ def send_mail(content, block_date, elapsed_time):
     #\nはラインフィード、\rはキャリッジリターンである。
     #つまり\nだけだとWindows純正メモソフトで開いたときに改行してくれない。まあそれだけなんだけど
     Subject = "{}.{}.time".format(block_date[2:4], block_date[4:6])
-    addr_to = "yuriko-kanzaki@xvg.biglobe.ne.jp" #TO_ADDRESS or KCABO_ADDRESS os.environ['TO_ADDRESS']
+    addr_to = os.environ['TO_ADDRESS'] #TO_ADDRESS or KCABO_ADDRESS 
     addr_me = os.environ['KCABO_ADDRESS']
     addr_from = os.environ['SENDER_GMAIL_ACCOUNT']
     body_text =("< MESSAGE FROM TiM >\n\n"
