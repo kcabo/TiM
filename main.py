@@ -372,10 +372,10 @@ def create_db():
 @app.route("/wake")
 def wakeup():
     print("awake")
-    return "ね、ねてねえよ"
+    return "起きてます"
 
 @app.route("/delete")
-def wakeup():
+def delete_db():
     query = TimeData.query.all
     return query
 
