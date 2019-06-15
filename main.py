@@ -371,9 +371,13 @@ def create_db():
 
 @app.route("/wake")
 def wakeup():
-    print("起きたぜ")
+    print("awake")
     return "ね、ねてねえよ"
 
+@app.route("/delete")
+def wakeup():
+    query = TimeData.query.all
+    return query
 
 @app.route("/")
 def test():
