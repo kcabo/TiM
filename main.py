@@ -335,13 +335,14 @@ def callback():
                             if existing_row is not None and existing_row.data == "" and existing_row.style == None: #同じ行が存在しておりかつデータが無いとき破壊的更新を実行可能とする
                                 existing_row.data = r.data
                                 existing_row.style = r.style
+                                db.session.commit()
                             else:
                                 lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>", "target:= {}".format(swimmer)])
                                 break
 
                     else: #このelseはrowsで回すfor文が正常に(breakせずに)終了したときのみ実行
                         try:
-                            db.session.commit()
+                            # db.session.commit()
                             updated_rows = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer).all()
                             show_data_as_reply = [updated_rows[0].swimmer]
                             for j in len(updated_rows):
