@@ -229,7 +229,6 @@ def callback():
                     blocks = MenuBlock.query.filter_by(date = block_date).order_by(MenuBlock.blockid).limit(9).all() #ちなみにここメニュー9個分までしかできない 一日9個以上ってことはないでしょ多分
                     con = blockhandler.BlocksFlex(blocks)
                     lineapi.SendFlexMsg(reply_token, con, "メニュー一覧だよ！どれかを選択してデータを登録してね✨")
-                    print(blocks)
                 except:
                     print("{} ――ERROR RAISED in 一覧".format(user.name))
                 user.currentblock = 0
@@ -336,10 +335,10 @@ def callback():
                                 break
                             existing_row = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer, row = i).first()
                             if existing_row is None: #同じ行が存在しない
-                                lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>\ntarget:= {}".format(swimmer),"更新元データの行数が足りません。"])
+                                lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>\nTarget:= {}".format(swimmer),"更新元データの行数が足りません。"])
                                 break
-                            if existing_row.data != "" or existing_row.style != None: #その行においてすでに何かしらのデータが有るとき、実行しない
-                                lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>\ntarget:= {}".format(swimmer),"更新元データの空白行に対してのみ更新ができます。"])
+                            if existing_row.data != "": #その行においてすでに何かしらのデータが有るとき、実行しない
+                                lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>\nTarget:= {}".format(swimmer),"更新元データの空白行に対してのみ更新ができます。"])
                                 break
 
                     else: #このelseはrowsで回すfor文が正常に(breakせずに)終了したときのみ実行
@@ -349,7 +348,8 @@ def callback():
                                     existing_row = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer, row = i).first()
                                     r = valueconv.RowSeparator(row)
                                     existing_row.data = r.data
-                                    existing_row.style = r.style
+                                    if r.style is not None:
+                                        existing_row.style = r.style
                                     db.session.commit()
                             updated_rows = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer).order_by(TimeData.keyid).all()
                             show_data_as_reply = [updated_rows[0].swimmer]
@@ -403,7 +403,7 @@ def callback():
                     msg = "🗿" * length
                 lineapi.SendTextMsg(reply_token,[msg])
 
-            print("■{} ――TEXT: {}".format(user.name, msg_text.replace("\n", "")))
+            print("■{} ――TEXT: {}".format(user.name, msg_text.replace("\n", "-")))
     return "ok"
 
 @app.route("/create")

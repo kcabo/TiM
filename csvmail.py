@@ -103,7 +103,6 @@ def make_all_data_lists(block, all_data):
         reversed_two_dimensions.append(blank)
         index += max_row #次の選手のデータが始まるindexを指定
 
-    print(reversed_two_dimensions)
     return reversed_two_dimensions
 
 def fix_reversed_lists(list): #行列入れ替え
@@ -116,7 +115,6 @@ def fix_reversed_lists(list): #行列入れ替え
                 rows.append("")
             else:
                 rows.append(child[r])
-        print(rows)
         fields.append(rows)
     return fields
 
