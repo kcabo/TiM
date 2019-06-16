@@ -337,6 +337,7 @@ def callback():
                                 existing_row.style = r.style
                                 db.session.commit()
                             else:
+                                print(i)
                                 lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>", "target:= {}".format(swimmer)])
                                 break
 
