@@ -326,7 +326,7 @@ def callback():
                 #既にその選手のデータがある場合、破壊的更新を試してみる
                 if existing_rows != None:
                     for i, row in enumerate(rows):
-                        if i != 0 or row != "": #2行目以降で何かしら書いてある行
+                        if i != 0 and row != "": #2行目以降で何かしら書いてある行
                             if len(row) > 12: #変に長い文字列を見つけた瞬間に処理をやめる
                                 lineapi.SendTextMsg(reply_token,["一行あたりの文字数が12を超えたのでデータ登録でないと判断しました。処理を中断します。"])
                                 break
@@ -336,7 +336,6 @@ def callback():
                                 existing_row.data = r.data
                                 existing_row.style = r.style
                             else:
-                                print(i,swimmer, currentblock)
                                 lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>", "target:= {}".format(swimmer)])
                                 break
 
