@@ -338,25 +338,25 @@ def callback():
 
 
                     else: #このelseはrowsで回すfor文が正常に(breakせずに)終了したときのみ実行
-                        try:
-                            for i, row in enumerate(rows):
-                                if i != 0 and row != "": #2行目以降で何かしら書いてある行
-                                    existing_row = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer, row = i).first()
-                                    r = valueconv.RowSeparator(row)
-                                    existing_row.data = r.data
-                                    existing_row.style = r.style
-                                    db.session.commit()
-                            updated_rows = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer).all()
-                            show_data_as_reply = [updated_rows[0].swimmer]
-                            for j in len(updated_rows):
-                                if updated_rows[j].style is None:
-                                    show_data_as_reply.append(updated_rows[j].style + "  " + updated_rows[j].data)
-                                else:
-                                    show_data_as_reply.append(updated_rows[j].data)
-                            msg = "\n".join(show_data_as_reply)
-                            lineapi.SendTextMsg(reply_token,["Destructive Update <Commit>", msg])
-                        except:
-                            lineapi.SendTextMsg(reply_token,["不明なエラーが発生。"])
+                        # try:
+                        for i, row in enumerate(rows):
+                            if i != 0 and row != "": #2行目以降で何かしら書いてある行
+                                existing_row = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer, row = i).first()
+                                r = valueconv.RowSeparator(row)
+                                existing_row.data = r.data
+                                existing_row.style = r.style
+                                db.session.commit()
+                        updated_rows = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer).all()
+                        show_data_as_reply = [updated_rows[0].swimmer]
+                        for j in len(updated_rows):
+                            if updated_rows[j].style is None:
+                                show_data_as_reply.append(updated_rows[j].style + "  " + updated_rows[j].data)
+                            else:
+                                show_data_as_reply.append(updated_rows[j].data)
+                        msg = "\n".join(show_data_as_reply)
+                        lineapi.SendTextMsg(reply_token,["Destructive Update <Commit>", msg])
+                        # except:
+                        #     lineapi.SendTextMsg(reply_token,["不明なエラーが発生。"])
 
                     # lineapi.SendTextMsg(reply_token,["その選手のデータはもう登録されてるみたい！🔗🔗"])
                     # continue
