@@ -336,7 +336,7 @@ def callback():
                                 existing_row.data = r.data
                                 existing_row.style = r.style
                             else:
-                                print(existing_row.data, existing_row.style)
+                                print(i,swimmer, currentblock)
                                 lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>", "target:= {}".format(swimmer)])
                                 break
 
