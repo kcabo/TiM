@@ -131,7 +131,7 @@ def callback():
                 user.status = "add" #この状態で受け取った文字列は通常のデータ登録となる
                 db.session.commit()
 
-                all_data = TimeData.query.filter_by(blockid = target_blc).all()
+                all_data = TimeData.query.filter_by(blockid = target_blc).order_by(TimeData.keyid).all()
                 switch_block = MenuBlock.query.filter_by(blockid = target_blc).first()
                 list = blockhandler.get_time_data_all_list(all_data)
                 msgs = []
@@ -244,7 +244,7 @@ def callback():
                     db.session.commit()
                     continue
 
-                all_data = TimeData.query.filter_by(blockid = target_blc).all()
+                all_data = TimeData.query.filter_by(blockid = target_blc).order_by(TimeData.keyid).all()
                 switch_block = MenuBlock.query.filter_by(blockid = target_blc).first()
                 list = blockhandler.get_time_data_all_list(all_data)
                 msgs = []
@@ -270,7 +270,7 @@ def callback():
                 text_file_content = ""
 
                 for b in blocks:
-                    all_data_in_block = TimeData.query.filter_by(blockid = b.blockid).all()
+                    all_data_in_block = TimeData.query.filter_by(blockid = b.blockid).order_by(TimeData.keyid).all()
                     rev_lists = csvmail.make_all_data_lists(b,all_data_in_block)
                     write_data = csvmail.fix_reversed_lists(rev_lists)
                     for wd_row in write_data:
