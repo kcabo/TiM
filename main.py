@@ -338,7 +338,7 @@ def callback():
                             if existing_row is None: #同じ行が存在しない
                                 lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>\ntarget:= {}".format(swimmer),"更新元データの行数が足りません。"])
                                 break
-                            elif existing_row.data != "" existing_row.data != "あ" or or existing_row.style != None: #その行においてすでに何かしらのデータが有るとき、実行しない
+                            if existing_row.data != "" existing_row.data != "あ" or or existing_row.style != None: #その行においてすでに何かしらのデータが有るとき、実行しない
                                 lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>\ntarget:= {}".format(swimmer),"更新元データの空白行に対してのみ更新ができます。"])
                                 break
 
