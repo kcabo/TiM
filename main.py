@@ -10,6 +10,10 @@ import valueconv
 import blockhandler
 import csvmail
 
+#スパゲッティ Lv.4
+#Pythonで初めて作ったものなんで勘弁してくださいほんとに
+#いつかリファクタリングやる
+
 #詳しくはFlaskとsqlalchemyの仕様を読んでください。
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -141,7 +145,7 @@ def callback():
                     start = i * 12
                     end = start + 12
                     max_12_list = list[start:end]
-                    print("データリスト：{}".format(max_12_list))
+                    # print("データリスト：{}".format(max_12_list))
                     msg = blockhandler.all_data_content_flex(switch_block,max_12_list)
                     msgs.append(msg)
                 lineapi.versatile_send_msgs(reply_token,msgs)
@@ -254,7 +258,7 @@ def callback():
                     start = i * 12
                     end = start + 12
                     max_12_list = list[start:end]
-                    print("データリスト：{}".format(max_12_list))
+                    # print("データリスト：{}".format(max_12_list))
                     msg = blockhandler.all_data_content_flex(switch_block,max_12_list)
                     msgs.append(msg)
                 lineapi.versatile_send_msgs(reply_token,msgs)
@@ -331,10 +335,12 @@ def callback():
                                 lineapi.SendTextMsg(reply_token,["一行あたりの文字数が12を超えたのでデータ登録でないと判断しました。処理を中断します。"])
                                 break
                             existing_row = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer, row = i).first()
-                            if existing_row is None or existing_row.data != "" or existing_row.style != None: #同じ行が存在しない、またはその行においてすでに何かしらのデータが有るとき、実行しない
-                                lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>", "target:= {}".format(swimmer)])
+                            if existing_row is None: #同じ行が存在しない
+                                lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>\ntarget:= {}".format(swimmer),"更新元データの行数が足りません。"])
                                 break
-
+                            elif: existing_row.data != "" existing_row.data != "あ" or or existing_row.style != None: #その行においてすでに何かしらのデータが有るとき、実行しない
+                                lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>\ntarget:= {}".format(swimmer),"更新元データの空白行に対してのみ更新ができます。"])
+                                break
 
                     else: #このelseはrowsで回すfor文が正常に(breakせずに)終了したときのみ実行
                         try:
