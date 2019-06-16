@@ -330,20 +330,22 @@ def callback():
                             if len(row) > 12: #変に長い文字列を見つけた瞬間に処理をやめる
                                 lineapi.SendTextMsg(reply_token,["一行あたりの文字数が12を超えたのでデータ登録でないと判断しました。処理を中断します。"])
                                 break
-                            r = valueconv.RowSeparator(row)
                             existing_row = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer, row = i).first()
-                            if existing_row is not None and existing_row.data == "" and existing_row.style == None: #同じ行が存在しておりかつデータが無いとき破壊的更新を実行可能とする
-                                existing_row.data = r.data
-                                existing_row.style = r.style
-                                db.session.commit()
-                            else:
+                            if existing_row is None or existing_row.data != "" or existing_row.style != None: #同じ行が存在しない、またはその行においてすでに何かしらのデータが有るとき、実行しない
                                 print(i, existing_row.data, existing_row.style)
                                 lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>", "target:= {}".format(swimmer)])
                                 break
 
+
                     else: #このelseはrowsで回すfor文が正常に(breakせずに)終了したときのみ実行
                         try:
-                            # db.session.commit()
+                            for i, row in enumerate(rows):
+                                if i != 0 and row != "": #2行目以降で何かしら書いてある行
+                                    existing_row = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer, row = i).first()
+                                    r = valueconv.RowSeparator(row)
+                                    existing_row.data = r.data
+                                    existing_row.style = r.style
+                                    db.session.commit()
                             updated_rows = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer).all()
                             show_data_as_reply = [updated_rows[0].swimmer]
                             for j in len(updated_rows):
@@ -354,7 +356,7 @@ def callback():
                             msg = "\n".join(show_data_as_reply)
                             lineapi.SendTextMsg(reply_token,["Destructive Update <Commit>", msg])
                         except:
-                            lineapi.SendTextMsg(reply_token,["上手く登録できませんでした。。。😔もう一度試してみてね"])
+                            lineapi.SendTextMsg(reply_token,["不明なエラーが発生。"])
 
                     # lineapi.SendTextMsg(reply_token,["その選手のデータはもう登録されてるみたい！🔗🔗"])
                     # continue
