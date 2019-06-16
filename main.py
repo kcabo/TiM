@@ -321,33 +321,66 @@ def callback():
                 rows = msg_text.split("\n")
                 swimmer = rows[0]
                 currentblock = user.currentblock
-                already_exists = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer).first()
-                if already_exists != None:
-                    lineapi.SendTextMsg(reply_token,["その選手のデータはもう登録されてるみたい！🔗🔗"])
-                    continue
+                existing_rows = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer).first()
 
-                show_data_as_reply = [swimmer]
-                for i, row in enumerate(rows):
-                    if i != 0: #０個目は名前が書いてあるから飛ばす
-                        if len(row) > 12: #変に長い文字列を見つけた瞬間に処理をやめる
-                            lineapi.SendTextMsg(reply_token,["一行あたりの文字数が12を超えたのでデータ登録でないと判断しました。処理を中断します。"])
-                            break
-                        td = TimeData()
-                        td.blockid = currentblock
-                        td.row = i
-                        td.swimmer = swimmer
-                        r = valueconv.RowSeparator(row)
-                        td.style = r.style
-                        td.data = r.data
-                        db.session.add(td)
-                        show_data_as_reply.append(r.merged_data())
+                #既にその選手のデータがある場合、破壊的更新を試してみる
+                if existing_rows != None:
+                    for i, row in enumerate(rows):
+                        if i != 0 or row != "": #2行目以降で何かしら書いてある行
+                            if len(row) > 12: #変に長い文字列を見つけた瞬間に処理をやめる
+                                lineapi.SendTextMsg(reply_token,["一行あたりの文字数が12を超えたのでデータ登録でないと判断しました。処理を中断します。"])
+                                break
+                            r = valueconv.RowSeparator(row)
+                            existing_row = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer, row = i).first()
+                            if existing_row is not None and existing_row.data == "" and existing_row.style == None: #同じ行が存在しておりかつデータが無いとき破壊的更新を実行可能とする
+                                existing_row.data = r.data
+                                existing_row.style = r.style
+                            else:
+                                lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>", "target:= {}".format(swimmer)])
+                                break
 
-                try:
-                    db.session.commit()
-                    msg = "\n".join(show_data_as_reply)
-                    lineapi.SendTextMsg(reply_token,[msg,"✨✨登録成功！✨✨"])
-                except:
-                    lineapi.SendTextMsg(reply_token,["上手く登録できませんでした。。。😔もう一度試してみてね"])
+                    else: #このelseはrowsで回すfor文が正常に(breakせずに)終了したときのみ実行
+                        try:
+                            db.session.commit()
+                            updated_rows = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer).all()
+                            show_data_as_reply = [updated_rows[0].swimmer]
+                            for j in len(updated_rows):
+                                if updated_rows[j].style is None:
+                                    show_data_as_reply.append(updated_rows[j].style + "  " + updated_rows[j].data)
+                                else:
+                                    show_data_as_reply.append(updated_rows[j].data)
+                            msg = "\n".join(show_data_as_reply)
+                            lineapi.SendTextMsg(reply_token,["Destructive Update <Commit>", msg])
+                        except:
+                            lineapi.SendTextMsg(reply_token,["上手く登録できませんでした。。。😔もう一度試してみてね"])
+
+                    # lineapi.SendTextMsg(reply_token,["その選手のデータはもう登録されてるみたい！🔗🔗"])
+                    # continue
+
+                else:
+                    show_data_as_reply = [swimmer]
+                    for i, row in enumerate(rows):
+                        if i != 0: #０個目は名前が書いてあるから飛ばす
+                            if len(row) > 12: #変に長い文字列を見つけた瞬間に処理をやめる
+                                lineapi.SendTextMsg(reply_token,["一行あたりの文字数が12を超えたのでデータ登録でないと判断しました。処理を中断します。"])
+                                break
+                            td = TimeData()
+                            td.blockid = currentblock
+                            td.row = i
+                            td.swimmer = swimmer
+                            r = valueconv.RowSeparator(row)
+                            td.style = r.style #styleなしならNoneになる
+                            td.data = r.data    #dataなしなら""になる
+                            db.session.add(td)
+                            show_data_as_reply.append(r.merged_data())
+
+                    else: #このelseはrowsで回すfor文が正常に(breakせずに)終了したときのみ実行
+                        try:
+                            db.session.commit()
+                            msg = "\n".join(show_data_as_reply)
+                            lineapi.SendTextMsg(reply_token,[msg,"✨✨登録成功！✨✨"])
+                        except:
+                            lineapi.SendTextMsg(reply_token,["上手く登録できませんでした。。。😔もう一度試してみてね"])
 
 
             #どれにも当てはまらない文字列にも一応返す
