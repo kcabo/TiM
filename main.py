@@ -345,11 +345,11 @@ def callback():
                                     existing_row.data = r.data
                                     existing_row.style = r.style
                                     db.session.commit()
-                            updated_rows = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer).all()
+                            updated_rows = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer).order_by(TimeData.keyid).all()
                             show_data_as_reply = [updated_rows[0].swimmer]
                             for j in range(len(updated_rows)):
-                                if updated_rows[j].style is None:
-                                    show_data_as_reply.append(updated_rows[j].data) #updated_rows[j].style + "  " + 
+                                if updated_rows[j].style is not None:
+                                    show_data_as_reply.append(updated_rows[j].style + "  " + updated_rows[j].data)
                                 else:
                                     show_data_as_reply.append(updated_rows[j].data)
                             msg = "\n".join(show_data_as_reply)
