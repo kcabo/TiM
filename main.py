@@ -332,7 +332,6 @@ def callback():
                                 break
                             existing_row = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer, row = i).first()
                             if existing_row is None or existing_row.data != "" or existing_row.style != None: #同じ行が存在しない、またはその行においてすでに何かしらのデータが有るとき、実行しない
-                                print(i, existing_row.data, existing_row.style)
                                 lineapi.SendTextMsg(reply_token,["Destructive Update <Failed>", "target:= {}".format(swimmer)])
                                 break
 
@@ -348,7 +347,7 @@ def callback():
                                 db.session.commit()
                         updated_rows = TimeData.query.filter_by(blockid = currentblock, swimmer = swimmer).all()
                         show_data_as_reply = [updated_rows[0].swimmer]
-                        for j in len(updated_rows):
+                        for j in range(len(updated_rows)):
                             if updated_rows[j].style is None:
                                 show_data_as_reply.append(updated_rows[j].style + "  " + updated_rows[j].data)
                             else:
