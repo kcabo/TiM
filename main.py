@@ -418,7 +418,7 @@ def wakeup():
 
 @app.route("/delete")
 def delete_db():
-    query = TimeData.query.all
+    query = TimeData.query.all()
     db.session.delete(query)
     db.session.commit()
     return "deleted"
