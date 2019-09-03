@@ -4,6 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 import json
 import time
+import requests
+
+# import api_adaptor as api
 #
 # import lineapi
 # import valueconv
@@ -15,10 +18,18 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #これ書かないとログがうるさくなる
 db = SQLAlchemy(app)
 
+access_token = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
+headers =  {
+    'Content-Type': 'application/json',
+    'Authorization' : 'Bearer ' + access_token
+}
+reply_url = 'https://api.line.me/v2/bot/message/reply'
+
+
 #以下DBのテーブルの定義
-class UserStatus(db.Model):
-    __tablename__ = "userstatus"
-    id = db.Column(db.Integer, primary_key = True)
+class User(db.Model):
+    __tablename__ = "users"
+    keyid = db.Column(db.Integer, primary_key = True)
     lineid = db.Column(db.String(), unique = True, nullable = False)
     name = db.Column(db.String())
     authorized = db.Column(db.Boolean, nullable = False)
@@ -28,7 +39,7 @@ class UserStatus(db.Model):
 
 class Record(db.Model):
     __tablename__ = "record"
-    id = db.Column(db.Integer, primary_key=True)
+    keyid = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Integer, nullable = False) #20190902
     serial = db.Column(db.Integer, nullable = False) #1
     swimmer = db.Column(db.String()) #神崎
@@ -37,40 +48,40 @@ class Record(db.Model):
 
 class Menu(db.Model):
     __tablename__ = "menu"
-    id = db.Column(db.Integer, primary_key=True)
+    keyid = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Integer, nullable = False) #20190902
     serial = db.Column(db.Integer, nullable = False) #1
     category = db.Column(db.String())
     description = db.Column(db.String())
     cycle = db.Column(db.String())
 
+
 class Event():
     def __init__(event):
-        type = event['type']
-        if type in ["message","postback","follow"]:
-            reply_token = event['replyToken']
-            lineid = event['source']['userId']
+        self.event_type = event.get('type')
+        self.reply_token = event.get('replyToken')
+        self.lineid = event.get('source',{'userId':None}).get('userId')#sourceキーが存在しないとき、NoneからuserIdを探すとエラー
+        self.msg_type = event.get('message',{'type':None}).get('type')
+        self.text = event.get('message',{'text':None}).get('text')
+        self.user = User.query.filter_by(lineid = lineid).first()
 
-            if type == "message":
-                msg_type = event['message']['type']
+    def post_reply(msg_list):
+        data = {'replyToken': self.reply_token, 'messages': msg_list}
+        requests.post(reply_url, headers=headers, data=json.dumps(data))
 
-                if msg_type == "text":
-                    msg_text = event['message']['text']
+    def send_text(*texts):
+        msgs = [{'type':'text','text':t} for t in texts]
+        post_reply(msgs)
 
 
 @app.route("/callback", methods=['POST'])
 def callback():
     body = request.get_data(as_text=True)
-    body_json = json.loads(body)
+    body_json = json.loads(body) #辞書型に変換
 
     for event in body_json['events']:
-        event_type = event['type']
-        if event_type in ["message","postback","follow"]:
-            reply_token = event['replyToken']
-            lineid = event['source']['userId']
 
-            if event_type == "message":
-                msg_type = event['message']['type']
+        e = Event(event)
 
-                if msg_type == "text":
-                    msg_text = event['message']['text']
+        #アクセス管理
+        if e.user == None:
