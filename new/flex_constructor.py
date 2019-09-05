@@ -1,6 +1,6 @@
 import datetime
 
-def menu_box(chain_date, serial, description, category_and_cycle): #ひとつのメニューの四角い部分
+def menu_box(chain_date, sequence, description, category_and_cycle): #ひとつのメニューの四角い部分
     box = {
         "type": "box",
         "layout": "horizontal",
@@ -62,8 +62,7 @@ def menu_box(chain_date, serial, description, category_and_cycle): #ひとつの
             "margin": "md",
             "action": {
               "type": "postback",
-              "label": "kill",
-              "data": "kill_{}_{}".format(chain_date, serial)
+              "data": "kill_{}_{}".format(chain_date, sequence)
             }
           },
           {
@@ -89,8 +88,7 @@ def menu_box(chain_date, serial, description, category_and_cycle): #ひとつの
             "backgroundColor": "#A6CF44",
             "action": {
               "type": "postback",
-              "label": "edit",
-              "data": "edit_{}_{}".format(chain_date, serial)
+              "data": "edit_{}_{}".format(chain_date, sequence)
           }
           }
         ],
@@ -99,8 +97,7 @@ def menu_box(chain_date, serial, description, category_and_cycle): #ひとつの
         "borderWidth": "1px",
         "action": {
           "type": "postback",
-          "label": "select",
-          "data": "select_{}_{}".format(chain_date, serial)
+          "data": "select_{}_{}".format(chain_date, sequence)
         }
       }
 
@@ -112,7 +109,7 @@ def design_flex_menu_list(chain_date, menu_query):
     prev_date = (date - datetime.timedelta(days=1)).strftime('%y%m%d')
     next_date = (date + datetime.timedelta(days=1)).strftime('%y%m%d')
 
-    menu_list_contents = [menu_box(chain_date, m.serial, m.description, m.category + " " + m.cycle) for m in menu_query]
+    menu_list_contents = [menu_box(chain_date, m.sequence, m.description, m.category + " " + m.cycle) for m in menu_query]
 
     new_menu_box =   {
         "type": "box",
@@ -139,7 +136,6 @@ def design_flex_menu_list(chain_date, menu_query):
         "backgroundColor": "#26408B",
         "action": {
           "type": "postback",
-          "label": "new_menu",
           "data": "new_{}".format(chain_date)
         }
       }
@@ -170,7 +166,6 @@ def design_flex_menu_list(chain_date, menu_query):
             ],
             "action": {
               "type": "postback",
-              "label": "prev_date",
               "data": "menu_{}".format(prev_date)
             }
           },
@@ -208,7 +203,6 @@ def design_flex_menu_list(chain_date, menu_query):
             ],
             "action": {
               "type": "postback",
-              "label": "next_date",
               "data": "menu_{}".format(next_date)
             }
           }
@@ -227,3 +221,76 @@ def design_flex_menu_list(chain_date, menu_query):
     }
 
     return menu_list
+
+
+def design_flex_record_list_bubble(record_queries, menu_query): #最大12 つまりひとつのバブルを返す関数 1行につき4人で最大3行
+
+    filler = {"type": "filler"}
+    separator = {"type": "separator"}
+
+    count_record = len(record_queries)
+    count_needed_rows = (count_record-1)//4 + 1 #たとえば5人分のタイムなら2行必要となる
+
+    fixed_record_array = [record.one_record_flex_content() for record in record_queries]
+
+    #たとえば5人分のタイムなら2行つかって8人分のスペースがある→ あいている3人分をfillerで埋める
+    fixed_record_array.extend([filler for i in range(count_needed_rows*4 - count_record)])
+
+    body_contents = []
+
+    for i in range(count_needed_rows): #0~2
+
+        one_row = {
+          "type": "box",
+          "layout": "horizontal",
+          "contents": fixed_record_array[i*4:(i+1)*4] #0~3,4~7,8~11を順にリストで取り出す
+        }
+
+        body_contents.append(one_row)
+
+        if i != count_needed_rows -1: #最終行でないならセパレーターを入れる
+            body_contents.append(separator)
+
+
+    record_bubble = {
+      "type": "bubble",
+      "header": {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "text",
+            "text": menu_query.format_date_two_row(),
+            "size": "sm",
+            "flex": 2,
+            "color": "#ffffff",
+            "align": "center",
+            "weight": "bold",
+            "wrap": True,
+            "gravity": "center"
+          },
+          {
+            "type": "separator",
+            "color": "#ffffff"
+          },
+          {
+            "type": "text",
+            "text": menu_query.format_menu_3_row()
+            "size": "xxs",
+            "flex": 3,
+            "color": "#ffffff",
+            "wrap": True
+          }
+        ],
+        "backgroundColor": "#0367D3",
+        "spacing": "xl"
+      },
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": body_contents,
+        "spacing": "lg"
+      }
+    }
+
+    return record_bubble
