@@ -28,6 +28,8 @@
 #         msgs = [{'type':'text','text':t} for t in texts]
 #         post_reply(msgs)
 
-import playfield
-import datetime
-print(playfield.hoge(datetime.date.today()))
+class hoge:
+    ho = 3
+    def h(a):
+
+        return a + 3
