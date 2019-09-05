@@ -145,6 +145,8 @@ class Event():
             "contents": bubbles
             }
 
+        send_flex(carousel, 'RecordList')
+
 
 
 
@@ -166,7 +168,7 @@ def callback():
         if e.event_type == 'message':
 
             if e.text == '一覧':
-                chain_date = datetime.date.today().strftime('%Y%m%d')
+                chain_date = datetime.date.today().strftime('%y%m%d')
                 show_menu_list(chain_date)
 
             elif e.text == '確認':
