@@ -15,9 +15,9 @@
 # print()
 #
 #
-# import datetime
+import datetime
 #
-# # print(type(int(datetime.date.today().strftime('%Y%m%d'))))
+print(int(datetime.date.today().strftime('%Y%m%d')))
 # print(datetime.date.today().strftime('%m/%d(%a)'))
 
 # n = None
