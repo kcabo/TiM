@@ -5,6 +5,7 @@ import  re
 regex = ".*(fr|fly|ba|br|IM|im|FR|MR|pull|kick|Fr|Fly|Ba|Br|Pull|Kick|m|ｍ)"
 ptn = re.compile(regex)
 
+
 class RowSeparator():
     def __init__(self, str):
         # match_obj = ptn.mtch(str)

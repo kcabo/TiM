@@ -7,7 +7,7 @@ import json
 import time
 import requests
 
-import flex_constructor as flex
+import flex_designer as flex
 
 # import api_adaptor as api
 #

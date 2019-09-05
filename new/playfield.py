@@ -1,9 +1,10 @@
+
 # d = {1:"kkk","u":"8","d":{"l":"iu","tt":"uu"}}
 
 # print(d.get("h",{"tt":None}).get("tt"))
 
 
-# def hoge(*a):
+# def hoge(*a):alkm;f
 #     for i in a:
 #         print(i)
 #

@@ -4,6 +4,7 @@ from email.mime.image import MIMEImage
 import os
 import smtplib
 
+
 def make_all_data_lists(block, all_data):
     #この処理は同一ブロックIDごとにおこなう
     reversed_two_dimensions = []
