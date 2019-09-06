@@ -163,7 +163,7 @@ class Event():
                 "contents": bubbles
                 }
             self.send_flex(carousel, 'RecordList')
-        e.user.set_value(date = date, sequence = sequence, status = '')
+        self.user.set_value(date = date, sequence = sequence, status = '')
 
 
 
@@ -272,7 +272,6 @@ def callback():
                 date = int(data[1])
                 sequence = int(data[2])
                 e.show_time_list(date, sequence)
-                e.user.set_value(date = date, sequence = sequence, status = '')
 
             elif data[0] == 'rc': #"data": "rc_{}_{}_{}".format(self.date, self.sequence, self.swimmer)
                 if e.user.status == 'erase':
