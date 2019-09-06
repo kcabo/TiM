@@ -100,8 +100,8 @@ class Record(db.Model):
             return 0
 
     def val_to_fmt(self, val):
-        minutes = time_val // 6000
-        seconds = str(time_val % 6000).zfill(4)
+        minutes = val // 6000
+        seconds = str(val % 6000).zfill(4)
         time_str = "{0}:{1}.{2}".format(str(minutes),seconds[-4:-2],seconds[-2:])
         return time_str
 
