@@ -285,7 +285,7 @@ def callback():
                 e.user.set_value(date = date, sequence = sequence, status = '')
                 e.send_text('{}のタイムを削除しました'.format(swimmer))
 
-    return 200
+    return '200'
 
 
 
