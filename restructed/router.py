@@ -1,6 +1,7 @@
 import datetime
 import json
 import os
+import re
 import requests
 
 from flask import Flask, request, abort
@@ -19,6 +20,8 @@ headers =  {
     'Content-Type': 'application/json',
     'Authorization' : 'Bearer ' + access_token
 }
+
+style_ptn = re.compile(".*(fr|fly|ba|br|IM|im|FR|MR|pull|kick|Fr|Fly|Ba|Br|Pull|Kick|m|ｍ)")
 
 
 #以下DBのテーブルの定義
@@ -54,9 +57,14 @@ class Record(db.Model):
     def __init__(self, text, date, sequence):
         rows = text.split('\n')
         self.swimmer = rows[0]
-        self.times = ','.join(rows[1:])
+        self.time_list = [self.format_time(t) if t.isdecimal() else t for t in rows[1:]]
+        self.times = ','.join(self.time_list)
         self.date = date
         self.sequence = sequence
+
+    def format_time(self, string):
+        zero_fixed = string.zfill(5) #最小５文字でゼロ埋め
+        return "{0}:{1}.{2}".format(zero_fixed[:-4], zero_fixed[-4:-2], zero_fixed[-2:])
 
     def one_record_flex_content(self):
         if self.styles is None:
@@ -223,7 +231,8 @@ def callback():
                     record = Record(e.text, e.user.date, e.user.sequence)
                     db.session.add(record)
                     db.session.commit()
-                    e.send_text(e.text, '登録完了')
+                    reply = '\n'.join(record.time_list)
+                    e.send_text(reply, '登録完了')
 
             else:
                 e.send_text(neta.pop_regional_indicator(e.text))

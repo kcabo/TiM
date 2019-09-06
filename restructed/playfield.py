@@ -16,9 +16,9 @@
 # print()
 #
 #
-import datetime
-#
-print(int(datetime.date.today().strftime('%Y%m%d')))
+# import datetime
+# #
+# print(int(datetime.date.today().strftime('%Y%m%d')))
 # print(datetime.date.today().strftime('%m/%d(%a)'))
 
 # n = None
@@ -54,3 +54,14 @@ print(int(datetime.date.today().strftime('%Y%m%d')))
 #     return (n-1)//4 + 1
 #
 # print(ret(12))
+
+
+import re
+
+record_ptn = re.compile(r".*(fr|fly|ba|br|IM|im|FR|MR|pull|kick|Fr|Fly|Ba|Br|Pull|Kick|m|ｍ)?(\d*)")
+
+t = '32485'
+
+obj = re.search(record_ptn, t)
+
+print(obj.group(2))
