@@ -276,7 +276,7 @@ def design_flex_record_list_bubble(record_queries, menu_query): #最大12 つま
           },
           {
             "type": "text",
-            "text": menu_query.format_menu_3_row()
+            "text": menu_query.format_menu_3_row(),
             "size": "xxs",
             "flex": 3,
             "color": "#ffffff",
