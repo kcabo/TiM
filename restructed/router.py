@@ -152,7 +152,7 @@ class Event():
 
         bubbles = []
         for i in range(count_needed_bubbles): #0~
-            one_bubble = flex.design_flex_record_list(record_queries[i*12:(i+1)*12], menu_query)
+            one_bubble = flex.design_flex_record_list_bubble(record_queries[i*12:(i+1)*12], menu_query)
             bubbles.append(one_bubble)
 
         if len(bubbles) == 0:
