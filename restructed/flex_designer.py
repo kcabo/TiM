@@ -348,7 +348,7 @@ def design_kill_menu_confirm(target_menu):
                 "height": "30px",
                 "action": {
                   "type": "postback",
-                  "data": "kill_{}_{}".format(target_menu.date, target_menu.sequence)
+                  "data": "yeskill_{}_{}".format(target_menu.date, target_menu.sequence)
                 }
               },
               {
@@ -362,3 +362,52 @@ def design_kill_menu_confirm(target_menu):
       }
     }
     return confirm_bubble
+
+
+def design_erase_record_bubble(date, sequence, swimmer):
+
+    bubble = {
+      "type": "bubble",
+      "size": "nano",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "filler"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "filler"
+              },
+              {
+                "type": "text",
+                "text": "Erase",
+                "align": "center",
+                "weight": "bold",
+                "color": "#c82333"
+              },
+              {
+                "type": "filler"
+              }
+            ],
+            "borderColor": "#c82333",
+            "cornerRadius": "4px",
+            "borderWidth": "1px",
+            "height": "30px",
+            "action": {
+              "type": "postback",
+              "data": "erase_{}_{}_{}".format(date, sequence, swimmer)
+            }
+          },
+          {
+            "type": "filler"
+          }
+        ]
+      }
+    }
+
+    return bubble
