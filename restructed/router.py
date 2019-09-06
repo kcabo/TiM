@@ -139,7 +139,7 @@ class Event():
         menu_query = Menu.query.filter_by(date = int(chain_date)).order_by(Menu.sequence).all()
         #その日のメニューがなかったとき、Noneのままではリスト内包表記できない
         flex_msg = flex.design_flex_menu_list(chain_date, menu_query if menu_query is not None else [])
-        send_flex(flex_msg, 'MenuList')
+        self.send_flex(flex_msg, 'MenuList')
         self.user.set_value(date = int(chain_date), sequence = 0, status = '')
 
 
@@ -156,13 +156,13 @@ class Event():
             bubbles.append(one_bubble)
 
         if len(bubbles) == 0:
-            send_text('まだタイムが登録されていません。')
+            self.send_text('まだタイムが登録されていません。')
         else:
             carousel = {
                 "type": "carousel",
                 "contents": bubbles
                 }
-            send_flex(carousel, 'RecordList')
+            self.send_flex(carousel, 'RecordList')
         e.user.set_value(date = date, sequence = sequence, status = '')
 
 
