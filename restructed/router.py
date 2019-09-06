@@ -269,7 +269,10 @@ def callback():
                     e.send_flex(confirm_bubble, alt_text = 'KillMenu')
 
             elif data[0] == 'select': #"data": "select_{}_{}".format(chain_date, sequence)
-                e.show_time_list(int(data[1]), int(data[2]))
+                date = int(data[1])
+                sequence = int(data[2])
+                e.show_time_list(date, sequence)
+                e.user.set_value(date = date, sequence = sequence, status = '')
 
             elif data[0] == 'rc': #"data": "rc_{}_{}_{}".format(self.date, self.sequence, self.swimmer)
                 if e.user.status == 'erase':
