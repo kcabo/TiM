@@ -118,7 +118,7 @@ class Event():
         self.reply_token = event.get('replyToken')
         self.lineid = event.get('source',{'userId':None}).get('userId')#sourceキーが存在しないとき、NoneからuserIdを探すとエラー
         self.msg_type = event.get('message',{'type':None}).get('type')
-        self.text = event.get('message',{'text':None}).get('text').replace(",","､") #replaceで通常のコンマを､(HALFWIDTH IDEOGRAPHIC COMMA)に置換している
+        self.text = event.get('message',{'text':None}).get('text','').replace(",","､") #replaceで通常のコンマを､(HALFWIDTH IDEOGRAPHIC COMMA)に置換している
         self.postback_data = event.get('postback',{'data':None}).get('data')
         self.user = User.query.filter_by(lineid = self.lineid).first()
 
