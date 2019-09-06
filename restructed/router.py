@@ -128,11 +128,11 @@ class Event():
 
     def send_text(self, *texts):
         msgs = [{'type':'text','text':t} for t in texts]
-        post_reply(msgs)
+        self.post_reply(msgs)
 
     def send_flex(self, flex_msg, alt_text = 'Msg'):
         msgs = [{"type":"flex","altText": alt_text,"contents": flex_msg}]
-        post_reply(msgs)
+        self.post_reply(msgs)
 
 
     def show_menu_list(self, chain_date): #190902がchain_date
