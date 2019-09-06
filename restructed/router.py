@@ -228,8 +228,10 @@ def callback():
             else:
                 e.send_text("🗿" * len(e.text))
 
-            print(">{}: {}".format(e.user.name, e.text if e.text is not None else e.msg_type))
+            print(">{}: {}".format(e.user.name, e.text if e.text is not None else e.msg_type).replace('\n',' '))
 
+
+        #ポストバック処理
         elif e.event_type == 'postback':
             data = e.postback_data.split('_')
 
@@ -255,17 +257,16 @@ def callback():
                 date = int(data[1])
                 sequence = int(data[2])
                 target_menu = Menu.query.filter_by(date = date, sequence = sequence).first()
-                menu_information = target_menu.format_date(if_twolines = False) + '\n' + target_menu.format_menu_3_row()
 
                 if e.user.status == 'kill': #レコードごとすべてDelete操作する
                     Menu.query.filter_by(date = date, sequence = sequence).delete()
                     Record.query.filter_by(date = date, sequence = sequence).delete()
                     e.user.set_value(date = date, sequence = 0, status = '')
-                    e.send_text('以下のメニューを完全に消去しました', menu_information)
+                    e.send_text('完全に消去しました')
 
                 else: #ステータスを変更し、確認メッセージを返す
                     e.user.set_value(date = date, sequence = sequence, status = 'kill')
-                    confirm_bubble = flex.design_kill_menu_confirm(menu_information)
+                    confirm_bubble = flex.design_kill_menu_confirm(target_menu)
                     e.send_flex(confirm_bubble, alt_text = 'KillMenu')
 
             elif data[0] == 'select': #"data": "select_{}_{}".format(chain_date, sequence)
