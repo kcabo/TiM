@@ -57,14 +57,18 @@ class Record(db.Model):
     def __init__(self, text, date, sequence):
         rows = text.split('\n')
         self.swimmer = rows[0]
-        self.time_list = [self.format_time(t) if t.isdecimal() else t for t in rows[1:]]
-        self.times = ','.join(self.time_list)
+        self.time_list = [self.format_time(t) if t.isdecimal() else t for t in rows]
+        self.times = ','.join(self.time_list[1:])
         self.date = date
         self.sequence = sequence
 
     def format_time(self, string):
         zero_fixed = string.zfill(5) #最小５文字でゼロ埋め
         return "{0}:{1}.{2}".format(zero_fixed[:-4], zero_fixed[-4:-2], zero_fixed[-2:])
+
+    def revert_origin_text(self):
+        times = self.times.replace(',','\n').replace(':','').replace('.','')
+        return self.swimmer + '\n' + times
 
     def one_record_flex_content(self):
         if self.styles is None:
@@ -144,11 +148,11 @@ class Event():
 
 
     def show_menu_list(self, chain_date): #190902がchain_date
-        menu_query = Menu.query.filter_by(date = int(chain_date)).order_by(Menu.sequence).all()
+        menu_query = Menu.query.filter_by(date = chain_date).order_by(Menu.sequence).all()
         #その日のメニューがなかったとき、Noneのままではリスト内包表記できない
-        flex_msg = flex.design_flex_menu_list(chain_date, menu_query if menu_query is not None else [])
+        flex_msg = flex.design_flex_menu_list(str(chain_date), menu_query if menu_query is not None else [])
         self.send_flex(flex_msg, 'MenuList')
-        self.user.set_value(date = int(chain_date), sequence = 0, status = '')
+        self.user.set_value(date = chain_date, sequence = 0, status = '')
 
 
     def show_time_list(self, date, sequence):
@@ -194,12 +198,14 @@ def callback():
         #     print('>Invalid User: {}'.format(e.lineid))
         #     continue
 
+
         #送信文字列処理
         if e.event_type == 'message':
 
             if e.text == '一覧':
                 chain_date = datetime.date.today().strftime('%y%m%d')
-                e.show_menu_list(chain_date)
+                e.show_menu_list(int(chain_date))
+
 
             elif e.text == '確認':
                 if e.user.sequence == 0:
@@ -208,11 +214,13 @@ def callback():
                 else:
                     e.show_time_list(e.user.date, e.user.sequence)
 
+
             elif e.text == 'メール':
                 e.user.set_value(status = '')
 
             elif e.text == 'jump':
                 e.user.set_value(status = '')
+
 
             elif e.user.status == 'define':
                 text_array = e.text.split('\n')
@@ -224,6 +232,7 @@ def callback():
                 else:
                     e.send_text('3行で入力してください。')
 
+            #タイム登録
             elif e.text.find('\n') > 0:
                 if e.user.sequence == 0:
                     e.send_text('メニューが選択されていません。')
@@ -234,6 +243,7 @@ def callback():
                     reply = '\n'.join(record.time_list)
                     e.send_text(reply, '登録完了')
 
+            #なんでもない文字列にはネタで返す
             else:
                 e.send_text(neta.pop_regional_indicator(e.text))
 
@@ -243,58 +253,59 @@ def callback():
         #ポストバック処理
         elif e.event_type == 'postback':
             data = e.postback_data.split('_')
+            label = data[0]
+            date = int(data[1])
+            sequence = int(data[2]) if len(data)>2 else None
 
-            if data[0] == 'menu': #"data": "menu_{}".format(prev_date)
-                e.show_menu_list(data[1])
 
-            elif data[0] == 'new': #"data": "new_{}".format(chain_date)
-                date = int(data[1])
+            if label == 'menu': #"data": "menu_{}".format(prev_date)
+                e.show_menu_list(date)
+
+            elif label == 'new': #"data": "new_{}".format(chain_date)
                 menu_query = Menu.query.filter_by(date = date).all()
                 new_menu_sequence = len(menu_query) + 1
                 new_menu = Menu(date = date, sequence = new_menu_sequence, category = 'category', description = 'description', cycle = 'cycle')
                 db.session.add(new_menu)
-                e.user.set_value(date = date, sequence = new_menu_sequence, status = 'define')
+                e.user.set_value(date, new_menu_sequence, 'define')
                 e.send_text("メニューの情報を３行で入力","例：\nSwim\n50*8*1 HighAverage\n1:30")
 
 
-            elif data[0] == 'edit': #"data": "edit_{}_{}".format(chain_date, sequence)
-                e.user.set_value(date = int(data[1]), sequence = int(data[2]), status = 'define')
+            elif label == 'edit':
+                e.user.set_value(date, sequence, 'define')
                 e.send_text("メニューの情報を３行で入力","例：\nSwim\n50*8*1 HighAverage\n1:30")
 
 
-            elif data[0] == 'kill': #"data": "kill_{}_{}".format(chain_date, sequence)
-                date = int(data[1])
-                sequence = int(data[2])
+            #ステータスを変更し、確認メッセージを返す
+            elif label == 'kill':
                 target_menu = Menu.query.filter_by(date = date, sequence = sequence).first()
+                e.user.set_value(date, sequence, 'kill')
+                confirm_bubble = flex.design_kill_menu_confirm(target_menu)
+                e.send_flex(confirm_bubble, alt_text = 'KillMenu')
 
-                if e.user.status == 'kill': #レコードごとすべてDelete操作する
-                    Menu.query.filter_by(date = date, sequence = sequence).delete()
-                    Record.query.filter_by(date = date, sequence = sequence).delete()
-                    e.user.set_value(date = date, sequence = 0, status = '')
-                    e.send_text('完全に消去しました')
+            #レコードごとすべてDelete操作する
+            elif label == 'yeskill' and e.user.status == 'kill':
+                Menu.query.filter_by(date = date, sequence = sequence).delete()
+                Record.query.filter_by(date = date, sequence = sequence).delete()
+                e.user.set_value(date, 0, '')
+                e.send_text('完全に消去しました')
 
-                else: #ステータスを変更し、確認メッセージを返す
-                    e.user.set_value(date = date, sequence = sequence, status = 'kill')
-                    confirm_bubble = flex.design_kill_menu_confirm(target_menu)
-                    e.send_flex(confirm_bubble, alt_text = 'KillMenu')
-
-            elif data[0] == 'select': #"data": "select_{}_{}".format(chain_date, sequence)
-                date = int(data[1])
-                sequence = int(data[2])
+            elif label == 'select':
                 e.show_time_list(date, sequence)
 
-            elif data[0] == 'rc': #"data": "rc_{}_{}_{}".format(self.date, self.sequence, self.swimmer)
-                if e.user.status == 'erase':
-                    pass
-                else:
-                    pass
+            #元の文字列に変換して返す
+            elif label == 'rc': #"data": "rc_{}_{}_{}".format(self.date, self.sequence, self.swimmer)
+                swimmer = data[3]
+                target_record = Record.query.filter_by(date = date, sequence = sequence, swimmer = swimmer).first()
+                origin_text = target_record.revert_origin_text()
+                erase_bubble = flex.design_erase_record_bubble(date, sequence, swimmer)
 
-            elif data[0] == 'erase':
-                date = int(data[1])
-                sequence = int(data[2])
+                msgs = [{'type':'text','text':origin_text}] + [{"type":"flex","altText":'EraseRecord', "contents":erase_bubble}]
+                e.post_reply(msgs)
+
+            elif label == 'erase':
                 swimmer = data[3]
                 Record.query.filter_by(date = date, sequence = sequence, swimmer = swimmer).delete()
-                e.user.set_value(date = date, sequence = sequence, status = '')
+                e.user.set_value(date, sequence, '')
                 e.send_text('{}のタイムを削除しました'.format(swimmer))
 
     return '200'
@@ -325,3 +336,4 @@ def test():
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+        msgs = [{"type":"flex","altText": alt_text,"contents": flex_msg}]
