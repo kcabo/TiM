@@ -1,13 +1,13 @@
+import datetime
+import json
+import os
+import requests
+
 from flask import Flask, request, abort
 from flask_sqlalchemy import SQLAlchemy
 
-import datetime
-import os
-import json
-import time
-import requests
-
 import flex_designer as flex
+import neta
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -226,7 +226,7 @@ def callback():
                     e.send_text(e.text, '登録完了')
 
             else:
-                e.send_text("🗿" * len(e.text))
+                e.send_text(neta.pop_regional_indicator(e.text))
 
             print(">{}: {}".format(e.user.name, e.text if e.text is not None else e.msg_type).replace('\n',' '))
 
