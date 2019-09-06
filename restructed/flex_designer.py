@@ -1,5 +1,6 @@
 import datetime
 
+
 def menu_box(chain_date, sequence, description, category_and_cycle): #ひとつのメニューの四角い部分
     box = {
         "type": "box",
@@ -13,8 +14,8 @@ def menu_box(chain_date, sequence, description, category_and_cycle): #ひとつ�
                 "type": "filler"
               }
             ],
-            "width": "20px",
-            "backgroundColor": "#26408B"
+            "width": "5px",
+            "backgroundColor": "#004385"
           },
           {
             "type": "box",
@@ -58,7 +59,7 @@ def menu_box(chain_date, sequence, description, category_and_cycle): #ひとつ�
               }
             ],
             "width": "50px",
-            "backgroundColor": "#A6CFD5",
+            "backgroundColor": "#BCE784",
             "margin": "md",
             "action": {
               "type": "postback",
@@ -85,7 +86,7 @@ def menu_box(chain_date, sequence, description, category_and_cycle): #ひとつ�
               }
             ],
             "width": "50px",
-            "backgroundColor": "#A6CF44",
+            "backgroundColor": "#5DD39E",
             "action": {
               "type": "postback",
               "data": "edit_{}_{}".format(chain_date, sequence)
@@ -93,7 +94,7 @@ def menu_box(chain_date, sequence, description, category_and_cycle): #ひとつ�
           }
         ],
         "height": "60px",
-        "borderColor": "#eeeeee",
+        "borderColor": "#dddddd",
         "borderWidth": "1px",
         "action": {
           "type": "postback",
@@ -131,9 +132,9 @@ def design_flex_menu_list(chain_date, menu_query):
           }
         ],
         "height": "60px",
-        "borderColor": "#eeeeee",
+        "borderColor": "#dddddd",
         "borderWidth": "1px",
-        "backgroundColor": "#26408B",
+        "backgroundColor": "#004385",
         "action": {
           "type": "postback",
           "data": "new_{}".format(chain_date)
@@ -260,7 +261,7 @@ def design_flex_record_list_bubble(record_queries, menu_query): #最大12 つま
         "contents": [
           {
             "type": "text",
-            "text": menu_query.format_date_two_row(),
+            "text": menu_query.format_date(if_twolines = True),
             "size": "sm",
             "flex": 2,
             "color": "#ffffff",
@@ -294,3 +295,64 @@ def design_flex_record_list_bubble(record_queries, menu_query): #最大12 つま
     }
 
     return record_bubble
+
+def design_kill_menu_confirm(menu_information):
+    confirm_bubble = {
+      "type": "bubble",
+      "size": "kilo",
+      "body": {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "separator",
+            "color": "#c82333"
+          },
+          {
+            "type": "text",
+            "text": menu_information,
+            "wrap": True,
+            "size": "xs",
+            "flex": 5
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "filler"
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "filler"
+                  },
+                  {
+                    "type": "text",
+                    "text": "消去",
+                    "align": "center",
+                    "weight": "bold",
+                    "color": "#c82333"
+                  },
+                  {
+                    "type": "filler"
+                  }
+                ],
+                "borderColor": "#c82333",
+                "cornerRadius": "4px",
+                "borderWidth": "1px",
+                "height": "30px"
+              },
+              {
+                "type": "filler"
+              }
+            ],
+            "flex": 3
+          }
+        ],
+        "spacing": "xl"
+      }
+    }
+    return confirm_bubble
