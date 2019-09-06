@@ -319,7 +319,6 @@ def create_db():
 
 @app.route("/wake")
 def wakeup():
-    print("awake")
     return "起きてます"
 
 @app.route("/delete")
@@ -335,4 +334,3 @@ def test():
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-        msgs = [{"type":"flex","altText": alt_text,"contents": flex_msg}]
