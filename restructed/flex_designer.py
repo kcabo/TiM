@@ -296,7 +296,9 @@ def design_flex_record_list_bubble(record_queries, menu_query): #最大12 つま
 
     return record_bubble
 
-def design_kill_menu_confirm(menu_information):
+def design_kill_menu_confirm(target_menu):
+    menu_information = target_menu.format_date(if_twolines = False) + '\n' + target_menu.format_menu_3_row()
+
     confirm_bubble = {
       "type": "bubble",
       "size": "kilo",
@@ -343,7 +345,11 @@ def design_kill_menu_confirm(menu_information):
                 "borderColor": "#c82333",
                 "cornerRadius": "4px",
                 "borderWidth": "1px",
-                "height": "30px"
+                "height": "30px",
+                "action": {
+                  "type": "postback",
+                  "data": "kill_{}_{}".format(target_menu.date, target_menu.sequence)
+                }
               },
               {
                 "type": "filler"
