@@ -120,7 +120,7 @@ class Event():
         self.msg_type = event.get('message',{'type':None}).get('type')
         self.text = event.get('message',{'text':None}).get('text').replace(",","､") #replaceで通常のコンマを､(HALFWIDTH IDEOGRAPHIC COMMA)に置換している
         self.postback_data = event.get('postback',{'data':None}).get('data')
-        self.user = User.query.filter_by(lineid = lineid).first()
+        self.user = User.query.filter_by(lineid = self.lineid).first()
 
     def post_reply(self, msg_list):
         data = {'replyToken': self.reply_token, 'messages': msg_list}
