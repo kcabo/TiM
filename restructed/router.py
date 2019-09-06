@@ -234,7 +234,7 @@ def callback():
             data = e.postback_data.split('_')
 
             if data[0] == 'menu': #"data": "menu_{}".format(prev_date)
-                show_menu_list(data[1])
+                e.show_menu_list(data[1])
 
             elif data[0] == 'new': #"data": "new_{}".format(chain_date)
                 date = int(data[1])
