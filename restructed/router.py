@@ -88,12 +88,12 @@ class Record(db.Model):
 
     def fmt_to_val(self, fmt):
         try:
-            posi = time_str.find(":")
+            posi = fmt.find(":")
             if posi == -1:
                 return 0
             else:
-                minutes = int(time_str[:posi])
-                seconds = int(time_str[posi + 1:].replace(".","")) #100倍した秒数
+                minutes = int(fmt[:posi])
+                seconds = int(fmt[posi + 1:].replace(".","")) #100倍した秒数
                 time_value = seconds + minutes * 6000
                 return time_value
         except:
