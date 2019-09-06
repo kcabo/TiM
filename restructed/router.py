@@ -101,7 +101,7 @@ class Menu(db.Model):
         return datetime.datetime.strptime(str(self.date),"%y%m%d")
 
     def format_date(self, if_twolines): #'09/02\n(Mon)を返す'
-        obj = datetime_object()
+        obj = self.datetime_object()
         if if_twolines:
             return obj.strftime('%m/%d\n(%a)')
         else:
