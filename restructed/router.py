@@ -87,6 +87,7 @@ class Record(db.Model):
           "wrap": True,
           "align": "center",
           "size": "xxs",
+          "gravity": "top",
           "action": {
             "type": "postback",
             "data": "rc_{}_{}_{}".format(self.date, self.sequence, self.swimmer)
@@ -256,7 +257,6 @@ def callback():
             label = data[0]
             date = int(data[1])
             sequence = int(data[2]) if len(data)>2 else None
-
 
             if label == 'menu': #"data": "menu_{}".format(prev_date)
                 e.show_menu_list(date)
