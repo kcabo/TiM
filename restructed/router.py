@@ -77,9 +77,9 @@ class Record(db.Model):
         # lap_indicator = [0]*len(base_records)
         # for i, indicator in enumerate(lap_indicator,-1):
         #     if base_records[i] > 0 and
-        lap_records = [base_records[i-1]-base_records[i] if base_records[i-1]>0 else 0 for i in range(base_records)]
+        lap_records = [base_records[i-1]-base_records[i] if base_records[i-1]>0 else 0 for i in range(len(base_records))]
         if max(lap_records) > 0:
-            self.matrix = [raw_records,[self.val_to_fmt(v) if v > 0 else '' for v in lap_records]]
+            self.matrix = [raw_records,[self.val_to_fmt(v) if v > 2200 else '' for v in lap_records]]
         else:
             self.matrix = [raw_records]
 
