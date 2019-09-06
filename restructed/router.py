@@ -130,16 +130,16 @@ class Event():
         msgs = [{'type':'text','text':t} for t in texts]
         post_reply(msgs)
 
-    def send_flex(self, flex, alt_text = 'Msg'):
-        msgs = [{"type":"flex","altText": alt_text,"contents": flex}]
+    def send_flex(self, flex_msg, alt_text = 'Msg'):
+        msgs = [{"type":"flex","altText": alt_text,"contents": flex_msg}]
         post_reply(msgs)
 
 
     def show_menu_list(self, chain_date): #190902がchain_date
         menu_query = Menu.query.filter_by(date = int(chain_date)).order_by(Menu.sequence).all()
         #その日のメニューがなかったとき、Noneのままではリスト内包表記できない
-        flex = flex.design_flex_menu_list(chain_date, menu_query if menu_query is not None else [])
-        send_flex(flex, 'MenuList')
+        flex_msg = flex.design_flex_menu_list(chain_date, menu_query if menu_query is not None else [])
+        send_flex(flex_msg, 'MenuList')
         self.user.set_value(date = int(chain_date), sequence = 0, status = '')
 
 
