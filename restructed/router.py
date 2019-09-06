@@ -191,7 +191,7 @@ def callback():
 
             if e.text == '一覧':
                 chain_date = datetime.date.today().strftime('%y%m%d')
-                show_menu_list(chain_date)
+                e.show_menu_list(chain_date)
 
             elif e.text == '確認':
                 if e.user.sequence == 0:
