@@ -227,7 +227,7 @@ def callback():
 
         #アクセス管理
         if e.user is None:
-            e.send_text("不正なアクセスを検知しました。あなたの情報は管理者へ送信されます。")
+            e.send_text("不正なアクセスを検知しました。あなたの情報は管理者へ送信されます。",'マネさんへ：COMING SOON')
             print('>Invalid User: {}'.format(e.lineid))
             continue
         # elif e.user.authorized == False:
@@ -304,7 +304,7 @@ def callback():
                     db.session.add(record)
                     db.session.commit()
                     reply = '\n'.join(record.time_list)
-                    e.send_text(reply, '登録完了')
+                    e.send_text(reply, '登録成功✨')
 
             #なんでもない文字列にはネタで返す
             else:
