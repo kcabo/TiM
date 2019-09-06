@@ -7,8 +7,9 @@ import requests
 from flask import Flask, request, abort
 from flask_sqlalchemy import SQLAlchemy
 
-import flex_designer as flex
+import flexDesigner as flex
 import neta
+import emailAgent
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -69,6 +70,38 @@ class Record(db.Model):
     def revert_origin_text(self):
         times = self.times.replace(',','\n').replace(':','').replace('.','')
         return self.swimmer + '\n' + times
+
+    def record_matrix(self):
+        raw_records = [self.swimmer] + self.times.split(',')
+        base_records = list(map(self.fmt_to_val, raw_records))
+        # lap_indicator = [0]*len(base_records)
+        # for i, indicator in enumerate(lap_indicator,-1):
+        #     if base_records[i] > 0 and
+        lap_records = [base_records[i-1]-base_records[i] if base_records[i-1]>0 else 0 for i in range(base_records)]
+        if max(lap_records) > 0:
+            self.matrix = [raw_records,[self.val_to_fmt(v) if v > 0 else '' for v in lap_records]]
+        else:
+            self.matrix = [raw_records]
+
+    def fmt_to_val(self, fmt):
+        try:
+            posi = time_str.find(":")
+            if posi == -1:
+                return 0
+            else:
+                minutes = int(time_str[:posi])
+                seconds = int(time_str[posi + 1:].replace(".","")) #100倍した秒数
+                time_value = seconds + minutes * 6000
+                return time_value
+        except:
+            return 0
+
+    def val_to_fmt(self, val):
+        minutes = time_val // 6000
+        seconds = str(time_val % 6000).zfill(4)
+        time_str = "{0}:{1}.{2}".format(str(minutes),seconds[-4:-2],seconds[-2:])
+        return time_str
+
 
     def one_record_flex_content(self):
         if self.styles is None:
@@ -217,6 +250,32 @@ def callback():
 
 
             elif e.text == 'メール':
+                menu_query = Menu.query.filter_by(date = e.user.date).order_by(Menu.sequence).all()
+                if menu_query == []:
+                    e.send_text('メールで送るデータがありません')
+                else:
+                    csv = ''
+                    for m in menu_query:
+                        record_queries = Record.query.filter_by(date = m.date, sequence = m.sequence).all()
+                        record_matrix = [[m.category, m.description], ['',m.cycle]]
+                        for r in record_queries:
+                            r.record_matrix()
+                            record_matrix.extend(r.matrix)
+
+                        trans = [['']*len(record_matrix) for i in range(len(max(record_matrix, key=len)))]
+                        for column, list in enumerate(record_matrix):
+                            for i, d in enumerate(list):
+                                trans[i][column] = d
+
+                        for row in trans:
+                            csv += ','.join(row) + '\n'
+
+                        csv += '..\n'
+
+                    emailAgent.email(e.user, csv)
+                    msg_otsukaresama = [{"type": "sticker", "packageId": "11537", "stickerId": "52002734"},
+                            {'type' : 'text', 'text' : "メールで送ったよ！ありがとう！おつかれさま！😆😆" }]
+                    e.post_reply(msg_otsukaresama)
                 e.user.set_value(status = '')
 
             elif e.text == 'jump':
