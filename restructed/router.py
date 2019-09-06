@@ -77,7 +77,7 @@ class Record(db.Model):
         # lap_indicator = [0]*len(base_records)
         # for i, indicator in enumerate(lap_indicator,-1):
         #     if base_records[i] > 0 and
-        lap_records = [base_records[i-1]-base_records[i] if base_records[i-1]>0 else 0 for i in range(len(base_records))]
+        lap_records = [base_records[i]-base_records[i-1] if base_records[i-1]>0 else 0 for i in range(len(base_records))]
 
         print(raw_records,base_records,lap_records, end='\n')
 
