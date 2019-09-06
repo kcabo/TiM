@@ -298,7 +298,6 @@ def callback():
                 target_record = Record.query.filter_by(date = date, sequence = sequence, swimmer = swimmer).first()
                 origin_text = target_record.revert_origin_text()
                 erase_bubble = flex.design_erase_record_bubble(date, sequence, swimmer)
-
                 msgs = [{'type':'text','text':origin_text}] + [{"type":"flex","altText":'EraseRecord', "contents":erase_bubble}]
                 e.post_reply(msgs)
 
