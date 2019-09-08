@@ -1,1 +1,1 @@
-web: python restructed/router.py
+web: python router.py
