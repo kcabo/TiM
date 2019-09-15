@@ -324,8 +324,8 @@ def callback():
 
             elif label == 'new': #"data": "new_{}".format(chain_date)
                 menu_query = Menu.query.filter_by(date = date).all()
-                # sequence_list = [m.sequence for m in menu_query]
-                new_menu_sequence = max(menu_query, key=sequence) + 1
+                sequence_list = [m.sequence for m in menu_query]
+                new_menu_sequence = max([0] if sequence_list == [] else sequence_list) + 1 #その日のメニューが一つも存在しないとき、新たなシーケンスは１になる
                 new_menu = Menu(date = date, sequence = new_menu_sequence, category = 'category', description = 'description', cycle = 'cycle')
                 db.session.add(new_menu)
                 e.user.set_value(date, new_menu_sequence, 'define')
