@@ -369,7 +369,6 @@ def callback():
                 e.send_text('{}のタイムを削除しました'.format(swimmer))
 
             print(">{}: {}".format(e.user.name, e.postback_data)
-
     return '200'
 
 
