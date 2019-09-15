@@ -1,5 +1,6 @@
 import datetime
 
+yobi = ['月','火','水','木','金','土','日']
 
 def menu_box(chain_date, sequence, description, category_and_cycle): #ひとつのメニューの四角い部分
     box = {
@@ -143,77 +144,52 @@ def design_flex_menu_list(chain_date, menu_query):
 
     menu_list_contents.append(new_menu_box)
 
+
     menu_list = {
       "type": "bubble",
       "size": "giga",
       "header": {
         "type": "box",
-        "layout": "horizontal",
+        "layout": "baseline",
         "contents": [
           {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "◀",
-                "color": "#ffffff",
-                "size": "3xl",
-                "weight": "bold",
-                "gravity": "center",
-                "align": "start",
-                "flex": 5
-              }
-            ],
+            "type": "text",
+            "text": "◀",
+            "size": "xxl",
+            "color": "#ffffff",
             "action": {
               "type": "postback",
               "data": "menu_{}".format(prev_date)
             }
           },
           {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": date.strftime('%m/%d(%a)'),
-                "color": "#ffffff",
-                "size": "xxl",
-                "flex": 5,
-                "weight": "bold",
-                "gravity": "center",
-                "align": "center"
-              }
-            ],
-            "flex": 5
+            "type": "text",
+            "text": date.strftime('%m月%d日') + '({})'.format(yobi[date.weekday()]),
+            "size": "xxl",
+            "color": "#ffffff",
+            "action": {
+              "type": "postback",
+              "data": "menu_{}".format(prev_date)
+            }
+            "weight": "bold",
+            "flex": 0
           },
           {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "▶",
-                "color": "#ffffff",
-                "size": "3xl",
-                "weight": "bold",
-                "gravity": "center",
-                "align": "end",
-                "flex": 5
-              }
-            ],
+            "type": "text",
+            "text": "▶",
+            "size": "xxl",
+            "color": "#ffffff",
             "action": {
               "type": "postback",
               "data": "menu_{}".format(next_date)
             }
+            "align": "end"
           }
         ],
-        "paddingAll": "20px",
         "backgroundColor": "#0367D3",
-        "height": "100px",
-        "paddingTop": "22px"
+        "height": "70px"
       },
-      "body": {
+        "body": {
         "type": "box",
         "layout": "vertical",
         "contents": menu_list_contents,
@@ -221,6 +197,86 @@ def design_flex_menu_list(chain_date, menu_query):
       }
     }
 
+
+    #
+    # menu_list = {
+    #   "type": "bubble",
+    #   "size": "giga",
+    #   "header": {
+    #     "type": "box",
+    #     "layout": "horizontal",
+    #     "contents": [
+    #       {
+    #         "type": "box",
+    #         "layout": "vertical",
+    #         "contents": [
+    #           {
+    #             "type": "text",
+    #             "text": "◀",
+    #             "color": "#ffffff",
+    #             "size": "3xl",
+    #             "weight": "bold",
+    #             "gravity": "center",
+    #             "align": "start",
+    #             "flex": 5
+    #           }
+    #         ],
+    #         "action": {
+    #           "type": "postback",
+    #           "data": "menu_{}".format(prev_date)
+    #         }
+    #       },
+    #       {
+    #         "type": "box",
+    #         "layout": "vertical",
+    #         "contents": [
+    #           {
+    #             "type": "text",
+    #             "text": date.strftime('%m/%d(%a)'),
+    #             "color": "#ffffff",
+    #             "size": "xxl",
+    #             "flex": 5,
+    #             "weight": "bold",
+    #             "gravity": "center",
+    #             "align": "center"
+    #           }
+    #         ],
+    #         "flex": 5
+    #       },
+    #       {
+    #         "type": "box",
+    #         "layout": "vertical",
+    #         "contents": [
+    #           {
+    #             "type": "text",
+    #             "text": "▶",
+    #             "color": "#ffffff",
+    #             "size": "3xl",
+    #             "weight": "bold",
+    #             "gravity": "center",
+    #             "align": "end",
+    #             "flex": 5
+    #           }
+    #         ],
+    #         "action": {
+    #           "type": "postback",
+    #           "data": "menu_{}".format(next_date)
+    #         }
+    #       }
+    #     ],
+    #     "paddingAll": "20px",
+    #     "backgroundColor": "#0367D3",
+    #     "height": "100px",
+    #     "paddingTop": "22px"
+    #   },
+    #   "body": {
+    #     "type": "box",
+    #     "layout": "vertical",
+    #     "contents": menu_list_contents,
+    #     "spacing": "md"
+    #   }
+    # }
+    #
     return menu_list
 
 
