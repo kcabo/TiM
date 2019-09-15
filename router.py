@@ -25,7 +25,6 @@ headers =  {
 style_ptn = re.compile(".*(fr|fly|ba|br|IM|im|FR|MR|pull|kick|Fr|Fly|Ba|Br|Pull|Kick|m|ｍ)")
 
 
-#以下DBのテーブルの定義
 class User(db.Model):
     __tablename__ = "users"
     keyid = db.Column(db.Integer, primary_key = True)
@@ -368,6 +367,8 @@ def callback():
                 Record.query.filter_by(date = date, sequence = sequence, swimmer = swimmer).delete()
                 e.user.set_value(date, sequence, '')
                 e.send_text('{}のタイムを削除しました'.format(swimmer))
+
+            print(">{}: {}".format(e.user.name, e.postback_data)
 
     return '200'
 
