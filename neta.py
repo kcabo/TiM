@@ -13,11 +13,11 @@ def pop_regional_indicator(text):
         return strings
 
 def random_sticker():
-    package = random.randint(11537,11540)
+    package = random.randint(11537,11539)
     if package == 11537:
-        sticker = random.randint(52002734,52002774)
+        sticker = random.randint(52002734,52002773)
     elif package == 11538:
-        sticker = random.randint(51626494,51626534)
+        sticker = random.randint(51626494,51626533)
     elif package == 11539:
-        sticker = random.randint(52114110,52114150)
+        sticker = random.randint(52114110,52114149)
     return {"type": "sticker", "packageId": package, "stickerId": sticker}
