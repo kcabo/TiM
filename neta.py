@@ -11,3 +11,13 @@ def pop_regional_indicator(text):
         return strings + ' ←おめでとう！日本だ！'
     else:
         return strings
+
+def random_sticker():
+    package = random.randint(11537,11540)
+    if package == 11537:
+        sticker = random.randint(52002734,52002774)
+    elif package == 11538:
+        sticker = random.randint(51626494,51626534)
+    elif package == 11539:
+        sticker = random.randint(52114110,52114150)
+    return {"type": "sticker", "packageId": package, "stickerId": sticker}
