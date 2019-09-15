@@ -95,7 +95,7 @@ def menu_box(chain_date, sequence, description, category_and_cycle): #ひとつ�
           }
         ],
         "height": "60px",
-        "borderColor": "#eeeeee",
+        "borderColor": "#dddddd",
         "borderWidth": "0.5px",
         "action": {
           "type": "postback",
@@ -111,7 +111,12 @@ def design_flex_menu_list(chain_date, menu_query):
     prev_date = (date - datetime.timedelta(days=1)).strftime('%y%m%d')
     next_date = (date + datetime.timedelta(days=1)).strftime('%y%m%d')
 
-    menu_list_contents = [menu_box(chain_date, m.sequence, m.description, m.category + " " + m.cycle) for m in menu_query]
+    menu_list_contents = [menu_box(
+        chain_date,
+        m.sequence,
+        m.description if m.description != '' else ' ',
+        m.category + " " + m.cycle
+        ) for m in menu_query]
 
     new_menu_box =   {
         "type": "box",
@@ -135,7 +140,6 @@ def design_flex_menu_list(chain_date, menu_query):
         "height": "60px",
         "borderColor": "#0367D3",
         "borderWidth": "1px",
-        # "backgroundColor": "#004385",
         "action": {
           "type": "postback",
           "data": "new_{}".format(chain_date)
@@ -193,90 +197,10 @@ def design_flex_menu_list(chain_date, menu_query):
         "type": "box",
         "layout": "vertical",
         "contents": menu_list_contents,
-        "spacing": "md"
+        "spacing": "lg"
       }
     }
 
-
-    #
-    # menu_list = {
-    #   "type": "bubble",
-    #   "size": "giga",
-    #   "header": {
-    #     "type": "box",
-    #     "layout": "horizontal",
-    #     "contents": [
-    #       {
-    #         "type": "box",
-    #         "layout": "vertical",
-    #         "contents": [
-    #           {
-    #             "type": "text",
-    #             "text": "◀",
-    #             "color": "#ffffff",
-    #             "size": "3xl",
-    #             "weight": "bold",
-    #             "gravity": "center",
-    #             "align": "start",
-    #             "flex": 5
-    #           }
-    #         ],
-    #         "action": {
-    #           "type": "postback",
-    #           "data": "menu_{}".format(prev_date)
-    #         }
-    #       },
-    #       {
-    #         "type": "box",
-    #         "layout": "vertical",
-    #         "contents": [
-    #           {
-    #             "type": "text",
-    #             "text": date.strftime('%m/%d(%a)'),
-    #             "color": "#ffffff",
-    #             "size": "xxl",
-    #             "flex": 5,
-    #             "weight": "bold",
-    #             "gravity": "center",
-    #             "align": "center"
-    #           }
-    #         ],
-    #         "flex": 5
-    #       },
-    #       {
-    #         "type": "box",
-    #         "layout": "vertical",
-    #         "contents": [
-    #           {
-    #             "type": "text",
-    #             "text": "▶",
-    #             "color": "#ffffff",
-    #             "size": "3xl",
-    #             "weight": "bold",
-    #             "gravity": "center",
-    #             "align": "end",
-    #             "flex": 5
-    #           }
-    #         ],
-    #         "action": {
-    #           "type": "postback",
-    #           "data": "menu_{}".format(next_date)
-    #         }
-    #       }
-    #     ],
-    #     "paddingAll": "20px",
-    #     "backgroundColor": "#0367D3",
-    #     "height": "100px",
-    #     "paddingTop": "22px"
-    #   },
-    #   "body": {
-    #     "type": "box",
-    #     "layout": "vertical",
-    #     "contents": menu_list_contents,
-    #     "spacing": "md"
-    #   }
-    # }
-    #
     return menu_list
 
 
