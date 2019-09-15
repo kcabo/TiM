@@ -15,8 +15,8 @@ def menu_box(chain_date, sequence, description, category_and_cycle): #ひとつ�
                 "type": "filler"
               }
             ],
-            "width": "5px",
-            "backgroundColor": "#004385"
+            "width": "4px",
+            "backgroundColor": "#0367D3"
           },
           {
             "type": "box",
@@ -95,8 +95,8 @@ def menu_box(chain_date, sequence, description, category_and_cycle): #ひとつ�
           }
         ],
         "height": "60px",
-        "borderColor": "#dddddd",
-        "borderWidth": "1px",
+        "borderColor": "#eeeeee",
+        "borderWidth": "0.5px",
         "action": {
           "type": "postback",
           "data": "select_{}_{}".format(chain_date, sequence)
@@ -126,16 +126,16 @@ def design_flex_menu_list(chain_date, menu_query):
             "size": "lg",
             "align": "center",
             "weight": "bold",
-            "color": "#ffffff"
+            "color": "#0367D3"
           },
           {
             "type": "filler"
           }
         ],
         "height": "60px",
-        "borderColor": "#dddddd",
+        "borderColor": "#0367D3",
         "borderWidth": "1px",
-        "backgroundColor": "#004385",
+        # "backgroundColor": "#004385",
         "action": {
           "type": "postback",
           "data": "new_{}".format(chain_date)
@@ -164,7 +164,7 @@ def design_flex_menu_list(chain_date, menu_query):
           },
           {
             "type": "text",
-            "text": date.strftime('%m月%d日') + '({})'.format(yobi[date.weekday()]),
+            "text": date.strftime('%-m月%-d日') + '({})'.format(yobi[date.weekday()]),
             "size": "xxl",
             "color": "#ffffff",
             "action": {
