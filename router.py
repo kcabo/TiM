@@ -166,7 +166,7 @@ class Event():
         self.reply_token = event.get('replyToken')
         self.lineid = event.get('source',{'userId':None}).get('userId')#sourceキーが存在しないとき、NoneからuserIdを探すとエラー
         self.msg_type = event.get('message',{'type':None}).get('type')
-        self.text = event.get('message',{'text':''}).get('text').replace(",","､") #replaceで通常のコンマを､(HALFWIDTH IDEOGRAPHIC COMMA)に置換している
+        self.text = event.get('message',{'text':''}).get('text','').replace(",","､") #replaceで通常のコンマを､(HALFWIDTH IDEOGRAPHIC COMMA)に置換している
         self.postback_data = event.get('postback',{'data':None}).get('data')
         self.user = User.query.filter_by(lineid = self.lineid).first()
 
@@ -306,8 +306,10 @@ def callback():
                     e.send_text(reply, '登録成功✨')
 
             #なんでもない文字列にはネタで返す
-            else:
+            elif e.text != '':
                 e.send_text(neta.pop_regional_indicator(e.text))
+            else:
+                e.post_reply([neta.random_sticker()])
 
             print(">{}: {}".format(e.user.name, e.text if e.text is not None else e.msg_type).replace('\n',' '))
 
@@ -324,12 +326,15 @@ def callback():
 
             elif label == 'new': #"data": "new_{}".format(chain_date)
                 menu_query = Menu.query.filter_by(date = date).all()
-                sequence_list = [m.sequence for m in menu_query]
-                new_menu_sequence = max([0] if sequence_list == [] else sequence_list) + 1 #その日のメニューが一つも存在しないとき、新たなシーケンスは１になる
-                new_menu = Menu(date = date, sequence = new_menu_sequence, category = 'category', description = 'description', cycle = 'cycle')
-                db.session.add(new_menu)
-                e.user.set_value(date, new_menu_sequence, 'define')
-                e.send_text("メニューの情報を３行で入力","例：\nSwim\n50*8*1 HighAverage\n1:30")
+                if len(menu_query)>8:
+                    e.send_text('これ以上は新しいメニューは作れません。')
+                else:
+                    sequence_list = [m.sequence for m in menu_query]
+                    new_menu_sequence = max([0] if sequence_list == [] else sequence_list) + 1 #その日のメニューが一つも存在しないとき、新たなシーケンスは１になる
+                    new_menu = Menu(date = date, sequence = new_menu_sequence, category = 'category', description = 'description', cycle = 'cycle')
+                    db.session.add(new_menu)
+                    e.user.set_value(date, new_menu_sequence, 'define')
+                    e.send_text("メニューの情報を３行で入力","例：\nSwim\n50*8*1 HighAverage\n1:30")
 
 
             elif label == 'edit':
