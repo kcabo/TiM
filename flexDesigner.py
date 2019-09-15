@@ -170,7 +170,7 @@ def design_flex_menu_list(chain_date, menu_query):
             "action": {
               "type": "postback",
               "data": "menu_{}".format(prev_date)
-            }
+            },
             "weight": "bold",
             "flex": 0
           },
@@ -182,7 +182,7 @@ def design_flex_menu_list(chain_date, menu_query):
             "action": {
               "type": "postback",
               "data": "menu_{}".format(next_date)
-            }
+            },
             "align": "end"
           }
         ],
