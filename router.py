@@ -326,7 +326,7 @@ def callback():
 
             elif label == 'new': #"data": "new_{}".format(chain_date)
                 menu_query = Menu.query.filter_by(date = date).all()
-                if len(menu_query)>8:
+                if len(menu_query)>7:
                     e.send_text('これ以上は新しいメニューは作れません。')
                 else:
                     sequence_list = [m.sequence for m in menu_query]
