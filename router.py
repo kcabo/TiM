@@ -17,12 +17,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #これ書かないとロ�
 db = SQLAlchemy(app)
 
 access_token = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
-headers =  {
-    'Content-Type': 'application/json',
-    'Authorization' : 'Bearer ' + access_token
-}
-
-style_ptn = re.compile(".*(fr|fly|ba|br|IM|im|FR|MR|pull|kick|Fr|Fly|Ba|Br|Pull|Kick|m|ｍ)")
+headers =  {'Content-Type': 'application/json', 'Authorization' : 'Bearer ' + access_token}
 
 
 class User(db.Model):
@@ -45,6 +40,7 @@ class User(db.Model):
             self.status = status
         db.session.commit()
 
+
 class Record(db.Model):
     __tablename__ = "record"
     keyid = db.Column(db.Integer, primary_key=True)
@@ -57,14 +53,14 @@ class Record(db.Model):
     def __init__(self, text, date, sequence):
         rows = text.split('\n')
         self.swimmer = rows[0]
-        self.time_list = [self.format_time(t) if t.isdecimal() else t for t in rows]
-        self.times = ','.join(self.time_list[1:])
+        data_list = [RowParser(row) for row in rows[1:]] #二行目以降をパース タイムとスタイルが１セットになって入っている
+
+        self.times = ','.join([d.time for d in data_list])
+        self.styles = ','.join([d.style for d in data_list])
+        self.parsed = self.swimmer + '\n' + '\n'.join([d.parsed for d in data_list])
+
         self.date = date
         self.sequence = sequence
-
-    def format_time(self, string):
-        zero_fixed = string.zfill(5) #最小５文字でゼロ埋め
-        return "{0}:{1}.{2}".format(zero_fixed[:-4], zero_fixed[-4:-2], zero_fixed[-2:])
 
     def revert_origin_text(self):
         times = self.times.replace(',','\n').replace(':','').replace('.','')
@@ -160,7 +156,37 @@ class Menu(db.Model):
 
 
 
-class Event():
+#50mfr 3245 とかの文字列ならgroup1に50mfr 、group2にfr、group3に3245がマッチする。かっこが3つあることに注意
+#つまりgroup2は使用しない
+#ごめんなさいはgroup3にのみマッチ
+style_ptn = re.compile("(.*(fr|fly|ba|br|IM|im|FR|MR|pull|kick|Fr|Fly|Ba|Br|Pull|Kick|m|ｍ) ?)?(.*$)")
+
+class RowParser:
+    def __init__(self, row):
+        match = re.match(style_ptn, row)
+
+        raw_time = match.group(3)
+        if raw_time.isdecimal():
+            self.time = self.format_time(raw_time)
+        else: #ごめんなさいのときは変換しないでそのまま
+            self.time = raw_time
+
+        if match.group(1) is not None: #スタイルありの行
+            self.style = match.group(1)
+            self.parsed = self.style + ' ' + self.time
+        else: #10233とかの文字列のときgroup1はNone
+            self.style = ''
+            self.parsed = self.time
+
+    def format_time(self, string):
+        zero_fixed = string.zfill(5) #最小５文字でゼロ埋め
+        return "{0}:{1}.{2}".format(zero_fixed[:-4], zero_fixed[-4:-2], zero_fixed[-2:])
+
+
+
+
+
+class Event:
     def __init__(self, event):
         self.event_type = event.get('type')
         self.reply_token = event.get('replyToken')
@@ -302,8 +328,7 @@ def callback():
                     record = Record(e.text, e.user.date, e.user.sequence)
                     db.session.add(record)
                     db.session.commit()
-                    reply = '\n'.join(record.time_list)
-                    e.send_text(reply, '登録成功✨')
+                    e.send_text(record.parsed, '登録成功✨')
 
             #なんでもない文字列にはネタで返す
             elif e.text != '':
