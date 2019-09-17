@@ -92,12 +92,18 @@ class Record(db.Model):
         prior_time[0] = self.swimmer
         matrix += [prior_time]
 
-        if max(w) >= 2:
-            lap50 = [0 if weight < 2 else base_val[i]-base_val[i-1] for i, weight in enumerate(w)]
-            matrix += [list(map(val_to_efmt, lap50))]
-            if max(w) >= 4:
-                lap100 = [0 if weight==0 or weight % 2 > 0 else base_val[i]-base_val[i-2] for i, weight in enumerate(w)]
-                matrix += [list(map(val_to_efmt, lap100))]
+        if max(w) >= 2: #50mごとのラップ
+            lap = [0 if weight < 2 else base_val[i]-base_val[i-1] for i, weight in enumerate(w)]
+            matrix += [list(map(val_to_efmt, lap))]
+            if max(w) >= 4: #100mごとのラップ
+                lap = [0 if weight==0 or weight % 2 > 0 else base_val[i]-base_val[i-2] for i, weight in enumerate(w)]
+                matrix += [list(map(val_to_efmt, lap))]
+                if max(w) >= 6: #200mごとのラップ
+                    lap = [0 if weight==0 or weight % 4 > 0 else base_val[i]-base_val[i-4] for i, weight in enumerate(w)]
+                    matrix += [list(map(val_to_efmt, lap))]
+                    if max(w) >= 10: #400mごとのラップ
+                        lap = [0 if weight==0 or weight % 8 > 0 else base_val[i]-base_val[i-8] for i, weight in enumerate(w)]
+                        matrix += [list(map(val_to_efmt, lap))]
 
         matrix += [['']]
 
