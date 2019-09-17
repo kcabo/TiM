@@ -84,12 +84,12 @@ class Record(db.Model):
                 if base_val[i] - base_val[i-1] > 2200: #前のタイムとの差が22秒以上
                     w[i] = w[i-1] + 1
 
-        lap50 = []
-        for i, weight in enumerate(w):
-            if weight>=2:
-                lap50.append(base_val[i]-base_val[i-1])
-            else:
-                lap50.append(0)
+        # lap50 = []
+        # for i, weight in enumerate(w):
+        #     if weight>=2:
+        #         lap50.append(base_val[i]-base_val[i-1])
+        #     else:
+        #         lap50.append(0)
 
         lap100 = []
         for i, weight in enumerate(w):
@@ -107,6 +107,7 @@ class Record(db.Model):
         matrix += [prior_time]
 
         if max(w) >= 2:
+            lap50 = [0 if weight < 2 else base_val[i]-base_val[i-1] for i, weight in enumerate(w)]
             matrix += [list(map(val_to_efmt, lap50))]
             if max(w) >= 4:
                 matrix += [list(map(val_to_efmt, lap100))]
