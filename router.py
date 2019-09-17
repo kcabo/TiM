@@ -76,7 +76,7 @@ class Record(db.Model):
 
     def export_matrix(self):
         self.set_data_list()
-        base_val = list(map(fmt_to_val, self.time_list))
+        base_val = [0] + list(map(fmt_to_val, self.time_list))
         w = list(map(lambda x: int(x>0), base_val)) #ラップインジケータ。weightのw
 
         for i in range(1,len(base_val)):
@@ -102,12 +102,14 @@ class Record(db.Model):
         if self.styles.replace(',','') != '':
             matrix += [[''] + self.style_list]
 
-        matrix += [[self.swimmer] + list(map(val_to_efmt, base_val))]
+        prior_time = list(map(val_to_efmt, base_val))
+        prior_time[0] = self.swimmer
+        matrix += [prior_time]
 
         if max(lap50) > 0:
-            matrix += [[''] + list(map(val_to_efmt, lap50))]
+            matrix += [list(map(val_to_efmt, lap50))]
             if max(lap100) > 0:
-                matrix += [[''] + list(map(val_to_efmt, lap100))]
+                matrix += [list(map(val_to_efmt, lap100))]
 
         matrix += [['']]
 
