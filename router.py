@@ -62,9 +62,17 @@ class Record(db.Model):
         self.date = date
         self.sequence = sequence
 
+    def set_data_list(self):
+        self.time_list = self.times.split(',')
+        self.style_list = self.styles.split(',')
+
     def revert_origin_text(self):
-        times = self.times.replace(',','\n').replace(':','').replace('.','')
-        return self.swimmer + '\n' + times
+        self.set_data_list()
+        # スタイルが指定されていないならタイムのみ、されてたら半角スペースでつなげる
+        origin_times = [fmt.replace(':','').replace('.','') for fmt in self.time_list]
+        text_array = [t if s == '' else s+' '+t for s,t in zip(self.style_list, origin_times)]
+        return self.swimmer + '\n' + '\n'.join(text_array)
+        
 
     def record_matrix(self):
         raw_records = [self.swimmer] + self.times.split(',')
@@ -102,15 +110,10 @@ class Record(db.Model):
 
 
     def one_record_flex_content(self):
-        if self.styles is None:
-            text = self.swimmer + "\n" + self.times.replace(',','\n')
-        else:
-            time_array = self.times.split(',')
-            style_array = self.styles.split(',')
-            # スタイルが指定されていないならタイムのみ、されてたら半角スペースでつなげる
-            text_array = [t if s == '' else s+' '+t for s,t in zip(style_array, time_array)]
-            text_array.insert(0, self.swimmer)
-            text = '\n'.join(text_array)
+        self.set_data_list()
+        # スタイルが指定されていないならタイムのみ、されてたら半角スペースでつなげる
+        text_array = [t if s == '' else s+' '+t for s,t in zip(self.style_list, self.time_list)]
+        text = self.swimmer + '\n' + '\n'.join(text_array)
 
         content = {
           "type": "text",
