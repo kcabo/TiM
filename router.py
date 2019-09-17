@@ -58,7 +58,6 @@ class Record(db.Model):
         self.times = ','.join([d.time for d in data_list])
         self.styles = ','.join([d.style for d in data_list])
         self.parsed = self.swimmer + '\n' + '\n'.join([d.parsed for d in data_list])
-
         self.date = date
         self.sequence = sequence
 
@@ -110,21 +109,6 @@ class Record(db.Model):
         return matrix
 
 
-        # raw_records = [self.swimmer] + self.times.split(',')
-        # base_records = list(map(self.fmt_to_val, raw_records))
-        # # lap_indicator = [0]*len(base_records)
-        # # for i, indicator in enumerate(lap_indicator,-1):
-        # #     if base_records[i] > 0 and
-        # lap_records = [base_records[i]-base_records[i-1] if base_records[i-1]>0 else 0 for i in range(len(base_records))]
-        #
-        # print(raw_records,base_records,lap_records, end='\n')
-        #
-        # if max(lap_records) > 0:
-        #     self.matrix = [raw_records,[self.val_to_fmt(v) if v > 2200 else '' for v in lap_records],[]]
-        # else:
-        #     self.matrix = [raw_records,[]]
-
-
     def one_record_flex_content(self):
         self.set_data_list()
         # スタイルが指定されていないならタイムのみ、されてたら半角スペースでつなげる
@@ -171,7 +155,6 @@ row_ptn = re.compile("(.*(fr|fly|ba|br|IM|im|FR|MR|pull|kick|Fr|Fly|Ba|Br|Pull|K
 class RowParser:
     def __init__(self, row):
         match = re.match(row_ptn, row)
-
         raw_time = match.group(3)
         if raw_time.isdecimal():
             self.time = self.format_time(raw_time)
