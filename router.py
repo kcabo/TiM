@@ -68,45 +68,56 @@ class Record(db.Model):
 
     def revert_origin_text(self):
         self.set_data_list()
-        # スタイルが指定されていないならタイムのみ、されてたら半角スペースでつなげる
         origin_times = [fmt.replace(':','').replace('.','') for fmt in self.time_list]
+        # スタイルが指定されていないならタイムのみ、されてたら半角スペースでつなげる
         text_array = [t if s == '' else s+' '+t for s,t in zip(self.style_list, origin_times)]
         return self.swimmer + '\n' + '\n'.join(text_array)
-        
 
-    def record_matrix(self):
-        raw_records = [self.swimmer] + self.times.split(',')
-        base_records = list(map(self.fmt_to_val, raw_records))
-        # lap_indicator = [0]*len(base_records)
-        # for i, indicator in enumerate(lap_indicator,-1):
-        #     if base_records[i] > 0 and
-        lap_records = [base_records[i]-base_records[i-1] if base_records[i-1]>0 else 0 for i in range(len(base_records))]
 
-        print(raw_records,base_records,lap_records, end='\n')
+    def export_matrix(self):
+        self.set_data_list()
+        base_val = list(map(fmt_to_val, self.time_list))
+        w = list(map(lambda x: int(x>0), base_val)) #ラップインジケータ。weightのw
 
-        if max(lap_records) > 0:
-            self.matrix = [raw_records,[self.val_to_fmt(v) if v > 2200 else '' for v in lap_records],[]]
-        else:
-            self.matrix = [raw_records,[]]
+        for i in range(1,len(base_val)):
+            if w[i]==1 and w[i-1]>0:
+                if base_val[i] - base_val[i-1] > 2200: #前のタイムとの差が22秒以上
+                    w[i] = w[i-1] + 1
 
-    def fmt_to_val(self, fmt):
-        try:
-            posi = fmt.find(":")
-            if posi == -1:
-                return 0
+        lap50 = []
+        for i, weight in enumerate(w):
+            if weight>=2:
+                lap50.append(base_val[i]-base_val[i-1])
             else:
-                minutes = int(fmt[:posi])
-                seconds = int(fmt[posi + 1:].replace(".","")) #100倍した秒数
-                time_value = seconds + minutes * 6000
-                return time_value
-        except:
-            return 0
+                lap50.append(0)
 
-    def val_to_fmt(self, val):
-        minutes = val // 6000
-        seconds = str(val % 6000).zfill(4)
-        time_str = "{0}:{1}.{2}".format(str(minutes),seconds[-4:-2],seconds[-2:])
-        return time_str
+        matrix = []
+        if self.styles.replace(',','') != '':
+            matrix += [[''] + self.style_list]
+
+        matrix += [[self.swimmer] + list(map(val_to_efmt, base_val))]
+
+        if max(lap50) > 0:
+            matrix += [[''] + list(map(val_to_efmt, lap50))]
+
+        matrix += [['']]
+
+        return matrix
+
+
+        # raw_records = [self.swimmer] + self.times.split(',')
+        # base_records = list(map(self.fmt_to_val, raw_records))
+        # # lap_indicator = [0]*len(base_records)
+        # # for i, indicator in enumerate(lap_indicator,-1):
+        # #     if base_records[i] > 0 and
+        # lap_records = [base_records[i]-base_records[i-1] if base_records[i-1]>0 else 0 for i in range(len(base_records))]
+        #
+        # print(raw_records,base_records,lap_records, end='\n')
+        #
+        # if max(lap_records) > 0:
+        #     self.matrix = [raw_records,[self.val_to_fmt(v) if v > 2200 else '' for v in lap_records],[]]
+        # else:
+        #     self.matrix = [raw_records,[]]
 
 
     def one_record_flex_content(self):
@@ -128,6 +139,51 @@ class Record(db.Model):
             }
         }
         return content
+
+fmt_ptn = re.compile('([0-9]{1,2}):([0-9]{2}).([0-9]{2})') #15分とかのときは：の前は2文字になる
+def fmt_to_val(fmt):
+    match = re.match(fmt_ptn, fmt)
+    if match is None: #コロンを持たないごめんなさいなどの文字列
+        return 0
+    else:
+        min = int(match.group(1))
+        sec = int(match.group(2)) * 100 + int(match.group(3))
+        return min * 6000 + sec #100倍した秒数
+
+def val_to_efmt(val):
+    if val == 0:
+        return ''
+    else:
+        min = str(val // 6000)
+        sec = str(val % 6000).zfill(4) #0000
+        return " {0}:{1}.{2}".format(min, sec[:2], sec[2:]) #Excelで開いたときに文字列と認識されるよう頭に半角スペース入れる
+
+
+#50mfr 3245 とかの文字列ならgroup1に50mfr 、group2にfr、group3に3245がマッチする。かっこが3つあることに注意
+#つまりgroup2は使用しない
+#ごめんなさいはgroup3にのみマッチ
+row_ptn = re.compile("(.*(fr|fly|ba|br|IM|im|FR|MR|pull|kick|Fr|Fly|Ba|Br|Pull|Kick|m|ｍ) ?)?(.*$)")
+class RowParser:
+    def __init__(self, row):
+        match = re.match(row_ptn, row)
+
+        raw_time = match.group(3)
+        if raw_time.isdecimal():
+            self.time = self.format_time(raw_time)
+        else: #ごめんなさいのときは変換しないでそのまま
+            self.time = raw_time
+
+        if match.group(1) is not None: #スタイルありの行
+            self.style = match.group(1).replace(' ','')
+            self.parsed = self.style + ' ' + self.time
+        else: #10233とかの文字列のときgroup1はNone
+            self.style = ''
+            self.parsed = self.time
+
+    def format_time(self, string):
+        zero_fixed = string.zfill(5) #最小５文字でゼロ埋め 00000
+        return "{0}:{1}.{2}".format(zero_fixed[:-4], zero_fixed[-4:-2], zero_fixed[-2:])
+
 
 
 class Menu(db.Model):
@@ -156,36 +212,6 @@ class Menu(db.Model):
 
     def format_menu_3_row(self):
         return self.category + "\n" + self.description + "\n" + self.cycle
-
-
-
-#50mfr 3245 とかの文字列ならgroup1に50mfr 、group2にfr、group3に3245がマッチする。かっこが3つあることに注意
-#つまりgroup2は使用しない
-#ごめんなさいはgroup3にのみマッチ
-style_ptn = re.compile("(.*(fr|fly|ba|br|IM|im|FR|MR|pull|kick|Fr|Fly|Ba|Br|Pull|Kick|m|ｍ) ?)?(.*$)")
-
-class RowParser:
-    def __init__(self, row):
-        match = re.match(style_ptn, row)
-
-        raw_time = match.group(3)
-        if raw_time.isdecimal():
-            self.time = self.format_time(raw_time)
-        else: #ごめんなさいのときは変換しないでそのまま
-            self.time = raw_time
-
-        if match.group(1) is not None: #スタイルありの行
-            self.style = match.group(1)
-            self.parsed = self.style + ' ' + self.time
-        else: #10233とかの文字列のときgroup1はNone
-            self.style = ''
-            self.parsed = self.time
-
-    def format_time(self, string):
-        zero_fixed = string.zfill(5) #最小５文字でゼロ埋め
-        return "{0}:{1}.{2}".format(zero_fixed[:-4], zero_fixed[-4:-2], zero_fixed[-2:])
-
-
 
 
 
@@ -290,15 +316,16 @@ def callback():
                         record_queries = Record.query.filter_by(date = m.date, sequence = m.sequence).all()
                         record_matrix = [[m.category, m.description], ['',m.cycle]]
                         for r in record_queries:
-                            r.record_matrix()
-                            record_matrix.extend(r.matrix)
+                            record_matrix.extend(r.export_matrix())
 
-                        trans = [['']*len(record_matrix) for i in range(len(max(record_matrix, key=len)))]
+                        #転置先の空白だらけの二次元配列を作成
+                        translated = [['']*len(record_matrix) for i in range(len(max(record_matrix, key=len)))]
+                        #転置
                         for column, list in enumerate(record_matrix):
                             for i, d in enumerate(list):
-                                trans[i][column] = d
+                                translated[i][column] = d
 
-                        for row in trans:
+                        for row in translated:
                             csv += ','.join(row) + '\n'
 
                         csv += '..\n'
@@ -329,9 +356,12 @@ def callback():
                     e.send_text('メニューが選択されていません。')
                 else:
                     record = Record(e.text, e.user.date, e.user.sequence)
-                    db.session.add(record)
-                    db.session.commit()
-                    e.send_text(record.parsed, '登録成功✨')
+                    if Record.query.filter_by(date = e.user.date, sequence = e.user.sequence, swimmer = record.swimmer).first() is None:
+                        db.session.add(record)
+                        db.session.commit()
+                        e.send_text(record.parsed, '登録成功✨')
+                    else: #既にその人のデータある時
+                        e.send_text('その人のデータは既に存在しています')
 
             #なんでもない文字列にはネタで返す
             elif e.text != '':
