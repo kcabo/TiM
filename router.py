@@ -84,20 +84,6 @@ class Record(db.Model):
                 if base_val[i] - base_val[i-1] > 2200: #前のタイムとの差が22秒以上
                     w[i] = w[i-1] + 1
 
-        # lap50 = []
-        # for i, weight in enumerate(w):
-        #     if weight>=2:
-        #         lap50.append(base_val[i]-base_val[i-1])
-        #     else:
-        #         lap50.append(0)
-
-        lap100 = []
-        for i, weight in enumerate(w):
-            if weight>0 and weight % 2 == 0:
-                lap100.append(base_val[i]-base_val[i-2])
-            else:
-                lap100.append(0)
-
         matrix = []
         if self.styles.replace(',','') != '':
             matrix += [[''] + self.style_list]
@@ -110,6 +96,7 @@ class Record(db.Model):
             lap50 = [0 if weight < 2 else base_val[i]-base_val[i-1] for i, weight in enumerate(w)]
             matrix += [list(map(val_to_efmt, lap50))]
             if max(w) >= 4:
+                lap100 = [0 if weight=0 or weight % 2 > 0 else base_val[i]-base_val[i-2] for i, weight in enumerate(w)]
                 matrix += [list(map(val_to_efmt, lap100))]
 
         matrix += [['']]
@@ -293,7 +280,7 @@ def callback():
 
         #アクセス管理
         if e.user is None:
-            e.send_text("不正なアクセスを検知しました。あなたの情報は管理者へ送信されます。",'マネさんへ：COMING SOON')
+            e.send_text("不正なアクセスを検知しました。あなたの情報は管理者へ送信されます。")
             print('>Invalid User: {}'.format(e.lineid))
             continue
         # elif e.user.authorized == False:
