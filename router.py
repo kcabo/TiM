@@ -410,10 +410,6 @@ def create_db():
     db.create_all()
     return "all tables have just created successfully!\nやったね！"
 
-@app.route("/wake")
-def wakeup():
-    return "起きてます"
-
 @app.route("/delete")
 def delete_db():
     TimeData.query.delete()
@@ -422,7 +418,7 @@ def delete_db():
 
 @app.route("/")
 def test():
-    return "This is a test route."
+    return "Home Route"
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))

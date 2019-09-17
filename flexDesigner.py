@@ -235,6 +235,7 @@ def design_flex_record_list_bubble(record_queries, menu_query): #最大12 つま
 
     record_bubble = {
       "type": "bubble",
+      "size": "giga",
       "header": {
         "type": "box",
         "layout": "horizontal",
