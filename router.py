@@ -91,6 +91,13 @@ class Record(db.Model):
             else:
                 lap50.append(0)
 
+        lap100 = []
+        for i, weight in enumerate(w):
+            if weight>0 and weight % 2 == 0:
+                lap100.append(base_val[i]-base_val[i-2])
+            else:
+                lap100.append(0)
+
         matrix = []
         if self.styles.replace(',','') != '':
             matrix += [[''] + self.style_list]
@@ -99,6 +106,8 @@ class Record(db.Model):
 
         if max(lap50) > 0:
             matrix += [[''] + list(map(val_to_efmt, lap50))]
+            if max(lap100) > 0:
+                matrix += [[''] + list(map(val_to_efmt, lap100))]
 
         matrix += [['']]
 
@@ -316,7 +325,7 @@ def callback():
                         record_queries = Record.query.filter_by(date = m.date, sequence = m.sequence).all()
                         record_matrix = [[m.category, m.description], ['',m.cycle]]
                         for r in record_queries:
-                            record_matrix.extend(r.export_matrix())
+                            record_matrix += r.export_matrix()
 
                         #転置先の空白だらけの二次元配列を作成
                         translated = [['']*len(record_matrix) for i in range(len(max(record_matrix, key=len)))]
