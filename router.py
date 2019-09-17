@@ -84,6 +84,8 @@ class Record(db.Model):
                 if base_val[i] - base_val[i-1] > 2200: #前のタイムとの差が22秒以上
                     w[i] = w[i-1] + 1
 
+        print(w)
+
         lap50 = []
         for i, weight in enumerate(w):
             if weight>=2:
