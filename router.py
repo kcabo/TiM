@@ -108,9 +108,9 @@ class Record(db.Model):
         prior_time[0] = self.swimmer
         matrix += [prior_time]
 
-        if max(weight) >= 2:
+        if max(w) >= 2:
             matrix += [list(map(val_to_efmt, lap50))]
-            if max(weight) >= 4:
+            if max(w) >= 4:
                 matrix += [list(map(val_to_efmt, lap100))]
 
         matrix += [['']]
