@@ -96,7 +96,7 @@ class Record(db.Model):
             lap50 = [0 if weight < 2 else base_val[i]-base_val[i-1] for i, weight in enumerate(w)]
             matrix += [list(map(val_to_efmt, lap50))]
             if max(w) >= 4:
-                lap100 = [0 if weight=0 or weight % 2 > 0 else base_val[i]-base_val[i-2] for i, weight in enumerate(w)]
+                lap100 = [0 if weight==0 or weight % 2 > 0 else base_val[i]-base_val[i-2] for i, weight in enumerate(w)]
                 matrix += [list(map(val_to_efmt, lap100))]
 
         matrix += [['']]
