@@ -24,7 +24,7 @@ class User(db.Model):
     __tablename__ = "users"
     keyid = db.Column(db.Integer, primary_key = True)
     lineid = db.Column(db.String(), unique = True, nullable = False)
-    name = db.Column(db.String())
+    name = db.Column(db.String(), nullable = False)
     authorized = db.Column(db.Boolean, nullable = False)
     email = db.Column(db.String())
     date = db.Column(db.Integer, nullable = False) #190902
@@ -46,9 +46,9 @@ class Record(db.Model):
     keyid = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Integer, nullable = False) #190902
     sequence = db.Column(db.Integer, nullable = False) #1
-    swimmer = db.Column(db.String()) #神崎
-    times = db.Column(db.String())  #0:29.47,1:01.22,,0:32.43,1:11.44
-    styles = db.Column(db.String()) #fr,,fr,, or None
+    swimmer = db.Column(db.String(), nullable = False) #神崎
+    times = db.Column(db.String(), nullable = False)  #0:29.47,1:01.22,,0:32.43,1:11.44
+    styles = db.Column(db.String(), nullable = False) #fr,,fr,,
 
     def __init__(self, text, date, sequence):
         rows = text.split('\n')
@@ -83,8 +83,6 @@ class Record(db.Model):
             if w[i]==1 and w[i-1]>0:
                 if base_val[i] - base_val[i-1] > 2200: #前のタイムとの差が22秒以上
                     w[i] = w[i-1] + 1
-
-        print(w)
 
         lap50 = []
         for i, weight in enumerate(w):
