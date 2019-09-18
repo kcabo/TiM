@@ -87,7 +87,7 @@ class Record(db.Model):
         if self.styles.replace(',','') != '':
             matrix += [[''] + self.style_list]
 
-        prior_time = list(map(val_to_efmt, base_val))
+        prior_time = list(map(lambda x: ' ' + x, self.time_list))
         prior_time[0] = self.swimmer
         matrix += [prior_time]
 
@@ -429,13 +429,13 @@ def callback():
 @app.route("/create")
 def create_db():
     db.create_all()
-    return "all tables have just created successfully!\nやったね！"
+    return "CREATED"
 
 @app.route("/delete")
 def delete_db():
     TimeData.query.delete()
     db.session.commit()
-    return "deleted"
+    return "DELETED"
 
 @app.route("/")
 def test():
