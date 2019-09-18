@@ -87,7 +87,7 @@ class Record(db.Model):
         if self.styles.replace(',','') != '':
             matrix += [[''] + self.style_list]
 
-        prior_time = list(map(lambda x: ' ' + x, self.time_list))
+        prior_time = [''] + list(map(lambda x: ' ' + x, self.time_list))
         prior_time[0] = self.swimmer
         matrix += [prior_time]
 
