@@ -125,7 +125,7 @@ class Record(db.Model):
           "action": {
             "type": "postback",
             # "data": "rc_{}_{}_{}".format(self.date, self.sequence, self.swimmer)
-            "data": "rc_".format(self.keyid)
+            "data": "rc_{}".format(self.keyid)
             }
         }
         return content
@@ -364,7 +364,6 @@ def callback():
         #ポストバック処理
         elif e.event_type == 'postback':
             data = e.postback_data.split('_')
-            print(f'data:{data}')
             label = data[0]
             date = int(data[1])
             sequence = int(data[2]) if len(data)>2 else None
