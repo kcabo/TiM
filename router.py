@@ -303,7 +303,9 @@ def callback():
                     csv = ''
                     for m in menu_query:
                         record_queries = Record.query.filter_by(date = m.date, sequence = m.sequence).all()
-                        record_matrix = [[m.category, m.description], ['',m.cycle]]
+                        first_row = [m.category]
+                        first_row.extend(m.description.split('\\'))
+                        record_matrix = [first_row, ['',m.cycle]]
                         for r in record_queries:
                             record_matrix += r.export_matrix()
 
