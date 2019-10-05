@@ -408,7 +408,7 @@ def callback():
 
             #元の文字列に変換して返す
             elif label == 'rc': # "data": "rc_".format(self.keyid)
-                id = data[2]
+                id = data[1]
                 target_record = Record.query.filter_by(keyid = id).first()
                 origin_text = target_record.revert_origin_text()
                 erase_bubble = flex.design_erase_record_bubble(id)
@@ -416,7 +416,7 @@ def callback():
                 e.post_reply(msgs)
 
             elif label == 'erase': # "data": "erase_{}".format(record_id)
-                id = data[2]
+                id = data[1]
                 erase_rc = Record.query.filter_by(keyid = id).first()
                 e.user.set_value(erase_rc.date, erase_rc.sequence, '')
                 swimmer = erase_rc.swimmer
