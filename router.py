@@ -347,12 +347,12 @@ def callback():
                     e.send_text('メニューが選択されていません。')
                 else:
                     record = Record(e.text, e.user.date, e.user.sequence)
-                    if Record.query.filter_by(date = e.user.date, sequence = e.user.sequence, swimmer = record.swimmer).first() is None:
-                        db.session.add(record)
-                        db.session.commit()
-                        e.send_text(record.parsed, '登録成功✨')
-                    else: #既にその人のデータある時
-                        e.send_text('その人のデータは既に存在しています')
+                    db.session.add(record)
+                    db.session.commit()
+                    e.send_text(record.parsed, '登録成功✨')
+                # if Record.query.filter_by(date = e.user.date, sequence = e.user.sequence, swimmer = record.swimmer).first() is None:
+                    # else: #既にその人のデータある時
+                    #     e.send_text('その人のデータは既に存在しています')
 
             #なんでもない文字列にはネタで返す
             elif e.text != '':
