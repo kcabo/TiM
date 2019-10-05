@@ -420,7 +420,8 @@ def callback():
                 erase_rc = Record.query.filter_by(keyid = id).first()
                 e.user.set_value(erase_rc.date, erase_rc.sequence, '')
                 swimmer = erase_rc.swimmer
-                Record.query.filter_by(keyid = id).delete()
+                # Record.query.filter_by(keyid = id).delete()
+                print(f'id={id}')
                 e.send_text('{}のタイムを削除しました'.format(swimmer))
 
             print(">{}: {}".format(e.user.name, e.postback_data))
