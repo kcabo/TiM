@@ -124,7 +124,8 @@ class Record(db.Model):
           "gravity": "top",
           "action": {
             "type": "postback",
-            "data": "rc_{}_{}_{}".format(self.date, self.sequence, self.swimmer)
+            # "data": "rc_{}_{}_{}".format(self.date, self.sequence, self.swimmer)
+            "data": "rc_".format(self.keyid)
             }
         }
         return content
@@ -406,18 +407,20 @@ def callback():
                 e.show_time_list(date, sequence)
 
             #元の文字列に変換して返す
-            elif label == 'rc': #"data": "rc_{}_{}_{}".format(self.date, self.sequence, self.swimmer)
-                swimmer = data[3]
-                target_record = Record.query.filter_by(date = date, sequence = sequence, swimmer = swimmer).first()
+            elif label == 'rc': # "data": "rc_".format(self.keyid)
+                id = data[2]
+                target_record = Record.query.filter_by(keyid = id).first()
                 origin_text = target_record.revert_origin_text()
-                erase_bubble = flex.design_erase_record_bubble(date, sequence, swimmer)
+                erase_bubble = flex.design_erase_record_bubble(id)
                 msgs = [{'type':'text','text':origin_text}] + [{"type":"flex","altText":'EraseRecord', "contents":erase_bubble}]
                 e.post_reply(msgs)
 
-            elif label == 'erase':
-                swimmer = data[3]
-                Record.query.filter_by(date = date, sequence = sequence, swimmer = swimmer).delete()
-                e.user.set_value(date, sequence, '')
+            elif label == 'erase': # "data": "erase_{}".format(record_id)
+                id = data[2]
+                erase_rc = Record.query.filter_by(keyid = id).first()
+                e.user.set_value(erase_rc.date, erase_rc.sequence, '')
+                swimmer = erase_rc.swimmer
+                Record.query.filter_by(keyid = id).delete()
                 e.send_text('{}のタイムを削除しました'.format(swimmer))
 
             print(">{}: {}".format(e.user.name, e.postback_data))

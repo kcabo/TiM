@@ -197,7 +197,7 @@ def design_flex_menu_list(chain_date, menu_query):
         "type": "box",
         "layout": "vertical",
         "contents": menu_list_contents,
-        "spacing": "lg"
+        "spacing": "md"
       }
     }
 
@@ -345,7 +345,7 @@ def design_kill_menu_confirm(target_menu):
     return confirm_bubble
 
 
-def design_erase_record_bubble(date, sequence, swimmer):
+def design_erase_record_bubble(record_id):
 
     bubble = {
       "type": "bubble",
@@ -381,7 +381,7 @@ def design_erase_record_bubble(date, sequence, swimmer):
             "height": "30px",
             "action": {
               "type": "postback",
-              "data": "erase_{}_{}_{}".format(date, sequence, swimmer)
+              "data": "erase_{}".format(record_id)
             }
           },
           {
