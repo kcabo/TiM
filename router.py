@@ -304,8 +304,10 @@ def callback():
                     for m in menu_query:
                         record_queries = Record.query.filter_by(date = m.date, sequence = m.sequence).all()
                         first_row = [m.category]
-                        first_row.extend(m.description.split('\\'))
-                        record_matrix = [first_row, ['',m.cycle]]
+                        first_row.extend(m.description)
+                        second_row = ['']
+                        second_row.extend(m.cycle.split('\\'))
+                        record_matrix = [first_row, second_row]
                         for r in record_queries:
                             record_matrix += r.export_matrix()
 
