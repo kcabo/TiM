@@ -1,6 +1,10 @@
+import json
+import os
 import random
+import requests
 
 symbols = "🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿"
+talk_api_url = 'https://api.a3rt.recruit-tech.co.jp/talk/v1/smalltalk'
 
 def pop_regional_indicator(text):
     random.seed(text)
@@ -21,3 +25,12 @@ def random_sticker():
     elif package == 11539:
         sticker = random.randint(52114110,52114149)
     return {"type": "sticker", "packageId": package, "stickerId": sticker}
+
+
+def a3rt_talk_api(text):
+    r = requests.post(url, {'apikey': os.environ['A3RT_APIKEY'], 'query': text})
+    data = r.json()
+    if data['status'] == 0: #正常応答
+        return data['results'][0]['reply']
+    else:
+        return data['message']

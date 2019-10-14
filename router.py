@@ -304,7 +304,7 @@ def callback():
                     for m in menu_query:
                         record_queries = Record.query.filter_by(date = m.date, sequence = m.sequence).all()
                         first_row = [m.category]
-                        first_row.extend(m.description.split('\\'))
+                        first_row.extend(m.description.split('\\')) #バックスラッシュで改行できるように
                         second_row = ['']
                         second_row.extend(m.cycle.split('\\'))
                         record_matrix = [first_row, second_row]
@@ -357,8 +357,8 @@ def callback():
                     #     e.send_text('その人のデータは既に存在しています')
 
             #なんでもない文字列にはネタで返す
-            elif e.text != '':
-                e.send_text(neta.pop_regional_indicator(e.text))
+            elif e.text != '': #送られたのがテキストのとき
+                e.send_text(neta.a3rt_talk_api(e.text))
             else:
                 e.post_reply([neta.random_sticker()])
 
