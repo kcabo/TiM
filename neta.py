@@ -28,7 +28,7 @@ def random_sticker():
 
 
 def a3rt_talk_api(text):
-    r = requests.post(url, {'apikey': os.environ['A3RT_APIKEY'], 'query': text})
+    r = requests.post(talk_api_url, {'apikey': os.environ['A3RT_APIKEY'], 'query': text})
     data = r.json()
     if data['status'] == 0: #正常応答
         return data['results'][0]['reply']
