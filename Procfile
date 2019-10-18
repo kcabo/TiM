@@ -1,1 +1,1 @@
-web: python router.py
+web: gunicorn router:app
