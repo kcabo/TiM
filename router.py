@@ -255,6 +255,7 @@ class Event:
                 "contents": bubbles
                 }
             self.send_flex(carousel, 'RecordList')
+            print(carousel)
         self.user.set_value(date = date, sequence = sequence, status = '')
 
 
