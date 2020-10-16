@@ -319,9 +319,9 @@ def callback():
                                 translated[i][column] = d
 
                         for row in translated:
-                            csv += ','.join(row) + '\n'
+                            csv += ','.join(row) + '\r\n'
 
-                        csv += '..\n'
+                        csv += '..\r\n'
 
                     emailAgent.email(e.user, csv)
                     msg_otsukaresama = [{"type": "sticker", "packageId": "11537", "stickerId": "52002734"},
