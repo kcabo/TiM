@@ -3,3 +3,4 @@
 /legacy
 /safe
 /data_backup
+/app/__pycache__
