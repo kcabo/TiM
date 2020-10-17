@@ -7,4 +7,4 @@ class Config:
     SQLALCHEMY_DATABASE_URI = DB_URL
     SQLALCHEMY_TRACK_MODIFICATIONS = False # DBの変更の度にロギングするのを防ぐ
     TESTING = True
-    DEBUG = True if IS_PRODUCT else False
+    DEBUG = False if IS_PRODUCT else True
