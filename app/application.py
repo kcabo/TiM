@@ -18,3 +18,8 @@ def callback():
     for event_json in data['events']:
         handler.handle(event_json)
     return '200 OK'
+
+@app.route('/create')
+def create():
+    db.create_all()
+    return 'Hi'
