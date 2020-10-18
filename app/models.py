@@ -9,7 +9,14 @@ class User(db.Model):
     lineid = db.Column(db.String(), unique = True, nullable = False)# LINEユーザーID "U4af4980629..."
     gen = db.Column(db.Integer, nullable = False)                   # 期
     email = db.Column(db.String(), nullable = False)                # メアド
-    role = db.Column(db.String(), nullable = False)                 # 権限（FRIEND, EDITOR, ADMIN）
+    role = db.Column(db.String(), nullable = False)                 # 権限（EDITOR, ADMIN）
+
+    # def __init__(self, line_id):
+    #     self.lineid = line_id
+    #     self.name = '不明なユーザー'
+    #     self.gen = 0
+    #     self.email = 'you@example.com'
+    #     self.role = 'FRIEND'
 
 class Menu(db.Model):
     __tablename__ = "menus"

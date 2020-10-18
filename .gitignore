@@ -1,6 +1,7 @@
 /__pycache__
+/app/__pycache__
+/app/webhook/__pycache__
 /FlexOriginal
 /legacy
 /safe
 /data_backup
-/app/__pycache__
