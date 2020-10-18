@@ -1,7 +1,7 @@
 from flask import Flask, request
 
 from app.models import db
-from app import hoge
+from app.webhook import handler
 
 app = Flask(__name__)
 app.config.from_object('app.config.Config')
@@ -14,16 +14,7 @@ def hello():
 @app.route('/callback', methods=['POST'])
 def callback():
     data = request.get_json()
+    # events内にWebhookイベントのリストが格納されている
     for event_json in data['events']:
-        pass
+        handler.handle(event_json)
     return '200 OK'
-
-@app.route('/create')
-def create():
-    hoge.init_db()
-    return 'Hi'
-
-@app.route('/add')
-def add():
-    hoge.add_record()
-    return 'Hi'
