@@ -37,7 +37,7 @@ def notify(message):
     url = 'https://notify-api.line.me/api/notify'
     headers = {'Authorization': 'Bearer ' + LINE_NOTIFY_ACCESS_TOKEN}
     data = {'message': message}
-    response = requests.post(url, headers=headers, params=data)
+    response = requests.post(url, headers=headers, data=data)
     if response.status_code != 200:
         print(response.json())
         raise Exception('LINE Notifyによる通知に失敗')
