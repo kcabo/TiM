@@ -1,13 +1,13 @@
 from app.models import db
 from app import gate, line_api
+from app.webhook import humor
 
 class Event:
     def __init__(self, event_json):
         self.type = event_json.get('type')
         self.reply_token = event_json.get('replyToken')
         self.line_id = event_json.get('source', {'userId': None}).get('userId') # sourceキーがないときもある
-        # self.msg_type = event_json.get('message', {'type': None}).get('type')
-        self.text = event_json.get('message', {'text': None}).get('text', None)
+        self.text = event_json.get('message', {'text': None}).get('text')
         self.postback_data = event_json.get('postback', {'data': None}).get('data')
         self.menu_id = 0
 
@@ -41,18 +41,19 @@ def handle(event_json):
 def receive_message(event):
     text = event.text
     if text is None:
-        pass
+        humor.random_sticker(event)
     elif text == '一覧':
-        pass
+        humor.random_sticker(event)
     elif text == '確認':
-        pass
+        humor.random_sticker(event)
     elif text == 'メール':
-        pass
+        humor.random_sticker(event)
     elif text.find('\n') > 0:
         # TODO: 文字列エスケープ
-        pass
+        humor.random_sticker(event)
     else:
-        pass
+        humor.smalltalk(event)
+
 
 def receive_postback(event):
     print(event.postback_data)
