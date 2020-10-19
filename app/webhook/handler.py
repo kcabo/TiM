@@ -3,6 +3,7 @@ from app.models import db
 from app import gate, line_api
 from app.webhook import dispatcher, humor
 
+
 class Event:
     def __init__(self, event_json):
         self.type = event_json.get('type')
@@ -11,6 +12,7 @@ class Event:
         self.text = event_json.get('message', {'text': None}).get('text')
         self.postback_data = event_json.get('postback', {'data': None}).get('data')
         self.menu_id = 0
+        print(event_json.get('postback', None), 'ポストバックデータ見せる')
 
     def reply(self, msg_list):
         line_api.post_reply(self.reply_token, msg_list)
@@ -18,6 +20,15 @@ class Event:
 
     def send_text(self, *texts):
         msg_list = [{'type': 'text', 'text': t} for t in texts if t is not None]
+        self.reply(msg_list)
+
+
+    def send_flex(self, alt_text, flex_msgs: list):
+        msg_list = [{
+            'type': 'flex',
+            'altText': alt_text,
+            'contents': flex
+        } for flex in flex_msgs if flex is not None]
         self.reply(msg_list)
 
 
@@ -60,8 +71,7 @@ def receive_message(event):
         humor.random_sticker(event)
     elif text == '一覧':
         today = datetime.date.today()
-        dispatcher.view_menus(today)
-        gate.set_current_menu_id(event.line_id, 0)
+        dispatcher.view_menus(event, today)
     elif text == '確認':
         humor.random_sticker(event)
     elif text == 'メール':
