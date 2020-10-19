@@ -6,6 +6,8 @@ import os
 import random
 import requests
 
+A3RT_APIKEY = os.environ.get('A3RT_APIKEY')
+
 
 def smalltalk(event):
     reply = fetch_from_a3rt_api(event.text)
@@ -14,7 +16,6 @@ def smalltalk(event):
 
 
 def fetch_from_a3rt_api(query_text):
-    A3RT_APIKEY = os.environ.get('A3RT_APIKEY') # これグローバル変数にするかも
     url = 'https://api.a3rt.recruit-tech.co.jp/talk/v1/smalltalk'
     data = {
         'apikey': A3RT_APIKEY,
