@@ -5,17 +5,16 @@
 import os
 import random
 import requests
-from app import line_api
 
 
 def smalltalk(event):
     reply = fetch_from_a3rt_api(event.text)
     msg_dic = {'type': 'text', 'text': reply}
-    reply_with_icon(event.reply_token, msg_dic)
+    event.reply_with_icon(msg_dic)
 
 
 def fetch_from_a3rt_api(query_text):
-    A3RT_APIKEY = os.environ.get('A3RT_APIKEY')
+    A3RT_APIKEY = os.environ.get('A3RT_APIKEY') # これグローバル変数にするかも
     url = 'https://api.a3rt.recruit-tech.co.jp/talk/v1/smalltalk'
     data = {
         'apikey': A3RT_APIKEY,
@@ -44,12 +43,4 @@ def random_sticker(event):
         "packageId": package,
         "stickerId": sticker
     }
-    return reply_with_icon(event.reply_token, msg_dic)
-
-
-def reply_with_icon(reply_token, msg_dic):
-    url = 'https://static.thenounproject.com/png/335121-200.png'
-    msg_dic['sender'] = {
-        'iconUrl': url
-    }
-    line_api.reply(reply_token, [msg_dic])
+    event.reply_with_icon(msg_dic)

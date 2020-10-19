@@ -1,6 +1,7 @@
+import datetime
 from app.models import db
 from app import gate, line_api
-from app.webhook import humor
+from app.webhook import dispatcher, humor
 
 class Event:
     def __init__(self, event_json):
@@ -10,6 +11,22 @@ class Event:
         self.text = event_json.get('message', {'text': None}).get('text')
         self.postback_data = event_json.get('postback', {'data': None}).get('data')
         self.menu_id = 0
+
+    def reply(self, msg_list):
+        line_api.post_reply(self.reply_token, msg_list)
+
+
+    def send_text(self, *texts):
+        msg_list = [{'type': 'text', 'text': t} for t in texts if t is not None]
+        self.reply(msg_list)
+
+
+    def reply_with_icon(self, msg_dic):
+        url = 'https://static.thenounproject.com/png/335121-200.png'
+        msg_dic['sender'] = {
+            'iconUrl': url
+        }
+        self.reply([msg_dic])
 
 
 def handle(event_json):
@@ -24,8 +41,7 @@ def handle(event_json):
 
     # 操作中のメニューIDを取得
     try:
-        menu_id = gate.validate_user(event.line_id)
-        event.menu_id = menu_id
+        event.menu_id = gate.validate_user(event.line_id)
         if event.type == 'message':
             receive_message(event)
         else:
@@ -35,7 +51,7 @@ def handle(event_json):
     except gate.UserNotFound:
         # TODO: まだ友達の人に権限を与えるためのフォームを送信する→LIFF
         msg = 'まだユーザー登録されておりません。管理者に登録をお願いしてください。'
-        line_api.send_text(event.reply_token, msg)
+        event.send_text(msg)
 
 
 def receive_message(event):
@@ -43,7 +59,9 @@ def receive_message(event):
     if text is None:
         humor.random_sticker(event)
     elif text == '一覧':
-        humor.random_sticker(event)
+        today = datetime.date.today()
+        dispatcher.view_menus(today)
+        gate.set_current_menu_id(event.line_id, 0)
     elif text == '確認':
         humor.random_sticker(event)
     elif text == 'メール':
@@ -57,4 +75,4 @@ def receive_message(event):
 
 def receive_postback(event):
     print(event.postback_data)
-    line_api.send_text(event.postback_data)
+    event.send_text(event.postback_data)
