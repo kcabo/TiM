@@ -5,12 +5,7 @@ ACCESS_TOKEN = os.environ.get('CHANNEL_ACCESS_TOKEN')
 ENVIRONMENT = os.environ.get('ENVIRONMENT', 'DEVELOP') # 環境判定
 
 
-def send_text(reply_token, *texts):
-    msg_list = [{'type': 'text', 'text': t} for t in texts if t is not None]
-    reply(reply_token, msg_list)
-
-
-def reply(reply_token, msg_list):
+def post_reply(reply_token, msg_list):
     if not msg_list: return 0
     headers =  {
         'Content-Type': 'application/json',
