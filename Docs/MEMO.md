@@ -30,6 +30,7 @@
 
 ### データベース(ローカルの話)
 - Postgresのバージョンは12.4
+- 接続は`psql -d database -U user `
 - timのロールを生成 パスワードも適当に設定 `alter role login`とかでログイン権限付与できる
 - ```
 create database tim encoding = UTF8
@@ -55,6 +56,11 @@ LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' template = template0
 ```
 
 - ハイフンとアットマークをエスケープする必要がある。ちなみにシングルクォーテーションはどうなんだろ
+- `tim=> \i sample.sql`でSQLを読み込めて実行できた
+> しかし日本語を含むファイルでは`psql:add_menu.sql:310: ERROR:  符号化方式"SJIS"においてバイト列0xef 0xbdである文字は符号化方式"UTF8"で等価な文字を持ちません`でエラーとなる
+> `\encoding UTF8;`をファイル冒頭に挟むことで解決
+> しかしやはりPSで日本語の行を読み込むとエラーになる
+> コンソール側も`$ chcp 65001`を設定することで解決。普段はSJIS(CP932)だと思われる
 
 
 ### LINE API
@@ -64,6 +70,7 @@ LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' template = template0
 - テキストエリアを可変にさせるには別のタグ使うってのもあり
 - Flexの容量をsys.getsizeofを使って知ることはできないか→大きければ警告
 - なぜかbuttonではないFlex要素のactionオブジェクトにlabelを指定しても受信できない→dataに指定するしかない
+- 空白文字は送れない
 
 ### Webサーバ
 - 本番環境はGunicorn（WSGIサーバ）
@@ -78,6 +85,13 @@ LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' template = template0
 > 上記コマンドで`setuptools==50.3.0.post20201006`が生成されるが、これはエラーになるため、`.post`以降を削除
 > conda list --exportなんていうコマンドもある
 > また、conda install できない場合はpipする前に`conda install -c conda-forge`するらしい
+
+- Procfileを以下のように修正したけど
+```
+web: gunicorn application:app --pythonpath app
+```
+TiM直下のrun.pyから起動させないことでimportの参照とかずれたりしないのかな
+
 
 ### その他
 - データ容量大丈夫か再検証する必要 具体的にいくつのメニューが送れるか タイムもいくつまでか

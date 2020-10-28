@@ -6,10 +6,6 @@ class UserNotFound(Exception):
         print(f'{line_id}による不明なアクセスを検知')
 
 
-def set_current_menu_id(line_id, new_menu_id):
-    conn.set(line_id, new_menu_id)
-
-
 def validate_user(line_id):
     # line_idがNoneのときに注意
     menu_id = conn.get(line_id)

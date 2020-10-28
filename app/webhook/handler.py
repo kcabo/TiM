@@ -49,5 +49,18 @@ def receive_message(event):
 
 
 def receive_postback(event):
-    print(event.postback_data)
-    event.send_text(event.postback_data)
+    try:
+        obj, val = event.postback_data.split('=')
+    except ValueError:
+        event.send_text('アンパックできませんでした')
+    else:
+
+        if obj == 'date':
+            target_date = datetime.datetime.strptime(val, '%y%m%d')
+            dispatcher.view_menus(event, target_date)
+        elif obj == 'picker':
+            val = event.picker_date
+            target_date = datetime.datetime.strptime(val, '%Y-%m-%d')
+            dispatcher.view_menus(event, target_date)
+        else:
+            event.send_text(event.postback_data)
