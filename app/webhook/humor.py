@@ -6,7 +6,7 @@ import os
 import random
 import requests
 
-A3RT_APIKEY = os.environ.get('A3RT_APIKEY')
+A3RT_APIKEY = os.environ['A3RT_APIKEY']
 
 
 def smalltalk(event):

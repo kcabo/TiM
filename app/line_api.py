@@ -1,8 +1,8 @@
 import os
 import requests
 
-ACCESS_TOKEN = os.environ.get('CHANNEL_ACCESS_TOKEN')
-ENVIRONMENT = os.environ.get('ENVIRONMENT', 'DEVELOP') # 環境判定
+ACCESS_TOKEN = os.environ['CHANNEL_ACCESS_TOKEN']
+ENVIRONMENT = os.environ['ENVIRONMENT'] # 環境判定
 
 
 def post_reply(reply_token, msg_list):
@@ -28,7 +28,7 @@ def post_reply(reply_token, msg_list):
 
 
 def notify(message):
-    LINE_NOTIFY_ACCESS_TOKEN = os.environ.get('NOTIFY_ACCESS_TOKEN')
+    LINE_NOTIFY_ACCESS_TOKEN = os.environ['NOTIFY_ACCESS_TOKEN']
     url = 'https://notify-api.line.me/api/notify'
     headers = {'Authorization': 'Bearer ' + LINE_NOTIFY_ACCESS_TOKEN}
     data = {'message': message}

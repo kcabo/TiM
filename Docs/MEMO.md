@@ -1,3 +1,4 @@
+
 ## 開発メモ
 
 ### 機能要件
@@ -18,10 +19,23 @@
 - DestructiveUpdateが必要なくなったけど、この代替を理解しているか
 
 
+### フロントエンド
+- 今後に合わせてモダンな設計に合わせるのもありか
+- Sass、Vueには手を出せる SPAは難しいか
+- webpack？勉強しなきゃ JS圧縮はしてもいい
+- TypescriptはJSのスーパーセットなんやーーー
+- [Vuetify](https://vuetifyjs.com/en/)割と美しいから使ってみたい
+- Flaskからの移行はORMこれ使ってる以上難しいか → 次回チャレンジ
+- Lambdaに移行させることあるかなあ
+
 ### データベース(ローカルの話)
 - Postgresのバージョンは12.4
 - timのロールを生成 パスワードも適当に設定 `alter role login`とかでログイン権限付与できる
-- ```create database tim encoding = UTF8 LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' template = template0``` でデータベースを生成
+- ```
+create database tim encoding = UTF8
+LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' template = template0
+```
+でデータベースを生成
 - エンコーディング、ロケールの値はそれぞれherokuで設定されるのと同値
 - `postgresql://tim:0000@localhost:5432/tim`でアクセスする。
 - テーブル情報をダンプするやり方がある。そのSQLを発行すればcreate_all()実行しなくていい
@@ -54,6 +68,7 @@
 ### Webサーバ
 - 本番環境はGunicorn（WSGIサーバ）
 - Gunicornはデフォルトで？マルチワーカー対応かも（LINEのドキュメントではメッセージは非同期で処理してくださいと書いてある）
+- Gunicornの引数でアプリの実体位置を指定できる？[pythonpath](https://docs.gunicorn.org/en/latest/settings.html#pythonpath)
 - Heroku側の設定でもワーカーの数を指定できたはず
 
 ### その他
