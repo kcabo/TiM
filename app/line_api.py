@@ -13,7 +13,7 @@ class Event:
         self.line_id = event_json.get('source', {'userId': None}).get('userId') # sourceキーがないときもある
         self.text = event_json.get('message', {'text': None}).get('text')
         self.postback_data = event_json.get('postback', {'data': None}).get('data')
-        self.picker_date = event_json.get('postback', {'params': None}).get('params', {'date': None}).get('date')
+        self.picker_date = event_json.get('postback', {'params': {}}).get('params', {'date': None}).get('date')
         self.menu_id = 0
 
 
