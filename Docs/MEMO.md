@@ -70,6 +70,13 @@ LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' template = template0
 - Gunicornはデフォルトで？マルチワーカー対応かも（LINEのドキュメントではメッセージは非同期で処理してくださいと書いてある）
 - Gunicornの引数でアプリの実体位置を指定できる？[pythonpath](https://docs.gunicorn.org/en/latest/settings.html#pythonpath)
 - Heroku側の設定でもワーカーの数を指定できたはず
+- なおローカルにはGunicornをインストールしていない
+- ローカルではAnacondaで管理している
+> おかげで？pip freezeの出力が他と違う
+> `pip list --format=freeze` で解決した。
+> できたリストにGunicorn付け足すのを忘れずに
+> conda list --exportなんていうコマンドもある
+> また、conda install できない場合はpipする前に`conda install -c conda-forge`するらしい
 
 ### その他
 - データ容量大丈夫か再検証する必要 具体的にいくつのメニューが送れるか タイムもいくつまでか
