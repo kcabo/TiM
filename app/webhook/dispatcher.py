@@ -2,7 +2,6 @@ import datetime
 
 from app.models import db, Menu
 from app.webhook import flex
-from app.gate import set_current_menu_id
 
 
 def view_menus(event, target_date: datetime.date):
@@ -11,4 +10,9 @@ def view_menus(event, target_date: datetime.date):
     flex_msgs = flex.build_menus(target_date, menus)
     alt_text = 'メニュー一覧'
     event.send_flex(alt_text, flex_msgs)
-    set_current_menu_id(event.line_id, 0)
+    event.aim_menu_id(0)
+
+# import json
+# fj = json.dumps(flex_msgs[0])
+# with open('safe/trash/b.py', mode='w', encoding='UTF8') as f:
+#     print(fj, file=f)

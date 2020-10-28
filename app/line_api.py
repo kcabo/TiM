@@ -1,6 +1,8 @@
 import os
 import requests
 
+from app.redis_setup import conn
+
 ACCESS_TOKEN = os.environ['CHANNEL_ACCESS_TOKEN']
 ENVIRONMENT = os.environ['ENVIRONMENT'] # 環境判定
 
@@ -11,6 +13,7 @@ class Event:
         self.line_id = event_json.get('source', {'userId': None}).get('userId') # sourceキーがないときもある
         self.text = event_json.get('message', {'text': None}).get('text')
         self.postback_data = event_json.get('postback', {'data': None}).get('data')
+        self.picker_date = event_json.get('postback', {'params': None}).get('params', {'date': None}).get('date')
         self.menu_id = 0
 
 
@@ -56,6 +59,10 @@ class Event:
             'iconUrl': url
         }
         self.reply([msg_dic])
+
+
+    def aim_menu_id(self, new_menu_id: int):
+        conn.set(self.line_id, new_menu_id)
 
 
 def notify(message):

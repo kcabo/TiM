@@ -1,217 +1,37 @@
 import datetime
+from copy import deepcopy
 
-def build_menus(target_date: datetime.date, menus) -> list:
-    menus = {
-      "type": "bubble",
-      "size": "mega",
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-              {
-                "type": "text",
-                "text": "　◀　",
-                "color": "#4f4f4f",
-                "flex": 0,
-                "gravity": "center",
-                "action": {
-                  "type": "postback",
-                  "label": "action",
-                  "data": "hello"
-                }
-              },
-              {
-                "type": "text",
-                "text": "2020.09.12 土",
-                "weight": "bold",
-                "color": "#4f4f4f",
-                "align": "center",
-                "flex": 0,
-                "gravity": "center",
-                "size": "lg",
-                "action": {
-                  "type": "datetimepicker",
-                  "label": "action",
-                  "data": "hello",
-                  "mode": "date",
-                  "max": "2020-09-03",
-                  "min": "2020-09-02"
-                }
-              },
-              {
-                "type": "text",
-                "text": "　▶　",
-                "color": "#4f4f4f",
-                "flex": 0,
-                "gravity": "center",
-                "action": {
-                  "type": "postback",
-                  "label": "action",
-                  "data": "hello"
-                }
-              }
-            ],
-            "justifyContent": "center",
-            "paddingAll": "md",
-            "spacing": "md"
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                  {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                      {
-                        "type": "text",
-                        "text": "Swim",
-                        "color": "#ffffff",
-                        "size": "xs",
-                        "weight": "bold",
-                        "adjustMode": "shrink-to-fit"
-                      }
-                    ],
-                    "backgroundColor": "#37D1F9",
-                    "cornerRadius": "xxl",
-                    "alignItems": "center",
-                    "width": "75px",
-                    "paddingAll": "xs"
-                  },
-                  {
-                    "type": "text",
-                    "text": "25*20*2 4t:浮き上がりまで 4t:12.5から 2t:Allout（1sfr 2sS1)",
-                    "weight": "bold",
-                    "wrap": True,
-                    "size": "xs",
-                    "margin": "md"
-                  }
-                ],
-                "paddingEnd": "lg"
-              },
-              {
-                "type": "text",
-                "text": "1:00",
-                "color": "#7F7F7F",
-                "gravity": "center",
-                "flex": 0,
-                "wrap": True,
-                "size": "xs"
-              }
-            ],
-            "backgroundColor": "#ffffff",
-            "cornerRadius": "lg",
-            "paddingAll": "md",
-            "paddingEnd": "xxl",
-            "action": {
-              "type": "postback",
-              "label": "action",
-              "data": "hello21211"
-            }
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                  {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                      {
-                        "type": "text",
-                        "text": "Swim",
-                        "color": "#ffffff",
-                        "size": "xs",
-                        "weight": "bold",
-                        "adjustMode": "shrink-to-fit"
-                      }
-                    ],
-                    "backgroundColor": "#37D1F9",
-                    "cornerRadius": "xxl",
-                    "alignItems": "center",
-                    "width": "75px",
-                    "paddingAll": "xs"
-                  },
-                  {
-                    "type": "text",
-                    "text": "25*20*2 4t:浮き上がりまで 4t:12.5から 2t:Allout（1sfr 2sS1)",
-                    "weight": "bold",
-                    "wrap": True,
-                    "size": "xs",
-                    "margin": "md"
-                  }
-                ],
-                "paddingEnd": "lg"
-              },
-              {
-                "type": "text",
-                "text": "1:00",
-                "color": "#7F7F7F",
-                "gravity": "center",
-                "flex": 0,
-                "wrap": True,
-                "size": "xs"
-              }
-            ],
-            "backgroundColor": "#ffffff",
-            "cornerRadius": "lg",
-            "paddingAll": "md",
-            "paddingEnd": "xxl",
-            "action": {
-              "type": "postback",
-              "label": "action",
-              "data": "hello21211"
-            }
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "＋",
-                "size": "3xl",
-                "color": "#ffffff",
-                "weight": "bold"
-              }
-            ],
-            "background": {
-              "type": "linearGradient",
-              "angle": "135deg",
-              "startColor": "#38E6FA",
-              "endColor": "#3477F3"
-            },
-            "justifyContent": "center",
-            "alignItems": "center",
-            "cornerRadius": "40px",
-            "height": "50px",
-            "action": {
-              "type": "uri",
-              "label": "action",
-              "uri": "http://linecorp.com/"
-            },
-            "margin": "lg"
-          }
-        ],
-        "paddingAll": "lg",
-        "spacing": "7px"
-      },
-      "styles": {
-        "body": {
-          "backgroundColor": "#EFF1F6"
-        }
-      }
-    }
-    return [menus]
+from app.webhook import flex_components as components
+
+def int2yobi(week_num: int) -> str:
+    return ['月', '火', '水', '木', '金', '土', '日'][week_num]
+
+def build_menus(target_date: datetime.date, queries) -> list:
+    embedded_menus = []
+    for menu_q in queries:
+        menu = deepcopy(components.menu_base)
+        # 空白文字だった場合は空白を補足
+        menu["contents"][0]["contents"][0]["contents"][0]["text"] = menu_q.category or ' '
+        menu["contents"][0]["contents"][1]["text"] = menu_q.description or ' '
+        menu["contents"][1]["text"] = menu_q.cycle or ' '
+        embedded_menus.append(menu)
+
+    menu_wrap = deepcopy(components.menu_wrap)
+    
+    japanese_date = target_date.strftime('%Y.%m.%d ') + \
+        int2yobi(target_date.weekday()) # 2020.09.12 土
+    yesterday = target_date - datetime.timedelta(days=1)
+    tomorrow = target_date + datetime.timedelta(days=1)
+    yesterday_int = int(yesterday.strftime('%y%m%d'))
+    tomorrow_int = int(tomorrow.strftime('%y%m%d'))
+
+    menu_wrap["body"]["contents"][0]["contents"][0]["action"]["data"] = f'date={yesterday_int}'
+    menu_wrap["body"]["contents"][0]["contents"][2]["action"]["data"] = f'date={tomorrow_int}'
+    menu_wrap["body"]["contents"][0]["contents"][1]["text"] = japanese_date
+
+    if embedded_menus:
+        index = 1
+        # contents内の二個目以降の要素として組み込み挿入
+        menu_wrap["body"]["contents"][index:index] = embedded_menus
+
+    return [menu_wrap]
