@@ -75,6 +75,7 @@ LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' template = template0
 > おかげで？pip freezeの出力が他と違う
 > `pip list --format=freeze` で解決した。
 > できたリストにGunicorn付け足すのを忘れずに
+> 上記コマンドで`setuptools==50.3.0.post20201006`が生成されるが、これはエラーになるため、`.post`以降を削除
 > conda list --exportなんていうコマンドもある
 > また、conda install できない場合はpipする前に`conda install -c conda-forge`するらしい
 
