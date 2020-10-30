@@ -32,18 +32,30 @@ def handle(event_json):
 
 def receive_message(event):
     text = event.text
+
+    # スタンプや画像などテキスト以外のメッセージを受信したらスタンプを返す
     if text is None:
         humor.random_sticker(event)
+
+    # メニュー一覧
     elif text == '一覧':
         today = datetime.date.today()
         dispatcher.view_menus(event, today)
+
+    # 操作中のメニューのタイムの確認
     elif text == '確認':
-        humor.random_sticker(event)
+        dispatcher.view_records_scroll(event)
+
+    # メールで出力
     elif text == 'メール':
         humor.random_sticker(event)
+
+    # タイムの取り込み
     elif text.find('\n') > 0:
         # TODO: 文字列エスケープ
         humor.random_sticker(event)
+
+    # 雑談
     else:
         humor.smalltalk(event)
 
@@ -51,13 +63,17 @@ def receive_message(event):
 def receive_postback(event):
     try:
         obj, val = event.postback_data.split('=')
+
     except ValueError:
         event.send_text('アンパックできませんでした')
-    else:
 
+    else:
+        # メニュー一覧（三角ボタン押して日付変更した場合）
         if obj == 'date':
             target_date = datetime.datetime.strptime(val, '%y%m%d')
             dispatcher.view_menus(event, target_date)
+
+        # メニュー一覧（DatePicker使用した場合）
         elif obj == 'picker':
             val = event.picker_date
             target_date = datetime.datetime.strptime(val, '%Y-%m-%d')
