@@ -7,6 +7,7 @@ def int2yobi(week_num: int) -> str:
     return ['月', '火', '水', '木', '金', '土', '日'][week_num]
 
 def build_menus(target_date: datetime.date, queries) -> list:
+    # TODO: アクションを指定
     embedded_menus = []
     for menu_q in queries:
         menu = deepcopy(components.menu_base)
@@ -17,9 +18,10 @@ def build_menus(target_date: datetime.date, queries) -> list:
         embedded_menus.append(menu)
 
     menu_wrap = deepcopy(components.menu_wrap)
-    
-    japanese_date = target_date.strftime('%Y.%m.%d ') + \
+
+    today_japanese = target_date.strftime('%Y.%m.%d ') + \
         int2yobi(target_date.weekday()) # 2020.09.12 土
+    today_hyphenated = target_date.strftime('%Y-%m-%d')
     yesterday = target_date - datetime.timedelta(days=1)
     tomorrow = target_date + datetime.timedelta(days=1)
     yesterday_int = int(yesterday.strftime('%y%m%d'))
@@ -27,7 +29,8 @@ def build_menus(target_date: datetime.date, queries) -> list:
 
     menu_wrap["body"]["contents"][0]["contents"][0]["action"]["data"] = f'date={yesterday_int}'
     menu_wrap["body"]["contents"][0]["contents"][2]["action"]["data"] = f'date={tomorrow_int}'
-    menu_wrap["body"]["contents"][0]["contents"][1]["text"] = japanese_date
+    menu_wrap["body"]["contents"][0]["contents"][1]["text"] = today_japanese
+    menu_wrap["body"]["contents"][0]["contents"][1]["action"]["initial"] = today_hyphenated
 
     if embedded_menus:
         index = 1

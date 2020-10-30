@@ -1,6 +1,6 @@
 # メニュー一覧の全体レイアウト
 # 改変部:
-# Variable * 4
+# Variable * 5
 
 dic = {
   "type": "bubble",
@@ -25,7 +25,7 @@ dic = {
           },
           {
             "type": "text",
-            "text": "2020.09.12 土", # Variable
+            "text": "2020.10.13 火", # Variable
             "weight": "bold",
             "color": "#4f4f4f",
             "align": "center",
@@ -35,7 +35,8 @@ dic = {
             "action": {
               "type": "datetimepicker",
               "data": "picker=0",
-              "mode": "date"
+              "mode": "date",
+              "initial":"2020-10-13" # Variable
             }
           },
           {
@@ -46,7 +47,7 @@ dic = {
             "gravity": "center",
             "action": {
               "type": "postback",
-              "data": "date=201012" # Variable
+              "data": "date=201014" # Variable
             }
           }
         ],

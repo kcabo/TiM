@@ -9,12 +9,10 @@
 - 自分に！しか送られないことを周知
 - マニュアル整備（改行できるとかしらんでしょっていう）
 - タイム一覧見やすく メニューがわかりにくい？
-- EDITとはなんぞや →日本語にするぞ
 - User.roleにVIEWERを設ければ応答はするけど編集はできない人、みたいなのが作れる（引退したらそうするか？）
 - メニュー削除時に削除予定のレコード数も通知する
 - ボタン押したらフォームに入力される
 - noun のクレジットどっかに書く
-- hiredis使う
 - エンドポイントをwebhookに変更
 - DestructiveUpdateが必要なくなったけど、この代替を理解しているか
 
@@ -32,11 +30,11 @@
 - Postgresのバージョンは12.4
 - 接続は`psql -d database -U user `
 - timのロールを生成 パスワードも適当に設定 `alter role login`とかでログイン権限付与できる
-- ```
+- データベースの初期設定
+```
 create database tim encoding = UTF8
 LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' template = template0
 ```
-でデータベースを生成
 - エンコーディング、ロケールの値はそれぞれherokuで設定されるのと同値
 - `postgresql://tim:0000@localhost:5432/tim`でアクセスする。
 - テーブル情報をダンプするやり方がある。そのSQLを発行すればcreate_all()実行しなくていい
@@ -62,6 +60,10 @@ LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' template = template0
 > しかしやはりPSで日本語の行を読み込むとエラーになる
 > コンソール側も`$ chcp 65001`を設定することで解決。普段はSJIS(CP932)だと思われる
 
+- ORM使うのはどうなんだろうか（吐き出すSQLの確認は後ほど必要）
+> オーバーヘッドが大きいなら生SQL書く可能性も
+> SQLインジェクション防ぐためにプリペアドステートメントを使わなくては
+
 
 ### LINE API
 - 本来ならWebhookを受け取ったら[署名を検証](https://developers.line.biz/ja/reference/messaging-api/#signature-validation)するけど面倒くさいからしない
@@ -69,8 +71,9 @@ LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' template = template0
 - LIFFのURLに追加のパスやパラメータを設定するとリダイレクトされる ＝ 二回ロードされるけど問題なく使用可能
 - テキストエリアを可変にさせるには別のタグ使うってのもあり
 - Flexの容量をsys.getsizeofを使って知ることはできないか→大きければ警告
-- なぜかbuttonではないFlex要素のactionオブジェクトにlabelを指定しても受信できない→dataに指定するしかない
-- 空白文字は送れない
+- なぜかbutton以外のFlex要素にaction-labelを指定しても受信できない→dataに指定するしかない
+- 空白文字は送れない →半角スペースを送ることで対応
+
 
 ### Webサーバ
 - 本番環境はGunicorn（WSGIサーバ）
@@ -96,3 +99,4 @@ TiM直下のrun.pyから起動させないことでimportの参照とかずれ�
 ### その他
 - データ容量大丈夫か再検証する必要 具体的にいくつのメニューが送れるか タイムもいくつまでか
 - メールの文字コードにハマった話
+- collectionライブラリ使えばもっと高速にできるか
