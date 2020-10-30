@@ -7,7 +7,7 @@ from app.webhook import flex_components as components
 def build_menus(target_date: datetime.date, queries) -> dict:
     # TODO: アクションを指定 メニュー作成URLを指定
     embedded_menu_cards = [
-        build_menu_base_card(menu_query) for menu_query in queries
+        build_menu_base_card(menu_query, button=True) for menu_query in queries
     ]
 
     menu_wrap = deepcopy(components.menu_wrap)
@@ -73,7 +73,7 @@ def date_jpn_period_chain(target_date: datetime.date) -> str:
     return f'{period_chain} {youbi}'
 
 
-def build_menu_base_card(menu_query) -> dict:
+def build_menu_base_card(menu_query, button=False) -> dict:
     # 辞書型はミュータブルのため、別々のインスタンスを複製する
     # copyをしないと単一のグローバルなmenu_base変数にアクセスしてしまう
     card = deepcopy(components.menu_base)
@@ -83,4 +83,10 @@ def build_menu_base_card(menu_query) -> dict:
     card["contents"][0]["contents"][0]["contents"][0]["text"] = menu_query.category or ' '
     card["contents"][0]["contents"][1]["text"] = menu_query.description or ' '
     card["contents"][1]["text"] = menu_query.cycle or ' '
+
+    if button:
+        card["action"] = {
+          "type": "postback",
+          "data": f"menu={menu_query.menuid}"
+        }
     return card

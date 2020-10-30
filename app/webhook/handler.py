@@ -78,5 +78,13 @@ def receive_postback(event):
             val = event.picker_date
             target_date = datetime.datetime.strptime(val, '%Y-%m-%d')
             dispatcher.view_menus(event, target_date)
+
+        # メニュー選択
+        elif obj == 'menu':
+            menu_id = int(val)
+            event.menu_id = menu_id
+            dispatcher.view_records_scroll(event)
+            event.aim_menu_id(menu_id)
+
         else:
             event.send_text(event.postback_data)

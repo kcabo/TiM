@@ -57,8 +57,4 @@ dic = {
   "cornerRadius": "lg",
   "paddingAll": "md",
   "paddingEnd": "xxl",
-  # "action": {
-  #   "type": "postback",
-  #   "data": "menu=45"
-  # }
 }
