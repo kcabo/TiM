@@ -9,7 +9,7 @@ class UserNotFound(Exception):
 def validate_user(line_id):
     # line_idがNoneのときに注意
     menu_id = conn.get(line_id)
-    if menu_id: return menu_id
+    if menu_id: return int(menu_id)
 
     # Redis上から見つからなかったらテーブルから探査
     user = db.session.query(User.userid).filter_by(lineid=line_id).one_or_none()
