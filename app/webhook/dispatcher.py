@@ -1,7 +1,8 @@
 import datetime
+from itertools import zip_longest
 
-from app.models import db, Menu, Record
-from app.webhook import flex
+from app.models import db, Menu, Record, User
+from app.webhook import flex, mailer
 
 
 def view_menus(event, target_date: datetime.date):
@@ -43,7 +44,48 @@ def export_by_mail(event):
     int_date = menu_q.date
     all_menus = Menu.query.filter_by(date=int_date).order_by(Menu.menuid).all()
 
-    event.send_text(f'{event.menu_id}, {len(all_menus)}件')
+    csv_strings = [construct_csv(menu) for menu in all_menus]
+    csv = '\r\n.\r\n'.join(csv_strings)
+
+    date_obj = datetime.datetime.strptime(str(int_date),'%y%m%d')
+    user = User.query.filter_by(lineid=event.line_id).one()
+    mailer.send_mail_with_csv(user, csv, date_obj)
+
+
+def construct_csv(menu_q: Menu) -> str:
+    first_column = [menu_q.category] + menu_q.description.split('\n')
+    second_column = [''] + menu_q.cycle.split('\n')
+    record_q = Record.query.filter_by(menuid=menu_q.menuid).order_by(Record.recordid).all()
+
+    data = [first_column, second_column] + [record_in_linear_list(rec) for rec in record_q]
+    transposed = [',,'.join(x) for x in zip_longest(*data, fillvalue='')]
+    csv = '\r\n'.join(transposed)
+    return csv
+
+
+def record_in_linear_list(record: Record) -> list:
+    rec_list = [record.swimmer]
+    style_separator = '|'
+    row_separator = '_'
+    raw_text = record.times
+
+    # fly,0:28.52 → fly,0:28.52
+    # 0:28.52 → ,0:28.52
+    pre_insert_comma = lambda x: x if ',' in x else ',' + x
+
+    # スタイルを含む場合は二列分確保する
+    if style_separator in raw_text:
+        raw_text_no_pipe = raw_text.replace(style_separator, ',')
+        time_list_not_aligned = raw_text_no_pipe.split(row_separator)
+        time_list_aligned = [pre_insert_comma(time) for time in time_list_not_aligned]
+        rec_list = [',' + record.swimmer]
+        rec_list.extend(time_list_aligned)
+        return rec_list
+
+    else:
+        time_list = raw_text.split(row_separator)
+        rec_list.extend(time_list)
+        return rec_list
 
 
 def fetch_current_menu(event):
@@ -52,12 +94,12 @@ def fetch_current_menu(event):
         event.send_text('メニューを選択してください！')
         return None
 
-    menu = Menu.query.get(menu_id)
-    if menu is None:
+    menu_q = Menu.query.get(menu_id)
+    if menu_q is None:
         event.send_text('メニューが見つかりませんでした...')
         return None
     else:
-        return menu
+        return menu_q
 
 # with open('de.py', 'w', encoding='UTF8') as f:
 #     import json
