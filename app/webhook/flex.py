@@ -106,7 +106,8 @@ def build_menu_base_card(menu_query, button=False) -> dict:
     if button:
         card["action"] = {
           "type": "postback",
-          "data": f"menu={menu_query.menuid}"
+          "data": f"menu={menu_query.menuid}",
+          "displayText": "このメニューを選択"
         }
     return card
 
