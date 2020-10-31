@@ -12,8 +12,3 @@ dic = {
     "paddingEnd": "xs"
   }
 }
-
-car = {
-  "type": "carousel",
-  "contents": []
-}
