@@ -3,9 +3,10 @@ from copy import deepcopy
 
 from app.webhook import flex_components as components
 
+layer_capacity = 4
 
 def build_menus(target_date: datetime.date, queries) -> dict:
-    # TODO: アクションを指定 メニュー作成URLを指定
+    # TODO: メニュー作成URLを指定
     embedded_menu_cards = [
         build_menu_base_card(menu_query, button=True) for menu_query in queries
     ]
@@ -47,22 +48,40 @@ def build_menu_transaction(menu_query) -> dict:
 
 
 def build_records_scroll(record_queries: list) -> dict:
-    return  {
-      "type": "bubble",
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
-          {
-            "type": "text",
-            "text": "2020.10.13 火", # Variable
-            "weight": "bold",
-            "color": "#4f4f4f",
-            "align": "center",
-            "offsetBottom": "xs"
-          }]
-         }
-         }
+    cnt_records = len(record_queries)
+
+    if cnt_records == 0:
+        return components.no_records
+
+    cnt_needed_layers = (cnt_records - 1) // layer_capacity + 1
+    bubble_capacity = 3
+    bubbles = []
+    tmp_contents = []
+
+    iter = yield_layer(record_queries)
+    for idx_layer, layer in enumerate(iter, 1): # idxは1からはじまる
+        tmp_contents.append(layer)
+        tmp_contents.append({"type": "separator"})
+
+        # バブルをひとつ作る
+        # 一つのバブルに3層溜まった or 最後の層
+        if idx_layer % bubble_capacity == 0 or idx_layer == cnt_needed_layers:
+            bubble = deepcopy(components.times_wrap)
+            bubble["body"]["contents"] = tmp_contents[:-1]
+            bubbles.append(bubble)
+            tmp_contents = []
+
+    # バブル一つ分で済む量ならカルーセルにはしない
+    if cnt_records <= 12:
+        return bubbles[0]
+
+    # 複数のバブルを送るため、カルーセルにまとめる
+    else:
+        carousel = {
+          "type": "carousel",
+          "contents": bubbles
+        }
+        return carousel
 
 
 def date_jpn_period_chain(target_date: datetime.date) -> str:
@@ -90,3 +109,36 @@ def build_menu_base_card(menu_query, button=False) -> dict:
           "data": f"menu={menu_query.menuid}"
         }
     return card
+
+
+def yield_layer(record_queries: list) -> dict:
+    # 受け取ったRecordのリストを4つずつchunkに分ける
+    # 一段ごとパーツ(FlexUI)を返す
+    max_index = len(record_queries)
+    for idx in range(0, max_index, layer_capacity):
+        start = idx
+        end = idx + layer_capacity # max_indexを超えることがあるが問題ない
+        chunk = record_queries[start:end]
+        cells = [build_record_cell(record) for record in chunk]
+        layer = build_record_layer(cells)
+        yield layer
+
+
+def build_record_cell(rec_q) -> dict:
+    cell = deepcopy(components.record_cell)
+
+    chained_time_no_pipe = rec_q.times.replace('|', ' ')
+    time_list = chained_time_no_pipe.split('_')
+    text = '\n'.join([rec_q.swimmer] + time_list)
+
+    cell["text"] = text
+    cell["action"]["data"] = f'rec={rec_q.recordid}'
+    return cell
+
+
+def build_record_layer(record_cells: list) -> dict:
+    # record_cellsは1~4の長さを持つリスト
+    layer = deepcopy(components.times_layer)
+    for i, cell in enumerate(record_cells):
+        layer["contents"][i] = cell
+    return layer

@@ -19,7 +19,3 @@ dic = {
     }
   ]
 }
-
-sep = {
-  "type": "separator"
-}

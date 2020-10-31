@@ -10,7 +10,7 @@ dic = {
   "size": "xs",
   "action": {
     "type": "postback",
-    "data": "rec_4196" # Variable
+    "data": "rec=4196" # Variable
   },
   "wrap": True
 }
