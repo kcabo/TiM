@@ -48,7 +48,7 @@ def receive_message(event):
 
     # メールで出力
     elif text == 'メール':
-        humor.random_sticker(event)
+        dispatcher.export_by_mail(event)
 
     # タイムの取り込み
     elif text.find('\n') > 0:
