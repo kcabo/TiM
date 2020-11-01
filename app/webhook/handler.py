@@ -1,5 +1,4 @@
 import datetime
-from app.models import db
 from app.line_api import Event, notify
 from app.gate import validate_user, UserNotFound
 from app.webhook import dispatcher, humor
@@ -85,6 +84,30 @@ def receive_postback(event):
             event.menu_id = menu_id
             dispatcher.view_records_scroll(event)
             event.aim_menu_id(menu_id)
+
+        # タイム選択
+        elif obj == 'rec':
+            record_id = int(val)
+            # dispatcher.view_records_scroll(event)
+            event.send_text(event.postback_data)
+
+        # レコードの削除
+        elif obj == 'delrec':
+            record_id = int(val)
+            # dispatcher.view_records_scroll(event)
+            event.send_text(event.postback_data)
+
+        # メニュー削除の確認を問う
+        elif obj == 'caution':
+            menu_id = int(val)
+            # dispatcher.view_records_scroll(event)
+            event.send_text(event.postback_data)
+
+        # メニュー削除の確定
+        elif obj == 'delmenu':
+            menu_id = int(val)
+            # dispatcher.view_records_scroll(event)
+            event.send_text(event.postback_data)
 
         else:
             event.send_text(event.postback_data)
