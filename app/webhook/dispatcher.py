@@ -47,9 +47,10 @@ def export_by_mail(event):
     csv_strings = [construct_csv(menu) for menu in all_menus]
     csv = '\r\n.\r\n'.join(csv_strings)
 
-    date_obj = datetime.datetime.strptime(str(int_date),'%y%m%d')
+    target_date = datetime.datetime.strptime(str(int_date),'%y%m%d').date()
     user = User.query.filter_by(lineid=event.line_id).one()
-    mailer.send_mail_with_csv(user, csv, date_obj)
+    mailer.send_mail_with_csv(user, csv, target_date)
+    event.send_thank_msg()
 
 
 def construct_csv(menu_q: Menu) -> str:

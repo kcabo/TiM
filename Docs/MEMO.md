@@ -15,6 +15,7 @@
 - noun のクレジットどっかに書く
 - エンドポイントをwebhookに変更
 - DestructiveUpdateが必要なくなったけど、この代替を理解しているか
+- Excelも同時に送りつけたら？
 
 
 ### フロントエンド
@@ -98,5 +99,12 @@ TiM直下のrun.pyから起動させないことでimportの参照とかずれ�
 
 ### その他
 - データ容量大丈夫か再検証する必要 具体的にいくつのメニューが送れるか タイムもいくつまでか
-- メールの文字コードにハマった話
-- collectionライブラリ使えばもっと高速にできるか
+- collectionやitertools使えばもっと高速にできるか
+- メールの添付ファイルは文字コード指定なしでもスマホなら問題ないが、Excelで開くと文字化けしてしまう
+> 'utf-8-sig'で指定するとExcel側もUTF8として認識してくれる。これはBOM付きUTF8
+
+- 二段階認証をONにしているGMAILアカウントでは、アカウントパスワードではなくアプリパスワードで接続する
+[参考:アプリパスワードについて](https://gammasoft.jp/support/prepare-gmail-account/)
+[参考:Gmailヘルプ](https://support.google.com/mail/answer/7126229?hl=ja)
+[参考:Python-SMTPライブラリ](https://docs.python.org/ja/3/library/smtplib.html)
+> SMTP_SSL インスタンスは SMTP と全く同じように動作します。SMTP_SSL は、接続の始めからSSLが必要であり、 starttls() が適切でない状況で使用するべきです。 host が指定されていない場合、ローカルホストが使用されます。 port が0の場合、標準のSMTP-over-SSLポート（465）が使用されます。
