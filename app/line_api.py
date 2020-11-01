@@ -17,7 +17,7 @@ class Event:
         self.menu_id = 0
 
 
-    def reply(self, msg_list):
+    def reply(self, msg_list: list):
         if not msg_list: return 0
         headers =  {
             'Content-Type': 'application/json',
@@ -53,12 +53,27 @@ class Event:
         self.reply(msg_list)
 
 
-    def reply_with_icon(self, msg_dic):
+    def send_thank_msg(self):
+        sticker_celebrate = {
+            "type": "sticker",
+            "packageId": "11537",
+            "stickerId": "52002748"
+        }
+        otsukare_text = {
+            "type": "text",
+            "text": "メールで送ったよ！ありがとう！おつかれさま！😆😆",
+        }
+        msg_list = [sticker_celebrate, otsukare_text]
+        self.reply(msg_list)
+
+
+    def reply_with_icon(self, msg_dic: dict):
         url = 'https://static.thenounproject.com/png/335121-200.png'
         msg_dic['sender'] = {
             'iconUrl': url
         }
-        self.reply([msg_dic])
+        msg_list = [msg_dic]
+        self.reply(msg_list)
 
 
     def aim_menu_id(self, new_menu_id: int):
