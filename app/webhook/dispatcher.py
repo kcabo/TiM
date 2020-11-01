@@ -1,8 +1,8 @@
 import datetime
-from itertools import zip_longest
 
 from app.models import db, Menu, Record, User
 from app.webhook import flex, mailer
+from app.webhook.csv_constructor import construct_csv
 
 
 def view_menus(event, target_date: datetime.date):
@@ -23,8 +23,7 @@ def view_menus(event, target_date: datetime.date):
 
 def view_records_scroll(event):
     menu_q = fetch_current_menu(event)
-    if menu_q is None:
-        return None
+    if menu_q is None: return None
 
     # タイムを全取得
     records = Record.query.filter_by(menuid=event.menu_id).all()
@@ -39,54 +38,23 @@ def view_records_scroll(event):
 
 def export_by_mail(event):
     menu_q = fetch_current_menu(event)
-    if menu_q is None:
-        return None
+    if menu_q is None: return None
+
     int_date = menu_q.date
     all_menus = Menu.query.filter_by(date=int_date).order_by(Menu.menuid).all()
-
-    csv_strings = [construct_csv(menu) for menu in all_menus]
-    csv = '\r\n.\r\n'.join(csv_strings)
+    csv = construct_csv(all_menus)
 
     target_date = datetime.datetime.strptime(str(int_date),'%y%m%d').date()
     user = User.query.filter_by(lineid=event.line_id).one()
-    mailer.send_mail_with_csv(user, csv, target_date)
-    event.send_thank_msg()
 
+    try:
+        mailer.send_mail_with_csv(user, csv, target_date)
 
-def construct_csv(menu_q: Menu) -> str:
-    first_column = [menu_q.category] + menu_q.description.split('\n')
-    second_column = [''] + menu_q.cycle.split('\n')
-    record_q = Record.query.filter_by(menuid=menu_q.menuid).order_by(Record.recordid).all()
-
-    data = [first_column, second_column] + [record_in_linear_list(rec) for rec in record_q]
-    transposed = [',,'.join(x) for x in zip_longest(*data, fillvalue='')]
-    csv = '\r\n'.join(transposed)
-    return csv
-
-
-def record_in_linear_list(record: Record) -> list:
-    rec_list = [record.swimmer]
-    style_separator = '|'
-    row_separator = '_'
-    raw_text = record.times
-
-    # fly,0:28.52 → fly,0:28.52
-    # 0:28.52 → ,0:28.52
-    pre_insert_comma = lambda x: x if ',' in x else ',' + x
-
-    # スタイルを含む場合は二列分確保する
-    if style_separator in raw_text:
-        raw_text_no_pipe = raw_text.replace(style_separator, ',')
-        time_list_not_aligned = raw_text_no_pipe.split(row_separator)
-        time_list_aligned = [pre_insert_comma(time) for time in time_list_not_aligned]
-        rec_list = [',' + record.swimmer]
-        rec_list.extend(time_list_aligned)
-        return rec_list
-
+    # メールがうまく送れなかったときにFeedback
+    except Exception as e:
+        event.send_text('メール送信に失敗しました...')
     else:
-        time_list = raw_text.split(row_separator)
-        rec_list.extend(time_list)
-        return rec_list
+        event.send_thank_msg()
 
 
 def fetch_current_menu(event):
