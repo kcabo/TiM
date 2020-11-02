@@ -60,25 +60,17 @@ def export_by_mail(event):
 def add_new_record(event):
     menu_q = fetch_current_menu(event)
     if menu_q is None: return None
-    if forge.is_text_appropriate(event) == False: return None
+    if forge.contains_invalid_char(event) == False: return None
 
-    lines_raw = event.text.split('\n')
-    swimmer = lines_raw[0]
-    time_lines_raw = lines_raw[1:]
+    # 'name', ['Fr|0:29.11', '0:30.45']
+    swimmer, times_list = forge.parse_user_text(event)
 
-    try:
-        time_lines_fixed = [forge.parse_time(raw) for raw in time_lines_raw]
-    except forge.TooManySpaces as e:
-        error_msg = e.args[0]
-        event.send_text(error_msg, '一行につきスペースは一つにしてください')
-        return None
-
-    times = '_'.join(time_lines_fixed)
+    times = '_'.join(times_list)
     new_record = Record(menu_q.menuid, swimmer, times)
     db.session.add(new_record)
     db.session.commit()
 
-    repeat_with_pipe = '\n'.join([swimmer, *time_lines_fixed])
+    repeat_with_pipe = '\n'.join([swimmer, *times_list])
     repeat = repeat_with_pipe.replace('|', ' ')
     event.send_text(repeat, '登録成功✨')
 

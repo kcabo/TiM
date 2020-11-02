@@ -1,9 +1,8 @@
 
 
-def is_text_appropriate(event) -> bool:
+def contains_invalid_char(event) -> bool:
     invalid_char = {'|', '_', ':', '.'}
-    text = event.text
-    set_text = set(text)
+    set_text = set(event.text)
     cross = set_text.intersection(invalid_char)
     if cross:
         retry_msg = f'{cross} を含む記録は登録できません。\n{cross} を別の文字に置き換えて送り直してください'
@@ -13,12 +12,20 @@ def is_text_appropriate(event) -> bool:
         return True
 
 
+def parse_user_text(event) -> (str, list):
+    lines_raw = event.text.split('\n')
+    swimmer = lines_raw[0]
+    time_lines_raw = lines_raw[1:]
+    times_list = [parse_time(raw) for raw in time_lines_raw]
+
+    return swimmer, times_list
+
+
 def parse_time(raw: str) -> str:
     if ' ' in raw:
-        count_space = raw.count(' ')
-        if count_space > 1:
-            raise TooManySpaces(f'スペースが多すぎます({count_space}個)')
-        style, time_raw = raw.split(' ')
+        last_space_position = raw.rfind(' ')
+        style = raw[:last_space_position]
+        time_raw = raw[last_space_position+1:]
         time = format_time(time_raw)
         parsed = f'{style}|{time}'
         return parsed
@@ -26,12 +33,9 @@ def parse_time(raw: str) -> str:
     else:
         if raw.isdecimal() == False:
             return raw
-        time = format_time(raw)
-        return time
-
-
-class TooManySpaces(Exception):
-    pass
+        else:
+            time = format_time(raw)
+            return time
 
 
 def format_time(time_raw: str) -> str:
