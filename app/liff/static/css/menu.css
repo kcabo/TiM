@@ -1,0 +1,20 @@
+body {
+  background: #5ea8b5;
+  text-align: center;
+}
+.hi {
+  font-size: 40px;
+  margin: 50px;
+  font-weight: bold;
+}
+
+.rect {
+  border: solid;
+  margin: 20px;
+  padding: 20px;
+}
+
+input.rect {
+  width: 90%;
+  font-size: 16px;
+}
