@@ -107,12 +107,38 @@ def revert_to_primitive_text(record: Record) -> str:
 
 def delete_record(event, record_id: int):
     target_record = Record.query.get(record_id)
+    if target_record is None:
+        event.send_text('記録が見つかりませんでした...')
+        return None
     swimmer = target_record.swimmer
     db.session.delete(target_record)
     db.session.commit()
     event.send_text(f'{swimmer}のタイムを削除したよ！')
 
 
+def ask_whether_delete_menu(event, menu_id: int):
+    target_menu = Menu.query.get(menu_id)
+    if target_menu is None:
+        event.send_text('メニューが見つかりませんでした...')
+        return None
+    count_records = Record.query.filter_by(menuid=menu_id).count()
+    flex_menu_caution = flex.build_delete_menu_caution(target_menu, count_records)
+
+    alt_text = 'メニューを消去しますか？'
+    event.send_flex(alt_text, [flex_menu_caution])
+    event.aim_menu_id(menu_id)
+
+
+def delete_menu(event, menu_id: int):
+    current_menu = event.menu_id
+    if current_menu != menu_id:
+        event.send_text('もう一度メニューを選択し直してください')
+        return None
+
+    count_deleted_menu = Menu.query.filter_by(menuid=menu_id).delete()
+    count_deleted_rec = Record.query.filter_by(menuid=menu_id).delete()
+    db.session.commit()
+    event.send_text(f'{count_deleted_menu}個のメニューと{count_deleted_rec}件のタイムを完全に消去しちゃいました')
 
 # with open('de.py', 'w', encoding='UTF8') as f:
 #     import json

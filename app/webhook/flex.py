@@ -41,7 +41,7 @@ def build_menu_transaction(menu_query) -> dict:
     target_date = datetime.datetime.strptime(str(date_int), '%y%m%d')
     menu_transaction_wrap = deepcopy(components.menu_transaction_wrap)
     menu_transaction_wrap["body"]["contents"][0]["text"] = date_jpn_period_chain(target_date)
-    menu_transaction_wrap["body"]["contents"][1]["contents"][-1]["contents"][0]["action"]["data"] = f'caution={menu_query.menuid}'
+    menu_transaction_wrap["body"]["contents"][1]["contents"][-1]["contents"][0]["action"]["data"] = f'ask={menu_query.menuid}'
 
     menu_transaction_wrap["body"]["contents"][1]["contents"][0:0] = [card]
     return menu_transaction_wrap
@@ -149,3 +149,19 @@ def build_delete_record_button(record_id: int) -> dict:
     button = deepcopy(components.delrec_button)
     button["body"]["contents"][0]["action"]["data"] = f'delrec={record_id}'
     return button
+
+
+def build_delete_menu_caution(menu_query, expected_count_records: int) -> dict:
+    card = build_menu_base_card(menu_query)
+
+    date_int = menu_query.date
+    target_date = datetime.datetime.strptime(str(date_int), '%y%m%d')
+
+    delmenu_ask_wrap = deepcopy(components.delmenu_ask_wrap)
+    delmenu_ask_wrap["body"]["contents"][0]["text"] = date_jpn_period_chain(target_date)
+    delmenu_ask_wrap["body"]["contents"][2]["contents"][1]["text"] = f'このメニューに含まれる{expected_count_records}個のタイムも削除されます'
+    delmenu_ask_wrap["body"]["contents"][2]["contents"][2]["contents"][0]["action"]["data"] = f'cancel={menu_query.menuid}'
+    delmenu_ask_wrap["body"]["contents"][2]["contents"][2]["contents"][1]["action"]["data"] = f'delmenu={menu_query.menuid}'
+    delmenu_ask_wrap["body"]["contents"][1] = card
+
+    return delmenu_ask_wrap

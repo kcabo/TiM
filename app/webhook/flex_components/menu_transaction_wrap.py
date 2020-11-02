@@ -20,7 +20,8 @@ dic = {
       {
         "type": "box",
         "layout": "vertical",
-        "contents": [ # ここにmenu_base入る
+        "contents": [
+          # ここにmenu_base入る
           {
             "type": "separator"
           },
@@ -44,7 +45,7 @@ dic = {
                 "alignItems": "center",
                 "action": {
                   "type": "postback",
-                  "data": "caution=45" # Variable
+                  "data": "ask=45" # Variable
                 }
               },
               {
