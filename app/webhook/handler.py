@@ -96,16 +96,18 @@ def receive_postback(event):
             dispatcher.delete_record(event, record_id)
 
         # メニュー削除の確認を問う
-        elif obj == 'caution':
+        elif obj == 'ask':
             menu_id = int(val)
-            # dispatcher.view_records_scroll(event)
-            event.send_text(event.postback_data)
+            dispatcher.ask_whether_delete_menu(event, menu_id)
 
         # メニュー削除の確定
         elif obj == 'delmenu':
             menu_id = int(val)
-            # dispatcher.view_records_scroll(event)
-            event.send_text(event.postback_data)
+            dispatcher.delete_menu(event, menu_id)
+
+        # メニュー削除操作をキャンセル
+        elif obj == 'cancel':
+            event.send_text('やっぱりやめたよ')
 
         else:
             event.send_text(event.postback_data)
