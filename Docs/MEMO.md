@@ -109,3 +109,5 @@ TiM直下のrun.pyから起動させないことでimportの参照とかずれ�
 [参考:Gmailヘルプ](https://support.google.com/mail/answer/7126229?hl=ja)
 [参考:Python-SMTPライブラリ](https://docs.python.org/ja/3/library/smtplib.html)
 > SMTP_SSL インスタンスは SMTP と全く同じように動作します。SMTP_SSL は、接続の始めからSSLが必要であり、 starttls() が適切でない状況で使用するべきです。 host が指定されていない場合、ローカルホストが使用されます。 port が0の場合、標準のSMTP-over-SSLポート（465）が使用されます。
+
+- 画像データやり取りするとユーザー外で使うのに可哀想

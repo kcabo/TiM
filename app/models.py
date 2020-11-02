@@ -11,13 +11,6 @@ class User(db.Model):
     email = db.Column(db.String(), nullable = False)                # メアド
     role = db.Column(db.String(), nullable = False)                 # 権限（EDITOR, ADMIN）
 
-    # def __init__(self, line_id):
-    #     self.lineid = line_id
-    #     self.name = '不明なユーザー'
-    #     self.gen = 0
-    #     self.email = 'you@example.com'
-    #     self.role = 'FRIEND'
-
 
 class Menu(db.Model):
     __tablename__ = "menus"
