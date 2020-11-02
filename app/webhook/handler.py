@@ -51,8 +51,7 @@ def receive_message(event):
 
     # タイムの取り込み
     elif text.find('\n') > 0:
-        # TODO: 文字列エスケープ
-        humor.random_sticker(event)
+        dispatcher.add_new_record(event)
 
     # 雑談
     else:

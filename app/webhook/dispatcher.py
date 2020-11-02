@@ -1,7 +1,7 @@
 import datetime
 
 from app.models import db, Menu, Record, User
-from app.webhook import flex, mailer
+from app.webhook import flex, mailer, forge
 from app.webhook.csv_constructor import construct_csv
 
 
@@ -55,6 +55,32 @@ def export_by_mail(event):
         event.send_text('メール送信に失敗しました...')
     else:
         event.send_thank_msg()
+
+
+def add_new_record(event):
+    menu_q = fetch_current_menu(event)
+    if menu_q is None: return None
+    if forge.is_text_appropriate(event) == False: return None
+
+    lines_raw = event.text.split('\n')
+    swimmer = lines_raw[0]
+    time_lines_raw = lines_raw[1:]
+
+    try:
+        time_lines_fixed = [forge.parse_time(raw) for raw in time_lines_raw]
+    except forge.TooManySpaces as e:
+        error_msg = e.args[0]
+        event.send_text(error_msg, '一行につきスペースは一つにしてください')
+        return None
+
+    times = '_'.join(time_lines_fixed)
+    new_record = Record(menu_q.menuid, swimmer, times)
+    db.session.add(new_record)
+    db.session.commit()
+
+    repeat_with_pipe = '\n'.join([swimmer, *time_lines_fixed])
+    repeat = repeat_with_pipe.replace('|', ' ')
+    event.send_text(repeat, '登録成功✨')
 
 
 def fetch_current_menu(event):
