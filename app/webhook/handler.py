@@ -88,14 +88,12 @@ def receive_postback(event):
         # タイム選択
         elif obj == 'rec':
             record_id = int(val)
-            # dispatcher.view_records_scroll(event)
-            event.send_text(event.postback_data)
+            dispatcher.pick_record(event, record_id)
 
         # レコードの削除
         elif obj == 'delrec':
             record_id = int(val)
-            # dispatcher.view_records_scroll(event)
-            event.send_text(event.postback_data)
+            dispatcher.delete_record(event, record_id)
 
         # メニュー削除の確認を問う
         elif obj == 'caution':

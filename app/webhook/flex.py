@@ -143,3 +143,9 @@ def build_record_layer(record_cells: list) -> dict:
     for i, cell in enumerate(record_cells):
         layer["contents"][i] = cell
     return layer
+
+
+def build_delete_record_button(record_id: int) -> dict:
+    button = deepcopy(components.delrec_button)
+    button["body"]["contents"][0]["action"]["data"] = f'delrec={record_id}'
+    return button

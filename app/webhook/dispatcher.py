@@ -70,6 +70,50 @@ def fetch_current_menu(event):
     else:
         return menu_q
 
+
+def pick_record(event, record_id: int):
+    target_record = Record.query.get(record_id)
+    if target_record is None:
+        event.send_text('記録が見つかりませんでした...')
+        return None
+    primitive_text = revert_to_primitive_text(target_record)
+    delrec_button = flex.build_delete_record_button(target_record.recordid)
+
+    primitive_text_wrap = {
+        "type": "text",
+        "text": primitive_text
+    }
+    delrec_button_wrap = {
+        "type": "flex",
+        "altText": 'この記録を削除',
+        "contents": delrec_button
+    }
+    event.reply([primitive_text_wrap, delrec_button_wrap])
+
+
+def revert_to_primitive_text(record: Record) -> str:
+    style_separator = '|'
+    line_separator = '_'
+    time_text = record.times
+    time_text_multi_line = time_text. \
+        replace(':',''). \
+        replace('.',''). \
+        replace(style_separator, ' '). \
+        replace(line_separator, '\n')
+    swimmer = record.swimmer
+    primitive_text = f'{swimmer}\n{time_text_multi_line}'
+    return primitive_text
+
+
+def delete_record(event, record_id: int):
+    target_record = Record.query.get(record_id)
+    swimmer = target_record.swimmer
+    db.session.delete(target_record)
+    db.session.commit()
+    event.send_text(f'{swimmer}のタイムを削除したよ！')
+
+
+
 # with open('de.py', 'w', encoding='UTF8') as f:
 #     import json
 #     print(json.dumps(flex_menu_transaction), file=f)

@@ -61,7 +61,7 @@ class Event:
         }
         otsukare_text = {
             "type": "text",
-            "text": "メールで送ったよ！ありがとう！おつかれさま！😆😆",
+            "text": "メールで送ったよ！ありがとう！おつかれさま！😆😆"
         }
         msg_list = [sticker_celebrate, otsukare_text]
         self.reply(msg_list)
