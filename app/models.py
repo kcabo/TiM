@@ -34,3 +34,8 @@ class Record(db.Model):
     menuid = db.Column(db.Integer, nullable = False)                # メニューIDの外部キー 制約なし
     swimmer = db.Column(db.String(), nullable = False)              # 選手名
     times = db.Column(db.String(), nullable = False)                # タイム fr|0:29.47_1:01.22__0:32.43_1:11.44
+
+    def __init__(self, menu_id: int, swimmer: str, times: str):
+        self.menuid = menu_id
+        self.swimmer = swimmer
+        self.times = times
