@@ -1,33 +1,30 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>LIFF TiM Menu</title>
-  <meta name="description" content="えここって誰かに読まれるんですか？">
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="format-detection" content="email=no,telephone=no,address=no">
-  <link rel="icon" type="image/png" href="/static/img/icon-32x32.png">
-  <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
-  <link rel="stylesheet" href="/static/css/menu.css">
-</head>
+<html lang="ja">
 
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>TiM</title>
+  <meta name="description" content="Menu Modifier for TiM">
+  <!-- <meta name="format-detection" content="email=no,telephone=no,address=no"> -->
+  <!-- <link rel="icon" type="image/png" href="/static/img/icon-32x32.png"> -->
+  <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
+  <link rel="stylesheet" href="../static/css/menu.min.css">
+</head>
 
 <body>
 
-  <div class="hi" contenteditable>
-    {{hello}}
+  <div id="app">
+    <p v-on:click="alert(app.message)">${message}</p>
+    <textarea v-model="tweet" ref="area" v-bind:style="styles"></textarea>
+    <textarea v-model="cycle" ref="area2"></textarea>
   </div>
 
-  <p>Client?: <span id="isInClient"></span></p>
-  <p>Login?: <span id="isLoggedIn"></span></p>
 
-  <input class="rect"></input>
-
-  <p class="rect" onclick="sendText()">メッセージを送る</p>
-  <p class="rect" id="getIDToken">Token</p>
-
-
-  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <!-- <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="../static/js/menu.js"></script>
 </body>
+
 </html>
