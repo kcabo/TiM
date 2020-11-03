@@ -49,6 +49,12 @@ def receive_message(event):
     elif text == 'メール':
         dispatcher.export_by_mail(event)
 
+    # （開発用）LIFFのURLを返す
+    elif text == 'テスト':
+        import os
+        LIFF_URL = os.environ['LIFF_URL']
+        event.send_text(LIFF_URL)
+
     # タイムの取り込み
     elif text.find('\n') > 0:
         dispatcher.add_new_record(event)

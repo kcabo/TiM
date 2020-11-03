@@ -1,4 +1,5 @@
-from flask import Flask, request, render_template
+import os
+from flask import Flask, request, render_template, jsonify
 
 from app.models import db
 from app.webhook import handler
@@ -9,7 +10,7 @@ db.init_app(app)
 
 @app.route('/')
 def hello():
-    return 'Hi'
+    return 'Hi', 200
 
 
 @app.route('/webhook', methods=['POST'])
@@ -18,15 +19,21 @@ def webhook_handler():
     # events内にWebhookイベントのリストが格納されている
     for event_json in data['events']:
         handler.handle(event_json)
-    return '200 OK'
+    return '200 OK', 200
 
 
 @app.route('/liff/menu')
 def menu_page():
-    return render_template('menu.html', hello='こん')
+    return render_template('menu.html', hello='こん'), 200
+
+
+@app.route('/liff/id')
+def get_liff_id():
+    LIFF_ID = os.environ['LIFF_ID']
+    return jsonify({'LIFFID': LIFF_ID}), 200
 
 
 @app.route('/create')
 def create():
     db.create_all()
-    return 'Hi'
+    return 'Hi', 200
