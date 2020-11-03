@@ -24,7 +24,7 @@ def webhook_handler():
 
 @app.route('/liff/menu')
 def menu_page():
-    return render_template('menu.html', hello='こん'), 200
+    return render_template('menu.html'), 200
 
 
 @app.route('/liff/id')
