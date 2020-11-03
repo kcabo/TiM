@@ -4,7 +4,7 @@ import requests
 from app.redis_setup import conn
 
 ACCESS_TOKEN = os.environ['CHANNEL_ACCESS_TOKEN']
-ENVIRONMENT = os.environ['ENVIRONMENT'] # 環境判定
+ENV = os.environ['FLASK_ENV'] # 環境判定
 
 class Event:
     def __init__(self, event_json):
@@ -27,7 +27,7 @@ class Event:
         data = {'replyToken': self.reply_token, 'messages': msg_list}
 
         # 以下テスト用
-        if ENVIRONMENT == 'DEVELOP':
+        if ENV == 'development':
             MY_LINE_ID = os.environ.get('MY_LINE_ID')
             url = 'https://api.line.me/v2/bot/message/push'
             data = {'to': MY_LINE_ID, 'messages': msg_list}
