@@ -103,6 +103,7 @@ LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' template = template0
 > また、conda install できない場合はpipする前に`conda install -c conda-forge`するらしい
 
 - [設定関係ドキュメント](https://msiz07-flask-docs-ja.readthedocs.io/ja/latest/config.html)
+FLASK_ENVを環境変数で指定することで自動でDEBUGモードをオンにしてくれる
 
 - Procfileを以下のように修正したけど
 ```
