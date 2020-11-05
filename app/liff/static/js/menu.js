@@ -5,12 +5,11 @@ Vue.component('form-component', {
       showChoices: false
     }
   },
-  // props: {
-  //   name: String,
-  //   content: String,
-  //   choices: Array
-  // },
-  props: ['name', 'content', 'choices'],
+  props: {
+    name: String,
+    content: String,
+    choices: Array
+  },
   template: `
   <div class="form-unit">
     <div class="filler"> </div>
@@ -24,10 +23,10 @@ Vue.component('form-component', {
       </svg>
     </div>
     <div class="form-wrapper">
-      <textarea id="ta1" rows="1" v-model="content" ref="area"></textarea>
+      <textarea id="ta1" rows="1" v-model="inputValue" ref="area"></textarea>
       <div class="delete-icon" v-show="showDelete"
-      v-on:touchend.prevent="content=''"
-      v-on:click.prevent="content=''">
+      v-on:touchend.prevent="inputValue=''"
+      v-on:click.prevent="inputValue=''">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
           <defs/>
           <path fill="#AFBFC9" d="M7 0C3.13337 0 0 3.13425 0 7c0 3.8658 3.13337 7 7 7 3.8666 0 7-3.1342 7-7 0-3.86575-3.1334-7-7-7zm3.2436 9.00638c.1641.16406.2563.38659.2563.61862 0 .23203-.0922.4546-.2563.6186-.164.1641-.38657.2563-.6186.2563-.23203 0-.45456-.0922-.61862-.2563L7 8.23725 4.99362 10.2436c-.08107.0816-.17746.1463-.28362.1904-.10617.0442-.22002.0669-.335.0669-.11498 0-.22883-.0227-.335-.0669-.10616-.0441-.20255-.1088-.28362-.1904-.08133-.0812-.14585-.1776-.18987-.28374-.04403-.10615-.06669-.21994-.06669-.33486s.02266-.22871.06669-.33486c.04402-.10615.10854-.20258.18987-.28376L5.76275 7 3.75638 4.99362c-.16407-.16406-.25625-.38659-.25625-.61862 0-.23203.09218-.45456.25625-.61862.16406-.16407.38659-.25625.61862-.25625.23203 0 .45456.09218.61862.25625L7 5.76275l2.00638-2.00637c.16406-.16407.38659-.25625.61862-.25625.23203 0 .4546.09218.6186.25625.1641.16406.2563.38659.2563.61862 0 .23203-.0922.45456-.2563.61862L8.23725 7l2.00635 2.00638z"/>
@@ -42,11 +41,19 @@ Vue.component('form-component', {
   `,
   computed: {
     showDelete: function () {
-      return Boolean(this.content)
+      return Boolean(this.inputValue)
+    },
+    inputValue: {
+      get: function () {
+        return this.content;
+      },
+      set: function (newValue) {
+        this.$emit('input', newValue);
+      }
     }
   },
   watch: {
-    content: function () {
+    inputValue: function () {
       const textarea = this.$refs.area;
       textarea.style.height = 'auto';
       this.$nextTick(() => {
@@ -62,37 +69,28 @@ const app = new Vue({
   data: {
     category: {
       name: 'カテゴリ',
-      content: 'aaa',
+      content: 'aaaa',
       choices: ['Swim', 'Dive']
     },
     description: {
       name: '説明',
-      content: '',
+      content: 'ｓ－',
       choices: ['Swim', 'Dive']
     },
     cycle: {
       name: 'サイクル',
-      content: '',
+      content: '2:10',
       choices: ['Swim', 'Dive']
     },
   },
   methods: {
     submit: function () {
-      let result = this.category.content;
+      let result = this.category.content + this.description.content + this.cycle.content;
       alert(result);
     }
 
   },
   computed: {
 
-  },
-  watch: {
-    category: function () {
-      const textarea = this.$refs.category_area;
-      textarea.style.height = 'auto';
-      this.$nextTick(() => {
-        textarea.style.height = textarea.scrollHeight + 'px'
-      });
-    }
   }
 });

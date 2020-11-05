@@ -41,6 +41,14 @@ Jinjaが先にサーバーで処理するためJinjaが優先される
 - スマホでClickイベントの感覚が非常に悪かったためtouchedイベントでもトリガーするように
 [preventを使う必要性](https://am-yu.net/2019/02/12/vue-js-mousedown-touchstart/)
 
+- コンポーネント内のフォームの値と親での値を動機させるのに詰まった
+emitや二重v-modelで解決
+[【Vue.js】コンポーネントの親子関係はInputを作って学べ](https://b1tblog.com/2019/10/03/vue-input/)
+[公式Doc:子コンポーネントのイベントを購読する](https://jp.vuejs.org/v2/guide/components.html#%E5%AD%90%E3%82%B3%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%8D%E3%83%B3%E3%83%88%E3%81%AE%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88%E3%82%92%E8%B3%BC%E8%AA%AD%E3%81%99%E3%82%8B)
+[Vue.jsで、親コンポーネントからもらった変数を子コンポーネントで更新したいときの対処法](https://qiita.com/masatomix/items/ab4f0488083554f5fceb)
+> コンポーネント側でmodelとバインドさせるのは引数valueで固定、と書いてあるがcontentという引数名でも動いた...
+
+
 
 ### データベース(ローカルの話)
 - Postgresのバージョンは12.4
