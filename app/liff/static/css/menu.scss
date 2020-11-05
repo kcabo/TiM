@@ -8,7 +8,6 @@ $font_family: 'Roboto', 'Noto Sans JP', sans-serif;
 
 body {
   background: #efefef;
-  background: #ffc;
   font-family: $font_family;
   font-weight: bold;
   position: relative;
@@ -58,9 +57,11 @@ body {
     grid-area: toggle-button;
     display: flex;
     align-content: center;
+    height: 100%;
 
     svg {
       width: 18px;
+      height: 100%;
     }
   }
 
