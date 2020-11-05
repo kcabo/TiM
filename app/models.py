@@ -20,6 +20,12 @@ class Menu(db.Model):
     description = db.Column(db.String(), nullable = False)          # 説明 50*4*1 Des to Hard
     cycle = db.Column(db.String(), nullable = False)                # サイクル 1:30
 
+    def __init__(self, date: int, category: str, description: str, cycle: str):
+        self.date = date
+        self.category = category
+        self.description = description
+        self.cycle = cycle
+
 
 class Record(db.Model):
     __tablename__ = "records"
