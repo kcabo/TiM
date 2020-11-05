@@ -21,9 +21,16 @@ def webhook_handler():
         handler.handle(event_json)
     return '200 OK', 200
 
+@app.route('/liff/menu', methods=['GET'])
+@app.route('/liff/menu/<int:menu_id>', methods=['GET'])
+def menu_page(menu_id=0):
+    print(menu_id)
+    return render_template('menu.html'), 200
 
-@app.route('/liff/menu')
-def menu_page():
+
+@app.route('/liff/new-menu/<int:date_int>', methods=['GET'])
+def new_menu(date_int):
+    print(date_int)
     return render_template('menu.html'), 200
 
 
