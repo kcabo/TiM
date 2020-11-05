@@ -1,9 +1,12 @@
+import os
 import datetime
 from copy import deepcopy
 
 from app.webhook import flex_components as components
 
 layer_capacity = 4
+
+LIFF_URL = os.environ['LIFF_URL']
 
 def build_menus(target_date: datetime.date, queries) -> dict:
     # TODO: メニュー作成URLを指定
@@ -15,6 +18,7 @@ def build_menus(target_date: datetime.date, queries) -> dict:
 
     today_japanese = date_jpn_period_chain(target_date)
     today_hyphenated = target_date.strftime('%Y-%m-%d')
+    today_int = int(target_date.strftime('%y%m%d'))
     yesterday = target_date - datetime.timedelta(days=1)
     tomorrow = target_date + datetime.timedelta(days=1)
     yesterday_int = int(yesterday.strftime('%y%m%d'))
@@ -24,6 +28,7 @@ def build_menus(target_date: datetime.date, queries) -> dict:
     menu_wrap["body"]["contents"][0]["contents"][2]["action"]["data"] = f'date={tomorrow_int}'
     menu_wrap["body"]["contents"][0]["contents"][1]["text"] = today_japanese
     menu_wrap["body"]["contents"][0]["contents"][1]["action"]["initial"] = today_hyphenated
+    menu_wrap["body"]["contents"][-1]["action"]["uri"] = f'{LIFF_URL}/new-menu/{today_int}'
 
     if embedded_menu_cards:
         # contents内の二個目以降の要素として組み込み挿入
@@ -42,6 +47,7 @@ def build_menu_transaction(menu_query) -> dict:
     menu_transaction_wrap = deepcopy(components.menu_transaction_wrap)
     menu_transaction_wrap["body"]["contents"][0]["text"] = date_jpn_period_chain(target_date)
     menu_transaction_wrap["body"]["contents"][1]["contents"][-1]["contents"][0]["action"]["data"] = f'ask={menu_query.menuid}'
+    menu_transaction_wrap["body"]["contents"][1]["contents"][-1]["contents"][2]["action"]["uri"] = f'{LIFF_URL}/menu/{menu_query.menuid}'
 
     menu_transaction_wrap["body"]["contents"][1]["contents"][0:0] = [card]
     return menu_transaction_wrap

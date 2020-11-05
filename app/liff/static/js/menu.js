@@ -118,12 +118,46 @@ const app = new Vue({
   },
   methods: {
     submit: function () {
-      let result = this.category.content + this.description.content + this.cycle.content;
-      alert(result);
+      let paths = location.pathname.split('/');
+      let target = paths.slice(-2)[0];
+      let path_int = parseInt(paths.slice(-1)[0]);
+      let data = {
+        num: path_int,
+        category: this.category.content.replace('␣', ' '),
+        description: this.description.content.replace('␣', ' '),
+        cycle: this.cycle.content.replace('␣', ' ')
+      };
+      if (target==='menu') {
+        updateMenu(data);
+      } else if (target==='new-menu') {
+        postNewMenu(data);
+      } else {
+        alert('INVALID PATH');
+      }
     }
-
   },
-  computed: {
-
-  }
 });
+
+let postNewMenu = function (data) {
+  fetch('/liff/new-menu', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then((response) => response.text())
+  .then((text) => alert(text))
+}
+
+let updateMenu = function (data) {
+  fetch('/liff/menu', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then((response) => response.text())
+  .then((text) => alert(text))
+}
