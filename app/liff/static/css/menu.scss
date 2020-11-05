@@ -42,7 +42,7 @@ body {
     "filler form-name"
     "toggle-button form-wrapper"
     "shorthand-group shorthand-group";
-  margin: 8px 0;
+  margin: 16px 0;
 
   .filler {
     grid-area: filler;
@@ -58,10 +58,15 @@ body {
     display: flex;
     align-content: center;
     height: 100%;
+    cursor: pointer;
 
     svg {
       width: 18px;
       height: 100%;
+    }
+
+    &.active svg path {
+      fill: $summer_sky;
     }
   }
 
@@ -83,6 +88,7 @@ body {
       font-size: 18px;
       font-weight: 500;
       padding: 12px;
+      padding-right: 30px;
       resize: none;
       overflow: hidden;
       line-height: 22px;
@@ -97,10 +103,27 @@ body {
       width: 20px;
       height: 20px;
       padding: 3px;
+      cursor: pointer;
 
       svg {
         // width: 15px;
       }
+    }
+  }
+
+  .shorthand-group {
+    display: flex;
+    padding: 6px;
+
+    .insert-btn {
+      display: inline-block;
+      color: $summer_sky;
+      font-size: 14px;
+      line-height: 1;
+      border: 1px solid $summer_sky;
+      border-radius: 20px;
+      padding: 6px 17px 4px;
+      margin: 0 3px;
     }
   }
 }
