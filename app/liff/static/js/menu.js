@@ -5,7 +5,7 @@ Vue.component('insert-btn', {
   },
   computed: {
     label: function () {
-      if (this.char === ' ') {
+      if (this.char === '␣') {
         return '<空白>';
       } else if (this.char === '\n') {
         return '<改行>';
@@ -102,18 +102,18 @@ const app = new Vue({
   data: {
     category: {
       name: 'カテゴリ',
-      content: 'S',
+      content: '',
       choices: ['Swim', 'Dive', 'Pull', 'Kick', 'K/P']
     },
     description: {
       name: '説明',
-      content: 'S',
-      choices: ['50', '100', '200', '1', '2', '4', '*', ' ', '\n']
+      content: '',
+      choices: ['50', '100', '200', '1', '2', '4', '*', 'allout', '␣', '\n']
     },
     cycle: {
       name: 'サイクル',
-      content: '2:10',
-      choices: ['1:00', '2:00', '3:00', ' ', '\n']
+      content: '',
+      choices: ['1:00', '2:00', '3:00', '␣', '\n']
     },
   },
   methods: {
