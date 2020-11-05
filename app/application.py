@@ -24,18 +24,15 @@ def webhook_handler():
     return '200 OK', 200
 
 @app.route('/liff/menu', methods=['GET'])
-def dummy():
-    return '200 OK', 200
-
-    
 @app.route('/liff/menu/<int:menu_id>', methods=['GET'])
 def fetch_menu(menu_id=0):
     print(menu_id)
     return render_template('menu.html', LIFF_ID=LIFF_ID), 200
 
 
+@app.route('/liff/new-menu', methods=['GET'])
 @app.route('/liff/new-menu/<int:date_int>', methods=['GET'])
-def new_menu(date_int):
+def new_menu(date_int=0):
     print(date_int)
     return render_template('menu.html', LIFF_ID=LIFF_ID), 200
 
