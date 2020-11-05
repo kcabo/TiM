@@ -22,9 +22,9 @@
     </div>
 
     <div class="form-group">
-      <form-component content="Swim"></form-component>
-      <form-component content="100*4*1 Hard"></form-component>
-      <form-component content="3:00"></form-component>
+      <form-component v-bind="category"></form-component>
+      <form-component v-bind="description"></form-component>
+      <form-component v-bind="cycle"></form-component>
 
       <!-- <div class="form-unit">
         <div class="filler"> </div>
@@ -51,7 +51,7 @@
 
 
     <div class="buttons">
-      <div class="submit">メニュー作成</div>
+      <div class="submit" v-on:click="console.log(category.content)">メニュー作成</div>
       <div class="cancel">キャンセル</div>
     </div>
 
