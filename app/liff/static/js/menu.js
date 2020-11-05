@@ -16,7 +16,7 @@ Vue.component('insert-btn', {
   },
   template: `
     <div class="insert-btn"
-    v-on:touchend.prevent=""
+    v-on:touchend.prevent="$emit('insert', char)"
     v-on:click.prevent="$emit('insert', char)">
     {{label}}
     </div>
