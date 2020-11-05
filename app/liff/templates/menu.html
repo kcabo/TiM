@@ -36,7 +36,20 @@
   </div>
 
 
-  <!-- <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script> -->
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script>
+    window.onload = function() {
+      let myLiffId = {{LIFF_ID}};
+      liff
+        .init({ liffId: myLiffId })
+        .then(() => {
+          console.log(liff.isInClient());
+        })
+        .catch((err) => {
+          console.log(err.code, err.message);
+        });
+    };
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
   <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script> -->
   <script src="../static/js/menu.js"></script>

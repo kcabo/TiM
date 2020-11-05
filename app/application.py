@@ -4,6 +4,8 @@ from flask import Flask, request, render_template, jsonify
 from app.models import db
 from app.webhook import handler
 
+LIFF_ID = os.environ['LIFF_ID']
+
 app = Flask(__name__, template_folder='liff/templates', static_folder='liff/static')
 app.config.from_object('app.config.Config')
 db.init_app(app)
@@ -25,18 +27,17 @@ def webhook_handler():
 @app.route('/liff/menu/<int:menu_id>', methods=['GET'])
 def menu_page(menu_id=0):
     print(menu_id)
-    return render_template('menu.html'), 200
+    return render_template('menu.html', LIFF_ID=LIFF_ID), 200
 
 
 @app.route('/liff/new-menu/<int:date_int>', methods=['GET'])
 def new_menu(date_int):
     print(date_int)
-    return render_template('menu.html'), 200
+    return render_template('menu.html', LIFF_ID=LIFF_ID), 200
 
 
 @app.route('/liff/id')
 def get_liff_id():
-    LIFF_ID = os.environ['LIFF_ID']
     return jsonify({'LIFFID': LIFF_ID}), 200
 
 
