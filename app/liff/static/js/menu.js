@@ -32,7 +32,7 @@ Vue.component('form-unit', {
   },
   props: {
     name: String,
-    content: String,
+    value: String,
     choices: Array
   },
   template: `
@@ -73,7 +73,7 @@ Vue.component('form-unit', {
     },
     inputValue: {
       get: function () {
-        return this.content;
+        return this.value;
       },
       set: function (newValue) {
         this.$emit('input', newValue);
