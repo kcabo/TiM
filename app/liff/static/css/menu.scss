@@ -37,7 +37,7 @@ body {
 .form-unit {
   display: grid;
   grid-template-rows: 18px auto auto;
-  grid-template-columns: 30px 1fr;
+  grid-template-columns: 32px 1fr;
   grid-template-areas:
     "filler form-name"
     "toggle-button form-wrapper"
