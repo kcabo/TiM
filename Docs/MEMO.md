@@ -38,6 +38,9 @@ HTMLファイル上では`src="../static/js/menu.js"`て指定してある
 Jinjaが先にサーバーで処理するためJinjaが優先される
 [こちら](https://blog.hysakhr.com/2019/09/14/flaskjinja2-vue-js-%E3%81%A7mustache%E8%A8%98%E6%B3%95-%E3%81%AE%E8%A1%9D%E7%AA%81%E5%9B%9E%E9%81%BF/)を参考にVueのデリミタを['${', '}']に修正して解決
 
+- スマホでClickイベントの感覚が非常に悪かったためtouchedイベントでもトリガーするように
+[preventを使う必要性](https://am-yu.net/2019/02/12/vue-js-mousedown-touchstart/)
+
 
 ### データベース(ローカルの話)
 - Postgresのバージョンは12.4
