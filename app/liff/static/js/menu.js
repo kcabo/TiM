@@ -1,5 +1,30 @@
 
-Vue.component('form-component', {
+Vue.component('insert-btn', {
+  props: {
+    char: String
+  },
+  computed: {
+    label: function () {
+      if (this.char === ' ') {
+        return '<空白>';
+      } else if (this.char === '\n') {
+        return '<改行>';
+      } else {
+        return this.char
+      }
+    }
+  },
+  template: `
+    <div class="insert-btn"
+    v-on:touchend.prevent=""
+    v-on:click.prevent="$emit('insert', char)">
+    {{label}}
+    </div>
+  `
+})
+
+
+Vue.component('form-unit', {
   data: function () {
     return {
       showChoices: false
@@ -34,8 +59,11 @@ Vue.component('form-component', {
       </div>
     </div>
     <div class="shorthand-group" v-show="showChoices">
-      <div class="insert-btn">50*1*1</div>
-      <div class="insert-btn">allout</div>
+      <insert-btn
+        v-for="c in choices"
+        v-bind:char="c"
+        v-on:insert="insert"
+      ></insert-btn>
     </div>
   </div>
   `,
@@ -60,6 +88,11 @@ Vue.component('form-component', {
         textarea.style.height = textarea.scrollHeight + 'px'
       });
     }
+  },
+  methods: {
+    insert: function (value) {
+      this.inputValue += value;
+    }
   }
 })
 
@@ -69,18 +102,18 @@ const app = new Vue({
   data: {
     category: {
       name: 'カテゴリ',
-      content: 'aaaa',
-      choices: ['Swim', 'Dive']
+      content: 'S',
+      choices: ['Swim', 'Dive', 'Pull', 'Kick', 'K/P']
     },
     description: {
       name: '説明',
-      content: 'ｓ－',
-      choices: ['Swim', 'Dive']
+      content: 'S',
+      choices: ['50', '100', '200', '1', '2', '4', '*', ' ', '\n']
     },
     cycle: {
       name: 'サイクル',
       content: '2:10',
-      choices: ['Swim', 'Dive']
+      choices: ['1:00', '2:00', '3:00', ' ', '\n']
     },
   },
   methods: {

@@ -48,6 +48,12 @@ emitや二重v-modelで解決
 [Vue.jsで、親コンポーネントからもらった変数を子コンポーネントで更新したいときの対処法](https://qiita.com/masatomix/items/ab4f0488083554f5fceb)
 > コンポーネント側でmodelとバインドさせるのは引数valueで固定、と書いてあるがcontentという引数名でも動いた...
 
+- <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>
+これなにが違うねん...
+
 
 
 ### データベース(ローカルの話)

@@ -58,7 +58,7 @@ body {
     display: flex;
     align-content: center;
     height: 100%;
-    // cursor: pointer;
+    cursor: pointer;
 
     svg {
       width: 18px;
@@ -112,18 +112,27 @@ body {
   }
 
   .shorthand-group {
+    grid-area: shorthand-group;
     display: flex;
-    padding: 6px;
+    padding: 6px 0;
+    flex-wrap: wrap;
 
     .insert-btn {
-      display: inline-block;
       color: $summer_sky;
       font-size: 14px;
       line-height: 1;
       border: 1px solid $summer_sky;
       border-radius: 20px;
-      padding: 6px 17px 4px;
-      margin: 0 3px;
+      padding: 6px 15px 4px;
+      margin: 2px 3px;
+      cursor: pointer;
+      // box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+      &:hover {
+        color: white;
+        background: $summer_sky;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.26)
+      }
     }
   }
 }
