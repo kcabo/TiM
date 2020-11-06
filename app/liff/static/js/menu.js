@@ -32,7 +32,7 @@ let sendUserMessage = function (message) {
     text: message
   };
   liff.sendMessages([data])
-  .catch((err) => alert('なぜかメッセージが送れませんでした'));
+  .catch((err) => alert(['なぜかメッセージが送れませんでした', err]));
 }
 
 
@@ -157,12 +157,6 @@ const app = new Vue({
   computed: {
     purpose: function () {
       return location.pathname.split('/').slice(-2)[0];
-    },
-    date: function () {
-      if (this.purpose === 'new-menu') {
-        let rawDate = location.pathname.split('/').slice(-1)[0];
-        return formatDate(rawDate)
-      }
     }
   },
   methods: {
@@ -206,6 +200,9 @@ const app = new Vue({
             this.cycle.content = json.cycle;
           }
         }).catch((error) => alert(error))
+    } else if (this.purpose === 'new-menu') {
+      let rawDate = location.pathname.split('/').slice(-1)[0];
+      this.date = formatDate(rawDate);
     }
   }
 });
