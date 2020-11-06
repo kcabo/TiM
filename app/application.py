@@ -25,9 +25,13 @@ def webhook_handler():
 
 
 @app.route('/liff', methods=['GET'])
-@app.route('/liff/menu/<int:menu_id>', methods=['GET'])
-@app.route('/liff/new-menu/<int:date_int>', methods=['GET'])
-def liff_to_menu_redirect(menu_id=0, date_int=0):
+def liff_origin():
+    return render_template('liff.html', LIFF_ID=LIFF_ID)
+
+
+@app.route('/liff/menu/<int:num>', methods=['GET'])
+@app.route('/liff/new-menu/<int:num>', methods=['GET'])
+def menu_modifier(num):
     return render_template('menu.html', LIFF_ID=LIFF_ID)
 
 
