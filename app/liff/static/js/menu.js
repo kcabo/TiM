@@ -174,8 +174,7 @@ const app = new Vue({
             alert('メニューが見つかりませんでした');
           } else {
             sendUserMessage('$menu=' + responseText);
-            alert('完了');
-            // liff.closeWindow();
+            liff.closeWindow();
           }
         })
       } else {
@@ -183,8 +182,7 @@ const app = new Vue({
       }
     },
     cancel: function () {
-      // liff.closeWindow();
-      alert(0);
+      liff.closeWindow();
     }
   },
   mounted: function () {
