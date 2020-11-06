@@ -115,49 +115,81 @@ const app = new Vue({
       content: '',
       choices: ['1:00', '2:00', '3:00', '␣', '\n']
     },
+    date: '2020.10.22 木'
+  },
+  computed: {
+    purpose: function () {
+      return location.pathname.split('/').slice(-2)[0];
+    },
+    date: function () {
+      if (this.purpose === 'new-menu') {
+        let rawDate = location.pathname.split('/').slice(-1)[0];
+        return formatDate(rawDate)
+      }
+    }
   },
   methods: {
     submit: function () {
-      let paths = location.pathname.split('/');
-      let target = paths.slice(-2)[0];
-      let path_int = parseInt(paths.slice(-1)[0]);
       let data = {
-        num: path_int,
         category: this.category.content.replace('␣', ' '),
         description: this.description.content.replace('␣', ' '),
         cycle: this.cycle.content.replace('␣', ' ')
       };
-      if (target==='menu') {
-        updateMenu(data);
-      } else if (target==='new-menu') {
-        postNewMenu(data);
+      if (this.purpose==='menu') {
+        sendData(data, 'PUT');
+      } else if (this.purpose==='new-menu') {
+        sendData(data, 'POST');
       } else {
         alert('INVALID PATH');
       }
     }
   },
+  mounted: function () {
+    if (this.purpose==='menu') {
+      fetch(location.pathname + '/ajax'
+        ).then((response) => response.json()
+        ).then((json) => {
+          if (json.message === 'Success') {
+            let rawDate = String(json.date);
+            this.date = formatDate(rawDate);
+            this.category.content = json.category;
+            this.description.content = json.description;
+            this.cycle.content = json.cycle;
+          }
+        }).catch((error) => alert(error))
+
+    } else if (this.purpose==='new-menu') {
+      ;
+    } else {
+      alert('INVALID PATH');
+    }
+  }
 });
 
-let postNewMenu = function (data) {
-  fetch('/liff/new-menu', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+let sendData = function (data, method) {
+  fetch(location.pathname, {
+    method: method,
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   })
   .then((response) => response.text())
   .then((text) => alert(text))
+  .catch((error) => alert(error))
 }
 
-let updateMenu = function (data) {
-  fetch('/liff/menu', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-  .then((response) => response.text())
-  .then((text) => alert(text))
+
+let formatDate = function (rawDate) {
+  // rawDateは文字列型 整数6桁 201009
+  let year = '20' + rawDate.substring(0, 2);
+  let month = rawDate.substring(2, 4);
+  let day = rawDate.substring(4, 6);
+  let dateArray = [year, month, day];
+  let fullDateStr = dateArray.join('/');
+  let time = Date(fullDateStr);
+  let date = new Date(time);
+  let dayNum = date.getDay();
+  const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+  let weekdayJP = weekdays[dayNum];
+  let formatted = dateArray.join('.') + ' ' + weekdayJP;
+  return formatted
 }
