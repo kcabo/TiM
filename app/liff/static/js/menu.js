@@ -180,7 +180,8 @@ const app = new Vue({
           if (responseText === 'Failed') {
             alert('メニューが見つかりませんでした');
           } else {
-            sendUserMessage('$menu=' + responseText);
+            console.log('センド！');
+            // sendUserMessage('$menu=' + responseText);
             // liff.closeWindow();
           }
         })
