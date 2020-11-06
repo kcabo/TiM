@@ -31,9 +31,8 @@ def liff_to_menu_redirect(menu_id=0, date_int=0):
     return render_template('menu.html', LIFF_ID=LIFF_ID), 200
 
 
-@app.route('/liff/menu', methods=['PUT'])
-def update_menu():
-    menu_id = request.json['num']
+@app.route('/liff/menu/<int:menu_id>', methods=['PUT'])
+def update_menu(menu_id):
     category = request.json['category']
     description = request.json['description']
     cycle = request.json['cycle']
@@ -49,9 +48,8 @@ def update_menu():
     return '200', 200
 
 
-@app.route('/liff/new-menu', methods=['POST'])
-def post_new_menu():
-    date_int = request.json['num']
+@app.route('/liff/new-menu/<int:date_int>', methods=['POST'])
+def post_new_menu(date_int):
     category = request.json['category']
     description = request.json['description']
     cycle = request.json['cycle']
@@ -59,6 +57,24 @@ def post_new_menu():
     db.session.add(new_menu)
     db.session.commit()
     return '200', 200
+
+
+@app.route('/liff/menu/<int:menu_id>/ajax', methods=['GET'])
+def fetch_menu_status(menu_id):
+    menu = Menu.query.get(menu_id)
+
+    if menu is None:
+        return jsonify({'message': 'メニューが見つかりませんでした'}), 200
+
+    response = {
+        'message': 'Success',
+        'date': menu.date,
+        'category': menu.category,
+        'description': menu.description,
+        'cycle': menu.cycle
+    }
+    return jsonify(response), 200
+
 
 
 @app.route('/liff/id')
@@ -69,4 +85,4 @@ def get_liff_id():
 @app.route('/create')
 def create():
     db.create_all()
-    return 'Hi', 200
+    return 'Hi'
