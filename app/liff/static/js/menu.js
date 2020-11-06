@@ -173,7 +173,7 @@ const app = new Vue({
         description: this.description.content.replace('␣', ' '),
         cycle: this.cycle.content.replace('␣', ' ')
       };
-      let purpose = this.purpose
+      let purpose = this.purpose;
       if (purpose === 'menu' || purpose === 'new-menu') {
         let method = purpose === 'menu' ? 'PUT' : 'POST';
         sendData(data, method).then((responseText) => {
@@ -181,7 +181,7 @@ const app = new Vue({
             alert('メニューが見つかりませんでした');
           } else {
             sendUserMessage('$menu=' + responseText);
-            liff.closeWindow();
+            // liff.closeWindow();
           }
         })
       } else {
@@ -189,7 +189,8 @@ const app = new Vue({
       }
     },
     cancel: function () {
-      liff.closeWindow();
+      // liff.closeWindow();
+      alert(0);
     }
   },
   mounted: function () {
