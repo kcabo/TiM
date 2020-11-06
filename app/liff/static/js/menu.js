@@ -140,17 +140,17 @@ const app = new Vue({
     category: {
       name: 'カテゴリ',
       content: '',
-      choices: ['Swim', 'Dive', 'Pull', 'Kick', 'K/P']
+      choices: ['Swim', 'Dive', 'Kick', 'Pull', 'α', 'β', 'γ', 'A', 'B', 'C', '␣']
     },
     description: {
       name: '説明',
       content: '',
-      choices: ['50', '100', '200', '1', '2', '4', '*', 'allout', '␣', '\n']
+      choices: ['25*1*1', '50*1*1', '50*4*1', '50*8*1', '100*1*1', '200*1*1', 'Hard', 'All Out', 'High-Ave', 'H/E/H/E', 'Max', 'des', '50', '100', '200', '1', '2', '4', '*', '!', '␣', '\n']
     },
     cycle: {
       name: 'サイクル',
       content: '',
-      choices: ['1:00', '2:00', '3:00', '␣', '\n']
+      choices: ['1:00', '1:10', '1:15', '1:20', '1:30', '1:40', '2:00', '3:00', '4:00', '5:00', '8:00', '10:00', '␣', '\n']
     },
     date: '2020.01.01 水'
   },
