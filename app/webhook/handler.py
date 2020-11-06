@@ -59,6 +59,17 @@ def receive_message(event):
     elif text.find('\n') > 0:
         dispatcher.add_new_record(event)
 
+    # メニュー作成・更新後にタイムを確認するショートカット
+    elif text.startswith('$menu='):
+        menu_id_unsafe = text[6:]
+        if menu_id_unsafe.isdecimal():
+            menu_id = int(menu_id_unsafe)
+            event.menu_id = menu_id
+            dispatcher.view_records_scroll(event)
+            event.aim_menu_id(menu_id)
+        else:
+            event.send_text('？？？？')
+
     # 雑談
     else:
         humor.smalltalk(event)

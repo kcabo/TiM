@@ -1,11 +1,10 @@
 let sendData = function (data, method) {
-  fetch(location.pathname, {
+  return fetch(location.pathname, {
     method: method,
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   })
   .then((response) => response.text())
-  .then((text) => alert(text))
   .catch((error) => alert(error))
 }
 
@@ -25,6 +24,17 @@ let formatDate = function (rawDate) {
   let formatted = dateArray.join('.') + ' ' + weekdayJP;
   return formatted
 }
+
+
+let sendUserMessage = function (message) {
+  let data = {
+    type: 'text',
+    text: message
+  };
+  liff.sendMessages([data])
+  .catch((err) => alert('なぜかメッセージが送れませんでした'));
+}
+
 
 Vue.component('insert-btn', {
   props: {
@@ -152,7 +162,7 @@ const app = new Vue({
         let rawDate = location.pathname.split('/').slice(-1)[0];
         return formatDate(rawDate)
       } else {
-        return '2020.10.22 木'
+        return '2020.01.01 水'
       }
     }
   },
@@ -163,13 +173,23 @@ const app = new Vue({
         description: this.description.content.replace('␣', ' '),
         cycle: this.cycle.content.replace('␣', ' ')
       };
-      if (this.purpose === 'menu') {
-        sendData(data, 'PUT');
-      } else if (this.purpose === 'new-menu') {
-        sendData(data, 'POST');
+      let purpose = this.purpose
+      if (purpose === 'menu' || purpose === 'new-menu') {
+        let method = purpose === 'menu' ? 'PUT' : 'POST';
+        sendData(data, method).then((responseText) => {
+          if (responseText === 'Failed') {
+            alert('メニューが見つかりませんでした');
+          } else {
+            sendUserMessage('$menu=' + responseText);
+            liff.closeWindow();
+          }
+        })
       } else {
         alert('INVALID PATH');
       }
+    },
+    cancel: function () {
+      liff.closeWindow();
     }
   },
   mounted: function () {

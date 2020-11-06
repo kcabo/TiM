@@ -44,12 +44,12 @@ def update_menu(menu_id):
     target_menu = Menu.query.get(menu_id)
 
     if target_menu is None:
-        return 'メニューが見つかりませんでした'
+        return 'Failed'
     target_menu.category = category
     target_menu.description = description
     target_menu.cycle = cycle
     db.session.commit()
-    return '200'
+    return str(menu_id)
 
 
 @app.route('/liff/new-menu/<int:date_int>', methods=['POST'])
@@ -60,7 +60,8 @@ def post_new_menu(date_int):
     new_menu = Menu(date_int, category, description, cycle)
     db.session.add(new_menu)
     db.session.commit()
-    return '200'
+    menu_id = new_menu.menuid
+    return str(menu_id)
 
 
 @app.route('/liff/menu/<int:menu_id>/ajax', methods=['GET'])
