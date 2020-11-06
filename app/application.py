@@ -12,7 +12,7 @@ db.init_app(app)
 
 @app.route('/')
 def hello():
-    return 'Hi', 200
+    return 'Hi'
 
 
 @app.route('/webhook', methods=['POST'])
@@ -21,14 +21,14 @@ def webhook_handler():
     # events内にWebhookイベントのリストが格納されている
     for event_json in data['events']:
         handler.handle(event_json)
-    return '200 OK', 200
+    return '200 OK'
 
 
 @app.route('/liff', methods=['GET'])
 @app.route('/liff/menu/<int:menu_id>', methods=['GET'])
 @app.route('/liff/new-menu/<int:date_int>', methods=['GET'])
 def liff_to_menu_redirect(menu_id=0, date_int=0):
-    return render_template('menu.html', LIFF_ID=LIFF_ID), 200
+    return render_template('menu.html', LIFF_ID=LIFF_ID)
 
 
 @app.route('/liff/menu/<int:menu_id>', methods=['PUT'])
@@ -40,12 +40,12 @@ def update_menu(menu_id):
     target_menu = Menu.query.get(menu_id)
 
     if target_menu is None:
-        return 'メニューが見つかりませんでした', 200
+        return 'メニューが見つかりませんでした'
     target_menu.category = category
     target_menu.description = description
     target_menu.cycle = cycle
     db.session.commit()
-    return '200', 200
+    return '200'
 
 
 @app.route('/liff/new-menu/<int:date_int>', methods=['POST'])
@@ -56,7 +56,7 @@ def post_new_menu(date_int):
     new_menu = Menu(date_int, category, description, cycle)
     db.session.add(new_menu)
     db.session.commit()
-    return '200', 200
+    return '200'
 
 
 @app.route('/liff/menu/<int:menu_id>/ajax', methods=['GET'])
@@ -64,7 +64,7 @@ def fetch_menu_status(menu_id):
     menu = Menu.query.get(menu_id)
 
     if menu is None:
-        return jsonify({'message': 'メニューが見つかりませんでした'}), 200
+        return jsonify({'message': 'メニューが見つかりませんでした'})
 
     response = {
         'message': 'Success',
@@ -73,13 +73,13 @@ def fetch_menu_status(menu_id):
         'description': menu.description,
         'cycle': menu.cycle
     }
-    return jsonify(response), 200
+    return jsonify(response)
 
 
 
 @app.route('/liff/id')
 def get_liff_id():
-    return jsonify({'LIFFID': LIFF_ID}), 200
+    return jsonify({'LIFFID': LIFF_ID})
 
 
 @app.route('/create')

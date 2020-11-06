@@ -1,3 +1,30 @@
+let sendData = function (data, method) {
+  fetch(location.pathname, {
+    method: method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then((response) => response.text())
+  .then((text) => alert(text))
+  .catch((error) => alert(error))
+}
+
+
+let formatDate = function (rawDate) {
+  // rawDateは文字列型 整数6桁 201009
+  let year = '20' + rawDate.substring(0, 2);
+  let month = rawDate.substring(2, 4);
+  let day = rawDate.substring(4, 6);
+  let dateArray = [year, month, day];
+  let fullDateStr = dateArray.join('/');
+  let time = Date(fullDateStr);
+  let date = new Date(time);
+  let dayNum = date.getDay();
+  const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+  let weekdayJP = weekdays[dayNum];
+  let formatted = dateArray.join('.') + ' ' + weekdayJP;
+  return formatted
+}
 
 Vue.component('insert-btn', {
   props: {
@@ -114,8 +141,7 @@ const app = new Vue({
       name: 'サイクル',
       content: '',
       choices: ['1:00', '2:00', '3:00', '␣', '\n']
-    },
-    date: '2020.10.22 木'
+    }
   },
   computed: {
     purpose: function () {
@@ -125,6 +151,8 @@ const app = new Vue({
       if (this.purpose === 'new-menu') {
         let rawDate = location.pathname.split('/').slice(-1)[0];
         return formatDate(rawDate)
+      } else {
+        return '2020.10.22 木'
       }
     }
   },
@@ -135,9 +163,9 @@ const app = new Vue({
         description: this.description.content.replace('␣', ' '),
         cycle: this.cycle.content.replace('␣', ' ')
       };
-      if (this.purpose==='menu') {
+      if (this.purpose === 'menu') {
         sendData(data, 'PUT');
-      } else if (this.purpose==='new-menu') {
+      } else if (this.purpose === 'new-menu') {
         sendData(data, 'POST');
       } else {
         alert('INVALID PATH');
@@ -145,7 +173,7 @@ const app = new Vue({
     }
   },
   mounted: function () {
-    if (this.purpose==='menu') {
+    if (this.purpose === 'menu') {
       fetch(location.pathname + '/ajax'
         ).then((response) => response.json()
         ).then((json) => {
@@ -157,39 +185,6 @@ const app = new Vue({
             this.cycle.content = json.cycle;
           }
         }).catch((error) => alert(error))
-
-    } else if (this.purpose==='new-menu') {
-      ;
-    } else {
-      alert('INVALID PATH');
     }
   }
 });
-
-let sendData = function (data, method) {
-  fetch(location.pathname, {
-    method: method,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  })
-  .then((response) => response.text())
-  .then((text) => alert(text))
-  .catch((error) => alert(error))
-}
-
-
-let formatDate = function (rawDate) {
-  // rawDateは文字列型 整数6桁 201009
-  let year = '20' + rawDate.substring(0, 2);
-  let month = rawDate.substring(2, 4);
-  let day = rawDate.substring(4, 6);
-  let dateArray = [year, month, day];
-  let fullDateStr = dateArray.join('/');
-  let time = Date(fullDateStr);
-  let date = new Date(time);
-  let dayNum = date.getDay();
-  const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
-  let weekdayJP = weekdays[dayNum];
-  let formatted = dateArray.join('.') + ' ' + weekdayJP;
-  return formatted
-}
