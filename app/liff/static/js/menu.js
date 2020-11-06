@@ -151,7 +151,8 @@ const app = new Vue({
       name: 'サイクル',
       content: '',
       choices: ['1:00', '2:00', '3:00', '␣', '\n']
-    }
+    },
+    date: '2020.01.01 水'
   },
   computed: {
     purpose: function () {
@@ -161,8 +162,6 @@ const app = new Vue({
       if (this.purpose === 'new-menu') {
         let rawDate = location.pathname.split('/').slice(-1)[0];
         return formatDate(rawDate)
-      } else {
-        return '2020.01.01 水'
       }
     }
   },
@@ -180,8 +179,8 @@ const app = new Vue({
           if (responseText === 'Failed') {
             alert('メニューが見つかりませんでした');
           } else {
-            console.log('センド！');
-            // sendUserMessage('$menu=' + responseText);
+            sendUserMessage('$menu=' + responseText);
+            alert('完了');
             // liff.closeWindow();
           }
         })

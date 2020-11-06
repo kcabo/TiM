@@ -29,8 +29,8 @@
 
 
     <div class="buttons">
-      <div class="submit" v-on:click="submit" v-on:touchend="submit">メニュー作成</div>
-      <div class="cancel" v-on:click="cancel" v-on:touchend="cancel">キャンセル</div>
+      <div class="submit" v-on:click.prevent="submit" v-on:touchend.prevent="submit">メニュー作成</div>
+      <div class="cancel" v-on:click.prevent="cancel" v-on:touchend.prevent="cancel">キャンセル</div>
     </div>
 
   </div>
