@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, make_response
 
 from app.models import db, Menu
 from app.webhook import handler
@@ -32,7 +32,13 @@ def liff_origin():
 @app.route('/liff/menu/<int:num>', methods=['GET'])
 @app.route('/liff/new-menu/<int:num>', methods=['GET'])
 def menu_modifier(num):
-    return render_template('menu.html', LIFF_ID=LIFF_ID)
+    response = make_response(render_template('menu.html', LIFF_ID=LIFF_ID))
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    response.headers['Cache-Control'] = 'public, max-age=0'
+    response.cache_control.no_cache = True
+    return response
 
 
 @app.route('/liff/menu/<int:menu_id>', methods=['PUT'])

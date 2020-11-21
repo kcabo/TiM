@@ -98,6 +98,9 @@ LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' template = template0
 REPLACE関数を使うことで解決
 `SELECT keyid, date, sequence, replace(swimmer, ',', '_'), replace(times, ',', '_'), replace(styles, ',', '_') from record ORDER BY keyid;`
 
+- `nextval('records_recordid_seq')`を指定してINSERTした行じゃないと、シーケンス関数の初期値が1のままになってしまう
+select setval('records_recordid_seq', 300)などを実行してシーケンスを進める
+
 
 ### LINE API
 - 本来ならWebhookを受け取ったら[署名を検証](https://developers.line.biz/ja/reference/messaging-api/#signature-validation)するけど面倒くさいからしない
