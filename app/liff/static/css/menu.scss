@@ -8,7 +8,6 @@ $font_family: 'Roboto', 'Noto Sans JP', sans-serif;
 
 body {
   background: #efefef;
-  background: tomato;
   font-family: $font_family;
   font-weight: bold;
   position: relative;
@@ -115,7 +114,7 @@ body {
   .shorthand-group {
     grid-area: shorthand-group;
     display: flex;
-    padding: 6px 0;
+    padding: 20px 0;
     flex-wrap: wrap;
 
     .insert-btn {
@@ -123,16 +122,16 @@ body {
       font-size: 14px;
       line-height: 1;
       border: 1px solid $summer_sky;
-      border-radius: 20px;
-      padding: 7px 15px 5px;
-      margin: 2px 3px;
+      border-radius: 6px;
+      padding: 8px 16px 5px;
+      margin: 3px;
       cursor: pointer;
       // box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 
       &:hover {
         color: white;
         background: $summer_sky;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.26)
+        // box-shadow: 0 2px 5px rgba(0,0,0,0.26)
       }
     }
   }
