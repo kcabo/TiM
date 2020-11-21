@@ -6,7 +6,15 @@ from app.webhook import handler
 
 LIFF_ID = os.environ['LIFF_ID']
 
-app = Flask(__name__, template_folder='liff/templates', static_folder='liff/static')
+class MyFlask(Flask):
+    def get_send_file_max_age(self, name):
+        if name.lower().endswith('.css'):
+            return 0
+        return Flask.get_send_file_max_age(self, name)
+
+app = MyFlask(__name__, template_folder='liff/templates', static_folder='liff/static')
+
+# app = Flask(__name__, template_folder='liff/templates', static_folder='liff/static')
 app.config.from_object('app.config.Config')
 db.init_app(app)
 
@@ -33,11 +41,10 @@ def liff_origin():
 @app.route('/liff/new-menu/<int:num>', methods=['GET'])
 def menu_modifier(num):
     response = make_response(render_template('menu.html', LIFF_ID=LIFF_ID))
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "0"
-    response.headers['Cache-Control'] = 'public, max-age=0'
-    response.cache_control.no_cache = True
+    # response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    # response.headers["Pragma"] = "no-cache"
+    # response.headers["Expires"] = "0"
+    # response.headers['Cache-Control'] = 'public, max-age=0'
     return response
 
 
