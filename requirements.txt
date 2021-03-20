@@ -9,7 +9,7 @@ Flask-SQLAlchemy==2.4.4
 hiredis==1.1.0
 idna==2.10
 itsdangerous==1.1.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 pip==20.2.4
 psycopg2==2.8.5
