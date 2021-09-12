@@ -16,7 +16,7 @@ def smalltalk(event):
 
 
 def fetch_from_a3rt_api(query_text):
-    url = 'https://api.a3rt.recruit-tech.co.jp/talk/v1/smalltalk'
+    url = 'https://api.a3rt.recruit.co.jp/talk/v1/smalltalk'
     data = {
         'apikey': A3RT_APIKEY,
         'query': query_text
