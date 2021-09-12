@@ -18,3 +18,18 @@
 ### その他
 - Python3.9にアップデートしてlist[int]とか使えるようにする
 - Vueを本番環境用に変える
+
+- Credits表示
+
+LINEエンドポイント変更やバージョンアップ、Herokuの仕様変更などによる劣化の懸念
+またそれに対する対応が保証されていない点
+
+テーブルの作成
+[スキーマ取得](http://wikis.sakura.ne.jp/tipi/?PostgreSQL/%A5%C6%A1%BC%A5%D6%A5%EB%A4%CE%A5%B9%A5%AD%A1%BC%A5%DE%28create+table%CA%B8%29%A4%F2%BC%E8%C6%C0%A4%B9%A4%EB)
+
+リージョンの問題、遅い
+RESTAPI設計にする
+ローディング、完了画面
+記録追加もFlex
+
+利用規約やプライバシーポリシー
