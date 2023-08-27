@@ -1,6 +1,2 @@
 __pycache__
-/FlexOriginal
-/legacy
-/safe
-/data_backup
-/dev_static
+.env
