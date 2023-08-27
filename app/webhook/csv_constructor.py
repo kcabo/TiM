@@ -43,7 +43,7 @@ def calc_lines_of_matrix(records, descriptions, cycles) -> int:
     # メニュー表示に必要な行数 Categoryの一行下から始まるため、+1
     menu_lines = max(len(descriptions), len(cycles)) + 1
 
-    if len(descriptions) == 0:
+    if len(records) == 0:
         return menu_lines
 
     # アンダーバーを最も多く含む(必要行数の多い)記録はどれか
